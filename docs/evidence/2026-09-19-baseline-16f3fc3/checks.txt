@@ -1,0 +1,31 @@
+# Run from a clean git worktree of 16f3fc3; LANGUAGE_HANGMAN_DATA_DIR pointed at a sandbox.
+
+## release-check
+is_clean: True
+artifact_count: 0
+artifacts: []
+relative_artifacts: []
+
+## ruff
+All checks passed!
+
+## black
+would reformat <TEMP>
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+15 files would be reformatted, 72 files would be left unchanged.
+
+## curated
+PASS: 30 unique words, 10 per situation, complete fields and contextual examples.
+Independent educator review remains pending.
+Editorial heuristic warnings: 24
+
+## legacy: python -m src.cli validate-content --summary
+Files processed: 3
+Valid words: 324
+Invalid words: 0
+Duplicate words: 0
+Quality warnings: 759
+- english.json: 108 valid, 0 invalid, 0 duplicates, 243 warnings
+- french.json: 108 valid, 0 invalid, 0 duplicates, 270 warnings
+- spanish.json: 108 valid, 0 invalid, 0 duplicates, 246 warnings

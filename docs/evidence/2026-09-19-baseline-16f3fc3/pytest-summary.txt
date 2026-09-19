@@ -1,0 +1,6 @@
+134 passed, 1 warning in 91.05s (0:01:31)
+
+Warning detail:
+<PROJECT>\.venv\Lib\site-packages\starlette\testclient.py:40
+  <PROJECT>\.venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]

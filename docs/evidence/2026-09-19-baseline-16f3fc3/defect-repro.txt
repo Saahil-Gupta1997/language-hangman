@@ -1,0 +1,4 @@
+D1 REPRODUCED: fresh profile started Review with unseen word 'fresh' (desktop-core)
+D2 REPRODUCED: review words [('simple', 'step9-expanded-core'), ('apple', 'step9-expanded-core'), ('safely', 'step9-expanded-core')]
+D3 startup fails: DatabaseError: file is not a database
+D3 REPRODUCED: restore failed: DatabaseError: file is not a database

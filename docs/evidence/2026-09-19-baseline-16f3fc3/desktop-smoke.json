@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "registration",
+    "hints",
+    "resume",
+    "three rounds",
+    "reports",
+    "backup restore",
+    "word cards",
+    "text scaling",
+    "guest",
+    "logout"
+  ],
+  "screenshots": [
+    "practice.png"
+  ]
+}

@@ -1,0 +1,14 @@
+revision: 16f3fc360355e8bbfe00f9efe79ef03c6c637f00
+date: 2026-09-19T12:33:17+05:30
+python: Python 3.12.1
+os: Windows 11 Home 10.0.26200
+black==24.10.0
+customtkinter==5.2.2
+darkdetect==0.8.0
+fastapi==0.115.6
+httpx==0.27.2
+pillow==12.3.0
+pytest==9.0.3
+ruff==0.6.9
+starlette==0.41.3
+streamlit==1.56.0
