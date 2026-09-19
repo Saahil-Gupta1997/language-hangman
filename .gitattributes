@@ -1,0 +1,9 @@
+# Deterministic line endings so source archives are identical on every checkout.
+* text=auto eol=lf
+*.png binary
+*.ico binary
+*.wav binary
+*.mp4 binary
+*.zip binary
+*.sqlite binary
+*.db binary
