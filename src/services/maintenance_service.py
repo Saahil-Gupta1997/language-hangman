@@ -178,6 +178,9 @@ class MaintenanceService:
                 path for path in self.project_root.rglob(pattern) if path.is_file()
             )
 
+        # Git's own data is never distributed; its refs for a branch named release/... would
+        # otherwise match the "release" directory name (D-29).
+        artifact_paths = {path for path in artifact_paths if not self._inside_git(path)}
         artifact_paths = self._collapse_nested_artifact_paths(artifact_paths)
         sorted_artifacts = sorted(str(path) for path in artifact_paths)
         return {
@@ -186,6 +189,12 @@ class MaintenanceService:
             "artifacts": sorted_artifacts,
             "relative_artifacts": self._build_relative_artifact_paths(artifact_paths),
         }
+
+    def _inside_git(self, path: Path) -> bool:
+        try:
+            return ".git" in path.relative_to(self.project_root).parts
+        except ValueError:
+            return False
 
     def _collapse_nested_artifact_paths(self, artifact_paths: set[Path]) -> set[Path]:
         """Avoid noisy reports for files already covered by an artifact directory."""
