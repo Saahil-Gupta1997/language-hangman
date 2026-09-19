@@ -67,6 +67,42 @@ def fit_to_work_area(window, width, height, minimum):
     window.geometry(f"{width}x{height}+{x}+{y}")
 
 
+def wrap_to_width(label):
+    """Wrap a label's text to the width it is actually given, not a fixed pixel count.
+
+    A fixed ``wraplength`` clips text on the right whenever the label is narrower than
+    assumed: a smaller window, Large text or higher display scaling (D-31). The label must
+    be packed or gridded to fill the available width. CustomTkinter scales ``wraplength``
+    itself, so it is set in logical pixels, less the label's rounded-corner padding.
+    """
+    import tkinter
+
+    def rewrap(event):
+        scaling = label._apply_widget_scaling(1.0)
+        wrap = max(120, int(event.width / scaling) - 2 * label._corner_radius)
+        if wrap != label.cget("wraplength"):
+            label.configure(wraplength=wrap)
+
+    # CTkLabel.bind targets its inner canvas and text label; the outer frame has the width.
+    tkinter.Frame.bind(label, "<Configure>", rewrap, "+")
+    return label
+
+
+def saved_text_size(data_dir):
+    """Return the saved text size ("Standard" or "Large"), defaulting to Standard."""
+    import json
+    from pathlib import Path
+
+    try:
+        size = json.loads((Path(data_dir) / "settings.json").read_text())["text_size"]
+    except (OSError, ValueError, KeyError, TypeError):
+        return "Standard"
+    return size if size in ("Standard", "Large") else "Standard"
+
+
+TEXT_SCALING = {"Standard": 1.0, "Large": 1.15}
+
+
 def scroll_into_view(widget):
     """Scroll the enclosing scrollable frame so a newly focused widget is visible.
 

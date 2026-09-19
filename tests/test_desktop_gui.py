@@ -1,4 +1,4 @@
-"""Native GUI regression checks (R-03, D-07, D-22 to D-25), one fresh process per scenario.
+"""Native GUI regression checks (R-03, D-07, D-22 to D-25, D-31), one fresh process each.
 
 See tests/gui_scenarios.py for why each scenario runs in its own process.
 """
@@ -18,6 +18,8 @@ SCENARIOS = [
     "focused_control_scrolls_into_view",
     "window_opens_inside_the_work_area",
     "automatic_backup_failure_does_not_block_start_up",
+    "recovery_window_fits_at_minimum_size",
+    "main_window_text_wraps_at_minimum_size",
 ]
 
 

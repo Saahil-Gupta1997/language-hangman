@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -24,10 +23,13 @@ from src.desktop.runtime import (
 from src.desktop.settings_view import SettingsView
 from src.desktop.widgets import (
     BLUE,
+    TEXT_SCALING,
     fit_to_work_area,
     keyboard_button,
     release_window,
+    saved_text_size,
     scroll_into_view,
+    wrap_to_width,
 )
 from src.services.auth_service import AuthService
 from src.services.curated_content import seed_curated
@@ -70,14 +72,9 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
             self.bind(sequence, lambda event: self.set_scale("Large"))
         for sequence in ("<Control-minus>", "<Control-KP_Subtract>"):
             self.bind(sequence, lambda event: self.set_scale("Standard"))
-        self.scale = "Standard"
-        settings_path = self.data_dir / "settings.json"
-        try:
-            self.scale = json.loads(settings_path.read_text())["text_size"]
-        except (OSError, ValueError, KeyError, TypeError):
-            pass
+        self.scale = saved_text_size(self.data_dir)
         ctk.set_appearance_mode("light")
-        ctk.set_widget_scaling(1.15 if self.scale == "Large" else 1.0)
+        ctk.set_widget_scaling(TEXT_SCALING[self.scale])
         self.header = ctk.CTkFrame(self, corner_radius=0, fg_color=BLUE)
         self.header.pack(fill="x")
         ctk.CTkLabel(
@@ -85,15 +82,16 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         ).pack(side="left", padx=24, pady=18)
         self.backup_warning = self.automatic_backup()
         if self.backup_warning:
-            ctk.CTkLabel(
-                self,
-                text=self.backup_warning,
-                fg_color=WARNING_BACKGROUND,
-                text_color="#78350F",
-                corner_radius=8,
-                wraplength=900,
-                justify="left",
-                font=("Arial", 14, "bold"),
+            wrap_to_width(
+                ctk.CTkLabel(
+                    self,
+                    text=self.backup_warning,
+                    fg_color=WARNING_BACKGROUND,
+                    text_color="#78350F",
+                    corner_radius=8,
+                    justify="left",
+                    font=("Arial", 14, "bold"),
+                )
             ).pack(fill="x", padx=20, pady=(10, 0), ipady=6)
         self.navigation = ctk.CTkFrame(self, fg_color="transparent")
         self.navigation.pack(fill="x", padx=20, pady=(10, 0))
@@ -197,11 +195,10 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
             text=text,
             anchor="w",
             justify="left",
-            wraplength=600,
             font=("Arial", 15, "bold" if bold else "normal"),
             text_color="#172B4D",
         )
-        label.pack(fill="x", padx=22, pady=7)
+        wrap_to_width(label).pack(fill="x", padx=22, pady=7)
         return label
 
     def button(self, parent, label, command, side=None, width=180, pack=True):

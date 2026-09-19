@@ -14,9 +14,12 @@ from src import __version__
 from src.desktop.runtime import log_event
 from src.desktop.widgets import (
     BLUE,
+    TEXT_SCALING,
     fit_to_work_area,
     keyboard_button,
     release_window,
+    saved_text_size,
+    wrap_to_width,
 )
 from src.services.curated_content import seed_curated
 from src.services.desktop_storage import restore_database
@@ -53,6 +56,8 @@ class RecoveryWindow(ctk.CTk):
     """Restore a backup without opening the damaged live database."""
 
     def __init__(self, db_path, data_dir, reason):
+        # Before the window exists: changing scaling afterwards pins its size for a second.
+        ctk.set_widget_scaling(TEXT_SCALING[saved_text_size(data_dir)])
         super().__init__()
         self.db_path, self.data_dir = Path(db_path), Path(data_dir)
         self.restored = False
@@ -91,23 +96,24 @@ class RecoveryWindow(ctk.CTk):
         buttons.append(self._button("Open data folder", self.open_data_folder))
         buttons.append(self._button("Quit", self.close))
         self._label(
-            "If a restore fails, the message explains why and your current data file stays "
-            "unchanged. After recovery, you can export diagnostics from Settings."
+            "If a restore fails, a message explains why and whether anything needs your "
+            "attention. After recovery, you can export diagnostics from Settings."
         )
         self.bind("<Escape>", lambda event: self.close())
         self.protocol("WM_DELETE_WINDOW", self.close)
         buttons[0].focus_set()
 
     def _label(self, text, bold=False, size=15):
-        ctk.CTkLabel(
+        label = ctk.CTkLabel(
             self.body,
             text=text,
             anchor="w",
             justify="left",
-            wraplength=680,
             font=("Arial", size, "bold" if bold or size > 15 else "normal"),
             text_color="#172B4D",
-        ).pack(fill="x", padx=22, pady=7)
+        )
+        wrap_to_width(label).pack(fill="x", padx=22, pady=7)
+        return label
 
     def _button(self, label, command):
         button = keyboard_button(self.body, label, command, width=320)

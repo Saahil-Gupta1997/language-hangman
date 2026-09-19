@@ -153,6 +153,104 @@ def automatic_backup_failure_does_not_block_start_up(data):
         app.close_application()
 
 
+EMULATED = (("Standard", 1.0), ("Large", 1.0), ("Large", 1.2))  # 1.2 x this display's scaling
+
+
+def emulate(window, size, factor):
+    """Apply a text size on top of an emulated display factor (not the Windows setting).
+
+    CustomTkinter pins the window's size for one second after a scaling change, so wait
+    that out before resizing.
+    """
+    import time
+
+    from src.desktop.widgets import TEXT_SCALING
+
+    ctk.set_window_scaling(factor)
+    ctk.set_widget_scaling(factor * TEXT_SCALING[size])
+    deadline = time.monotonic() + 1.2
+    while time.monotonic() < deadline:
+        window.update()
+        time.sleep(0.02)
+
+
+def assert_text_fits(body, where):
+    """No label wider than its space and no control past the right edge of the view."""
+    canvas = body._parent_canvas
+    right = canvas.winfo_rootx() + canvas.winfo_width()
+    for widget in body.winfo_children():
+        if isinstance(widget, ctk.CTkLabel):
+            needed, given = widget._label.winfo_reqwidth(), widget.winfo_width()
+            assert needed <= given, (where, widget.cget("text")[:50], needed, given)
+        if isinstance(widget, (ctk.CTkLabel, ctk.CTkButton)):
+            edge = widget.winfo_rootx() + widget.winfo_width()
+            assert edge <= right, (where, widget.cget("text")[:50], edge, right)
+
+
+def recovery_window_fits_at_minimum_size(data):
+    """D-31: recovery text wraps to the window; every action scrolls into view and is
+    reached by Tk's own Tab traversal. Display scaling is emulated, not the Windows setting."""
+    import json
+
+    from src.desktop.recovery import RecoveryWindow
+    from src.desktop.widgets import scroll_into_view
+
+    backups = data / "backups"
+    backups.mkdir()
+    for name in ("daily-a.sqlite", "before-restore-b.sqlite", "pre-upgrade-c.sqlite"):
+        (backups / name).write_bytes(b"")
+    for size, factor in EMULATED:
+        (data / "settings.json").write_text(json.dumps({"text_size": size}))
+        window = RecoveryWindow(
+            data / "app.db", data, "The data file could not be opened (DatabaseError)."
+        )
+        try:
+            emulate(window, size, factor)
+            window.geometry("640x480")  # the window's minimum size
+            window.update()
+            where = f"{size} text, factor {factor}"
+            assert_text_fits(window.body, where)
+            canvas = window.body._parent_canvas
+            assert window.body.winfo_reqheight() > canvas.winfo_height(), "expected scrolling"
+            buttons = [w for w in window.body.winfo_children() if isinstance(w, ctk.CTkButton)]
+            assert len(buttons) == 6, [b.cget("text") for b in buttons]
+            for button in buttons:
+                scroll_into_view(button)
+                window.update()
+                top, bottom = canvas.winfo_rooty(), canvas.winfo_rooty() + canvas.winfo_height()
+                assert top <= button.winfo_rooty(), (where, button.cget("text"))
+                assert button.winfo_rooty() + button.winfo_height() <= bottom, (where, button)
+            reached, current = set(), buttons[0]._canvas
+            for _ in range(40):
+                reached.add(str(current))
+                current = current.tk_focusNext()
+            assert {str(b._canvas) for b in buttons} <= reached, "Tab must reach every action"
+            assert "<Key-Escape>" in window.bind(), "Escape must close the window"
+        finally:
+            window.close()
+            ctk.set_window_scaling(1.0)
+            ctk.set_widget_scaling(1.0)
+
+
+def main_window_text_wraps_at_minimum_size(data):
+    """D-31: body text wraps to the window on the text-heavy pages (emulated scaling)."""
+    from src.desktop.application import MINIMUM_WINDOW
+
+    app = signed_in_app(data)
+    try:
+        for size, factor in EMULATED:
+            emulate(app, size, factor)
+            app.geometry(f"{MINIMUM_WINDOW[0]}x{MINIMUM_WINDOW[1]}")
+            for page in (app.show_home, app.show_practice, app.show_settings, app.show_help):
+                page()
+                app.update()
+                assert_text_fits(app.body, f"{page.__name__}, {size} text, factor {factor}")
+    finally:
+        app.close_application()
+        ctk.set_window_scaling(1.0)
+        ctk.set_widget_scaling(1.0)
+
+
 SCENARIOS = {
     function.__name__: function
     for function in (
@@ -162,6 +260,8 @@ SCENARIOS = {
         focused_control_scrolls_into_view,
         window_opens_inside_the_work_area,
         automatic_backup_failure_does_not_block_start_up,
+        recovery_window_fits_at_minimum_size,
+        main_window_text_wraps_at_minimum_size,
     )
 }
 
