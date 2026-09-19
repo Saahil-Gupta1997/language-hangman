@@ -39,6 +39,14 @@ from src.utils.feedback_lines import CORRECT_LINES, INCORRECT_LINES, get_random_
 from src.utils.helpers import serialize_string_list, shift_utc_iso, utc_now_iso
 
 
+class NoReviewWordsError(ValueError):
+    """Review was requested but the learner has no eligible review words."""
+
+
+def _situation_label(situation: Any) -> str:
+    return str(situation or "this situation").replace("_", " ").title()
+
+
 class GameService:
     """Owns Hangman gameplay rules, builder validation, and persistence."""
 
@@ -50,6 +58,40 @@ class GameService:
         self.word_progress_repository = WordProgressRepository(db_path=db_path)
         self.adaptation_service = AdaptationService(db_path=db_path)
         self.smart_practice_service = SmartPracticeService(db_path=db_path)
+
+    def review_eligibility(
+        self,
+        user_id: int,
+        language: str,
+        situation: str | None,
+        categories: list[str] | None = None,
+        difficulties: list[str] | None = None,
+    ) -> dict[str, list[int]]:
+        """Return Review-eligible word ids split into due and not-yet-due, oldest due first.
+
+        A word is eligible when the learner has an active review-queue item for it (created
+        when a round with that word is completed) and the word is playable under the
+        word service's corpus, situation, category and difficulty filters.
+        """
+        playable = {
+            int(word["id"])
+            for word in self.word_service.get_words(
+                language=language,
+                categories=categories,
+                difficulties=difficulties,
+                situation=situation,
+            )
+        }
+        now = utc_now_iso()
+        eligibility: dict[str, list[int]] = {"due": [], "upcoming": []}
+        for row in self.review_queue_repository.get_active_items_by_due_date(
+            user_id=user_id, language=language
+        ):
+            word_id = int(row["word_id"])
+            if word_id in playable:
+                bucket = "due" if str(row["review_due_at"] or "") <= now else "upcoming"
+                eligibility[bucket].append(word_id)
+        return eligibility
 
     def get_default_builder_settings(self, user: dict[str, Any]) -> dict[str, Any]:
         """Return the starting builder settings for a user."""
@@ -257,13 +299,15 @@ class GameService:
             difficulties=normalized_settings["difficulties"],
             situation=normalized_settings["situation"],
         )
-        review_pool_count = self.word_service.count_candidate_words(
+        review_eligibility = self.review_eligibility(
+            user_id=int(user["id"]),
             language=normalized_settings["language"],
+            situation=normalized_settings["situation"],
             categories=normalized_settings["categories"],
             difficulties=normalized_settings["difficulties"],
-            situation=normalized_settings["situation"],
-            candidate_word_ids=recommendation["candidate_word_ids"],
         )
+        review_pool_count = len(review_eligibility["due"]) + len(review_eligibility["upcoming"])
+        situation_label = _situation_label(normalized_settings["situation"])
         new_word_pool_count = self.word_service.count_candidate_words(
             language=normalized_settings["language"],
             categories=normalized_settings["categories"],
@@ -296,8 +340,9 @@ class GameService:
         elif normalized_settings["review_policy"] == "review_only":
             if review_pool_count == 0:
                 errors.append(
-                    "No review words match this setup yet. "
-                    "Try Prefer Review Words or a broader filter."
+                    f"There are no review words for {situation_label} yet. Review only uses "
+                    "words you have already practised in this situation. "
+                    "Play a Standard session first."
                 )
                 return {
                     "can_start": False,
@@ -305,6 +350,7 @@ class GameService:
                     "warnings": warnings,
                     "settings": normalized_settings,
                     "matched_word_count": 0,
+                    "reason": "no_review_words",
                 }
             matched_word_count = review_pool_count
         elif normalized_settings["review_policy"] == "new_only":
@@ -339,11 +385,18 @@ class GameService:
             matched_word_count = general_pool_count
 
         if matched_word_count < normalized_settings["rounds"]:
-            warnings.append(
-                f"Only {matched_word_count} matching word(s) were available, "
-                "so the session was shortened from "
-                f"{normalized_settings['rounds']} rounds."
-            )
+            if normalized_settings["review_policy"] == "review_only":
+                warnings.append(
+                    f"Only {matched_word_count} review word(s) are available for "
+                    f"{situation_label}, so this session has {matched_word_count} round(s) "
+                    f"instead of {normalized_settings['rounds']}."
+                )
+            else:
+                warnings.append(
+                    f"Only {matched_word_count} matching word(s) were available, "
+                    "so the session was shortened from "
+                    f"{normalized_settings['rounds']} rounds."
+                )
             normalized_settings["rounds"] = matched_word_count
 
         if matched_word_count <= 0:
@@ -366,7 +419,10 @@ class GameService:
         """Create a validated multi-round learning session from custom builder settings."""
         preparation = self.prepare_custom_session(user=user, builder_settings=builder_settings)
         if not preparation["can_start"]:
-            raise ValueError(" ".join(preparation["errors"]))
+            error_type = (
+                NoReviewWordsError if preparation.get("reason") == "no_review_words" else ValueError
+            )
+            raise error_type(" ".join(preparation["errors"]))
 
         settings = preparation["settings"]
         started_at = utc_now_iso()
@@ -442,7 +498,23 @@ class GameService:
             )
 
         candidate_word_ids = None
-        if learning_session.review_policy in {"prefer_review", "review_only"}:
+        if learning_session.review_policy == "review_only":
+            # Review: only eligible review words, due ones first, each once per session.
+            # An empty list stays empty so selection cannot widen to unseen words.
+            eligibility = self.review_eligibility(
+                user_id=int(user["id"]),
+                language=learning_session.language,
+                situation=learning_session.situation,
+                categories=learning_session.selected_categories,
+                difficulties=learning_session.difficulty_filter,
+            )
+            practiced = set(learning_session.practiced_word_ids)
+            due = [word_id for word_id in eligibility["due"] if word_id not in practiced]
+            upcoming = [word_id for word_id in eligibility["upcoming"] if word_id not in practiced]
+            candidate_word_ids = due or upcoming
+            excluded_word_ids = list(learning_session.practiced_word_ids)
+        elif learning_session.review_policy == "prefer_review":
+            # Standard: review words are only a preference, never a restriction.
             candidate_word_ids = recommendation["candidate_word_ids"] or None
         if learning_session.practice_mode == "weak_words":
             candidate_word_ids = [
@@ -453,7 +525,7 @@ class GameService:
                     situation=learning_session.situation,
                     limit=100,
                 )
-            ] or None
+            ]
 
         selection_warning: str | None = None
         strict_mode = learning_session.review_policy in {"review_only", "new_only"}
@@ -610,7 +682,7 @@ class GameService:
             situation=learning_session.situation,
         )
         candidate_id_set = {int(word_id) for word_id in (candidate_word_ids or [])}
-        if candidate_id_set and (
+        if candidate_word_ids is not None and (
             strict_mode
             or learning_session.practice_mode == "weak_words"
             or learning_session.review_policy == "review_only"

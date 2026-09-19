@@ -66,6 +66,9 @@ class PracticeService:
                 "review": None,
                 "summary": None,
                 "message": "Guess one letter at a time.",
+                # Explains adjustments such as a shortened Review session; optional key,
+                # so saved sessions from 1.0.0rc1 remain loadable.
+                "notice": " ".join(result["warnings"]) or None,
             }
             self._write(connection, user["id"], payload)
         self._last_tick = time.monotonic()
@@ -96,6 +99,12 @@ class PracticeService:
                 next_round = outcome["next_round"]
                 if next_round:
                     next_round.active_seconds = 0.0
+                elif session.completed_rounds < session.planned_rounds:
+                    payload["notice"] = (
+                        f"This session ended after {session.completed_rounds} of "
+                        f"{session.planned_rounds} rounds because no more eligible words "
+                        "remain for it. Completed rounds are saved."
+                    )
                 payload["next_round"] = asdict(next_round) if next_round else None
             payload["round"] = asdict(game_round)
             self._write(connection, user["id"], payload)
@@ -111,6 +120,7 @@ class PracticeService:
             payload["next_round"] = None
             payload["review"] = None
             payload["message"] = "Guess one letter at a time."
+            payload["notice"] = None
             self._write(connection, user_id, payload)
         self._last_tick = time.monotonic()
         return payload

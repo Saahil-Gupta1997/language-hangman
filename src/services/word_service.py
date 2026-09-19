@@ -27,11 +27,24 @@ WordRecord = dict[str, Any]
 
 
 class WordService:
-    """Loads word banks, validates content, and selects playable words."""
+    """Loads word banks, validates content, and selects playable words.
+
+    Candidate id lists follow one rule everywhere: ``None`` means no restriction and an
+    empty list means no eligible words.
+    """
+
+    # When set, listing, counting and selection only ever return words from this source.
+    source: str | None = None
 
     def __init__(self, words_dir: Path | None = None, db_path: Path | None = None) -> None:
         self.words_dir = Path(words_dir or WORDS_DIR)
         self.word_repository = WordRepository(db_path=db_path)
+
+    def _restrict_to_source(self, rows: Sequence[Any]) -> list[Any]:
+        """Drop rows outside the supported corpus when a source restriction is set."""
+        if not self.source:
+            return list(rows)
+        return [row for row in rows if row["source"] == self.source]
 
     def get_available_languages(self) -> list[str]:
         """Return each available language based on the database or JSON fallback."""
@@ -180,17 +193,23 @@ class WordService:
             else ([difficulty.lower()] if difficulty else None)
         )
 
-        database_words = self.word_repository.get_words(
-            language=language.lower(),
-            categories=normalized_categories,
-            difficulties=normalized_difficulties,
-            limit=limit,
+        database_words = self._restrict_to_source(
+            self.word_repository.get_words(
+                language=language.lower(),
+                categories=normalized_categories,
+                difficulties=normalized_difficulties,
+                # With a source restriction the limit must apply after filtering.
+                limit=None if self.source else limit,
+            )
         )
         if database_words:
             words = [self._normalize_word_row(row) for row in database_words]
             if situation:
                 words = [word for word in words if self._word_matches_situation(word, situation)]
             return words[:limit] if limit is not None else words
+        if self.source:
+            # Never fall back to file banks that sit outside the supported corpus.
+            return []
 
         words = self.load_word_bank(language)
         if normalized_categories:
@@ -203,6 +222,8 @@ class WordService:
 
     def get_categories(self, language: str) -> list[str]:
         """Return distinct categories for a language."""
+        if self.source:
+            return sorted({word["category"] for word in self.get_words(language)})
         database_categories = [
             row["category"] for row in self.word_repository.get_categories(language.lower())
         ]
@@ -212,6 +233,8 @@ class WordService:
 
     def get_difficulties(self, language: str) -> list[str]:
         """Return distinct difficulty levels for a language."""
+        if self.source:
+            return sorted({word["difficulty"] for word in self.get_words(language)})
         database_difficulties = [
             row["difficulty"] for row in self.word_repository.get_difficulties(language.lower())
         ]
@@ -366,7 +389,9 @@ class WordService:
 
         difficulty_pool = list(difficulty_override or self.get_difficulties_for_level(level))
         excluded_ids = {int(word_id) for word_id in (excluded_word_ids or [])}
-        prioritized_word_ids = [int(word_id) for word_id in (candidate_word_ids or [])]
+        prioritized_word_ids = (
+            None if candidate_word_ids is None else [int(word_id) for word_id in candidate_word_ids]
+        )
         deprioritized_ids = {int(word_id) for word_id in (deprioritized_word_ids or [])}
 
         if strict_mode:
@@ -452,17 +477,19 @@ class WordService:
         situation: str | None = None,
     ) -> list[WordRecord]:
         """Return candidate words from the database with lightweight priority filters."""
-        rows = self.word_repository.get_words(
-            language=language,
-            categories=categories,
-            difficulties=difficulties,
+        rows = self._restrict_to_source(
+            self.word_repository.get_words(
+                language=language,
+                categories=categories,
+                difficulties=difficulties,
+            )
         )
         candidate_words = [self._normalize_word_row(row) for row in rows]
         if situation:
             candidate_words = [
                 word for word in candidate_words if self._word_matches_situation(word, situation)
             ]
-        if candidate_word_ids:
+        if candidate_word_ids is not None:
             candidate_id_set = {int(word_id) for word_id in candidate_word_ids}
             candidate_words = [
                 word for word in candidate_words if int(word["id"]) in candidate_id_set

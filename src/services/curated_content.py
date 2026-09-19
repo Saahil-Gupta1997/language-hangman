@@ -23,16 +23,20 @@ def seed_curated(db_path):
         )
 
 
+CURATED_SOURCE = "desktop-core"
+
+
 class CuratedWordService(WordService):
+    """Desktop word service: listing, counting and selection never leave the curated pack.
+
+    Legacy words stay in the database so older results remain reportable, but they are
+    never offered for desktop practice.
+    """
+
+    source = CURATED_SOURCE
+
     def __init__(self, db_path):
         super().__init__(words_dir=CURATED_WORDS_DIR, db_path=db_path)
-
-    def get_words(self, *args, **kwargs):
-        # Apply limit after filtering; never fall back to archived teaching material.
-        limit = kwargs.pop("limit", None)
-        words = super().get_words(*args, **kwargs)
-        words = [word for word in words if word.get("source") == "desktop-core"]
-        return words[:limit] if limit is not None else words
 
     def get_available_languages(self):
         return ["english"]

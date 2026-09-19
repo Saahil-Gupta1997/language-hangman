@@ -10,6 +10,7 @@ from src.models.game_round import GameRound
 from src.services.desktop_storage import (
     progress_report,
 )
+from src.services.game_service import NoReviewWordsError
 from src.services.hint_service import get_revealed_hints
 
 BLUE = "#155E75"
@@ -72,28 +73,50 @@ class PracticeView:
         self.focus = ctk.CTkOptionMenu(self.body, values=["Standard", "Review"])
         self.focus.pack(anchor="w", padx=22, pady=8)
         self.text(
-            "Standard prioritises words needing practice. Review uses previously practised "
-            "words in your review queue. Recommendations follow explainable rules."
+            "Standard chooses from all 10 words for the situation, favouring words that need "
+            "practice. Review only uses words you have already completed in this situation "
+            "and that are still in your review queue: due words first, then the rest, each "
+            "word once per session. If fewer review words exist than the rounds you choose, "
+            "the session is shortened and you are told why."
         )
         self.button(self.body, "Start session", self.start_session)
 
     def start_session(self):
-        review = self.focus.get() == "Review"
-        self.practice.start(
-            self.user,
-            {
-                "language": "english",
-                "categories": ["noun", "verb", "adjective", "adverb"],
-                "difficulties": ["beginner"],
-                "rounds": int(self.rounds.get()),
-                "game_mode": self.mode.get().lower(),
-                "situation": self.situation.get().lower(),
-                "practice_mode": "review" if review else "standard",
-                "review_policy": "review_only" if review else "prefer_review",
-                "show_hint_immediately": False,
-            },
+        self.begin_session(
+            self.situation.get(), self.mode.get(), int(self.rounds.get()), self.focus.get()
         )
+
+    def begin_session(self, situation, mode, rounds, focus):
+        review = focus == "Review"
+        try:
+            self.practice.start(
+                self.user,
+                {
+                    "language": "english",
+                    "categories": ["noun", "verb", "adjective", "adverb"],
+                    "difficulties": ["beginner"],
+                    "rounds": rounds,
+                    "game_mode": mode.lower(),
+                    "situation": situation.lower(),
+                    "practice_mode": "review" if review else "standard",
+                    "review_policy": "review_only" if review else "prefer_review",
+                    "show_hint_immediately": False,
+                },
+            )
+        except NoReviewWordsError as error:
+            self.show_review_unavailable(str(error), situation, mode, rounds)
+            return
         self.show_practice()
+
+    def show_review_unavailable(self, message, situation, mode, rounds):
+        self.clear("Practice")
+        self.heading("No review words yet", message)
+        self.button(
+            self.body,
+            f"Start Standard practice in {situation}",
+            lambda: self.begin_session(situation, mode, rounds, "Standard"),
+        )
+        self.button(self.body, "Back to practice setup", self.show_practice)
 
     def render_round(self):
         state = GameRound(**self.payload["round"])
@@ -102,6 +125,8 @@ class PracticeView:
             f"{session['situation'].title()} · {session['game_mode'].title()}",
             f"{session['completed_rounds']} of {session['planned_rounds']} rounds completed",
         )
+        if self.payload.get("notice"):
+            self.text(self.payload["notice"], bold=True)
         if state.saved:
             self.text(
                 "Round won" if state.result == "won" else "Round finished — keep practising",

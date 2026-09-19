@@ -1174,6 +1174,18 @@ class ReviewQueueRepository(BaseRepository):
         rows = self.fetchall(" ".join(query), params)
         return [int(row["word_id"]) for row in rows]
 
+    def get_active_items_by_due_date(self, user_id: int, language: str) -> list[sqlite3.Row]:
+        """Return every active review item for a learner, most overdue first (no cap)."""
+        return self.fetchall(
+            """
+            SELECT word_id, review_due_at
+            FROM review_queue
+            WHERE user_id = ? AND language = ? AND is_active = 1
+            ORDER BY review_due_at ASC, priority_score DESC, word_id ASC
+            """,
+            (user_id, language),
+        )
+
     def get_summary_counts(
         self,
         user_id: int,
