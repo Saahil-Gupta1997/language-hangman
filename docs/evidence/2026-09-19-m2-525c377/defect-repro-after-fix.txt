@@ -1,0 +1,5 @@
+D1 NOT REPRODUCED: Review refused: There are no review words for Restaurant yet. Review only uses words you have already practised in this situation. Play a Standard session first.
+D2 NOT REPRODUCED: review words [('<refused>', 'There are no review words for Restaurant yet. Review only uses words you have already practised in this situation. Play a Standard session first.')]
+D3 startup fails: DatabaseError: file is not a database
+D3 NOT REPRODUCED: restore over corrupt database succeeded
+D-07 NOT REPRODUCED: app started; warning shown: True

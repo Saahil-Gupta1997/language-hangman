@@ -1,0 +1,14 @@
+## ruff
+All checks passed!
+
+## curated
+PASS: 30 unique words, 10 per situation, complete fields and contextual examples.
+Independent educator review remains pending.
+Editorial heuristic warnings: 24
+
+## release-check
+is_clean: True
+artifact_count: 0
+artifacts: []
+relative_artifacts: []
+

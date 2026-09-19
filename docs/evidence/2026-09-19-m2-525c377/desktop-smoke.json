@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "version": "1.0.0rc1",
+  "checks": [
+    "registration",
+    "review refused for a new profile; standard offered",
+    "clue after wrong guess; session resumes",
+    "three rounds recorded in reports",
+    "review uses only practised words and explains the shorter session",
+    "backup and restore",
+    "text size change after dropdown screens",
+    "guest practice and sign out",
+    "damaged database detected at start-up",
+    "backup restored over damaged database; damaged bytes quarantined",
+    "sign in and progress after recovery"
+  ],
+  "screenshots": [
+    "review-unavailable.png",
+    "practice.png",
+    "review-shortened.png",
+    "recovery.png"
+  ]
+}
