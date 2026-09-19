@@ -45,3 +45,36 @@ def configure_logging(data_dir):
         handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
         logger.addHandler(handler)
     return logger
+
+
+def fix_dropdown_scaling_leak():
+    """Unregister destroyed dropdowns from CustomTkinter's scaling tracker.
+
+    CustomTkinter 5.2.2's DropdownMenu.destroy skips CTkScalingBaseClass.destroy, so every
+    closed option menu stays registered and the next text-size change raises TclError.
+    Removing an already-removed callback is a no-op, so this is safe if fixed upstream.
+    """
+    try:
+        from customtkinter.windows.widgets.core_widget_classes.dropdown_menu import DropdownMenu
+        from customtkinter.windows.widgets.scaling import CTkScalingBaseClass
+    except ImportError:
+        return  # Internals moved in a newer release; never block startup for a workaround.
+
+    if getattr(DropdownMenu.destroy, "unregisters_scaling", False):
+        return
+    library_destroy = DropdownMenu.destroy
+
+    def destroy(self):
+        CTkScalingBaseClass.destroy(self)
+        library_destroy(self)
+
+    destroy.unregisters_scaling = True
+    DropdownMenu.destroy = destroy
+
+
+def close_logging():
+    """Release the log file; Windows cannot delete or rotate a file that is still open."""
+    logger = logging.getLogger("hangman")
+    for handler in list(logger.handlers):
+        logger.removeHandler(handler)
+        handler.close()

@@ -15,7 +15,7 @@ from src.db.database import init_db
 from src.desktop.auth_view import AuthView
 from src.desktop.practice_view import PracticeView
 from src.desktop.reports_view import ReportsView
-from src.desktop.runtime import configure_logging
+from src.desktop.runtime import close_logging, configure_logging, fix_dropdown_scaling_leak
 from src.desktop.settings_view import SettingsView
 from src.services.auth_service import AuthService
 from src.services.curated_content import seed_curated
@@ -30,6 +30,7 @@ BLUE = "#155E75"
 
 class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk):
     def __init__(self, db_path=DATABASE_PATH, data_dir=DATA_DIR):
+        fix_dropdown_scaling_leak()
         super().__init__()
         self.title(f"Language Hangman · {__version__}")
         self.geometry("1060x760")
@@ -128,8 +129,8 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
                     ("Sign out", self.logout),
                 ]
             ):
-                control = self.button(self.navigation, label, command, width=130)
-                control.pack_forget()
+                # Tk forbids mixing pack and grid in one frame, so these are gridded only.
+                control = self.button(self.navigation, label, command, width=130, pack=False)
                 control.grid(row=index // 4, column=index % 4, sticky="ew", padx=4, pady=4)
                 self.navigation.grid_columnconfigure(index % 4, weight=1)
         else:
@@ -157,7 +158,7 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         label.pack(fill="x", padx=22, pady=7)
         return label
 
-    def button(self, parent, label, command, side=None, width=180):
+    def button(self, parent, label, command, side=None, width=180, pack=True):
         button = ctk.CTkButton(
             parent,
             text=label,
@@ -181,9 +182,13 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
             "<FocusIn>", lambda event: button.configure(border_width=3, border_color="#F59E0B")
         )
         button.bind("<FocusOut>", lambda event: button.configure(border_width=0))
-        button.pack(
-            side=side or "top", padx=5 if side else 22, pady=8, anchor="w" if not side else "center"
-        )
+        if pack:
+            button.pack(
+                side=side or "top",
+                padx=5 if side else 22,
+                pady=8,
+                anchor="w" if not side else "center",
+            )
         return button
 
     def entry(self, label, password=False):
@@ -202,3 +207,4 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         if self.guest:
             self.guest.close()
         self.destroy()
+        close_logging()
