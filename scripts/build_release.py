@@ -7,29 +7,56 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
 EXCLUDED_DIRS = {
-    ".git", ".venv", ".idea", "__pycache__", ".pytest_cache", ".pytest_tmp",
-    ".ruff_cache", ".mypy_cache", "htmlcov", "build", "dist", "release",
-    "node_modules", "backups", ".streamlit",
+    ".git",
+    ".venv",
+    ".idea",
+    "__pycache__",
+    ".pytest_cache",
+    ".pytest_tmp",
+    ".ruff_cache",
+    ".mypy_cache",
+    "htmlcov",
+    "build",
+    "dist",
+    "release",
+    "node_modules",
+    "backups",
+    ".streamlit",
+    "desktop-evidence",
 }
 EXCLUDED_PATTERNS = (
-    "pytest_tmp*", "pytest-cache-files-*", "codex_pytest_tmp*", "*.pyc",
-    "*.db*", "*.sqlite*", "*.zip", "*.log", ".coverage*", ".session_secret",
-    ".desktop_login_handoff.json", ".env", ".env.*",
-    "*.tsbuildinfo", "vite.config.js", "vite.config.d.ts",
+    "pytest_tmp*",
+    "pytest-cache-files-*",
+    "codex_pytest_tmp*",
+    "*.pyc",
+    "*.db*",
+    "*.sqlite*",
+    "*.zip",
+    "*.log",
+    ".coverage*",
+    ".session_secret",
+    ".desktop_login_handoff.json",
+    ".env",
+    ".env.*",
+    "*.tsbuildinfo",
+    "vite.config.js",
+    "vite.config.d.ts",
+    "*.egg-info",
 )
 
 
 def build_release(root: Path, output: Path, name: str) -> Path:
     """Create a new archive; never overwrite an existing release."""
     root, output = root.resolve(), output.resolve()
-    if not name or name in {".", ".."} or any(char in name for char in '/\\:'):
+    if not name or name in {".", ".."} or any(char in name for char in "/\\:"):
         raise ValueError("Package name must be a single directory name.")
     output.mkdir(parents=True, exist_ok=True)
     archive_path = output / f"{name}.zip"
     with ZipFile(archive_path, "x", compression=ZIP_DEFLATED) as archive:
         for current, directories, files in os.walk(root):
             directories[:] = [
-                item for item in directories
+                item
+                for item in directories
                 if item not in EXCLUDED_DIRS
                 and not any(fnmatch(item, pattern) for pattern in EXCLUDED_PATTERNS)
                 and not (Path(current) / item).is_symlink()

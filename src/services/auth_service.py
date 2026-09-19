@@ -56,13 +56,19 @@ class AuthService:
         if algorithm != self.algorithm:
             return False
 
-        candidate_hash = hashlib.pbkdf2_hmac(
-            "sha256",
-            password.encode("utf-8"),
-            bytes.fromhex(salt),
-            int(iterations),
-        ).hex()
-        return hmac.compare_digest(candidate_hash, password_hash)
+        try:
+            rounds = int(iterations)
+            if not 1 <= rounds <= 2_000_000:
+                return False
+            candidate_hash = hashlib.pbkdf2_hmac(
+                "sha256",
+                password.encode("utf-8"),
+                bytes.fromhex(salt),
+                rounds,
+            ).hex()
+            return hmac.compare_digest(candidate_hash, password_hash)
+        except (ValueError, TypeError):
+            return False
 
     def register_user(
         self,

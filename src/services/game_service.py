@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import copy
+import json
 import random
+import unicodedata
+from dataclasses import asdict, fields
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -13,6 +17,7 @@ from src.db.repository import (
     ReviewQueueRepository,
     WordProgressRepository,
 )
+from src.db.transaction import transaction
 from src.models.game_round import GameRound
 from src.models.learning_session import LearningSession
 from src.services.adaptation_service import AdaptationService
@@ -628,7 +633,7 @@ class GameService:
 
     def record_guess(self, round_state: GameRound, guess: str) -> dict[str, Any]:
         """Apply a single-letter guess and update the round state."""
-        letter = guess.strip().lower()
+        letter = unicodedata.normalize("NFC", guess.strip().lower())
 
         if round_state.is_complete:
             return {
@@ -717,6 +722,8 @@ class GameService:
             started_at=round_state.started_at,
             completed_at=completed_at,
         )
+        if round_state.active_seconds is not None:
+            time_taken_seconds = round_state.active_seconds
         session_id = self.game_session_repository.create_session(
             user_id=user_id,
             word_id=round_state.word_id,
@@ -743,7 +750,58 @@ class GameService:
         round_state.completed_at = completed_at
         return session_id
 
-    def finalize_round(
+    def finalize_round(self, user, round_state, learning_session, rng=None):
+        """Commit completion exactly once; failed saves never mutate caller state."""
+        if int(user["id"]) != learning_session.user_id:
+            raise ValueError("The session belongs to another profile.")
+        if round_state.learning_session_id != learning_session.session_id:
+            raise ValueError("The round does not belong to this session.")
+        path = self.game_session_repository.db_path
+        with transaction(path) as connection:
+            receipt = connection.execute(
+                "SELECT user_id, payload FROM completion_receipts WHERE round_key = ?",
+                (round_state.round_key,),
+            ).fetchone()
+            if receipt:
+                if receipt["user_id"] != int(user["id"]):
+                    raise ValueError("The round belongs to another profile.")
+                data = json.loads(receipt["payload"])
+                result = data["outcome"]
+                saved_round = GameRound(**data["round"])
+                saved_session = LearningSession(**result["learning_session"])
+                result["learning_session"] = saved_session
+                result["next_round"] = (
+                    GameRound(**result["next_round"]) if result["next_round"] else None
+                )
+            else:
+                saved_round = copy.deepcopy(round_state)
+                saved_session = copy.deepcopy(learning_session)
+                result = self._finalize_round(user, saved_round, saved_session, rng)
+                serialized = dict(result)
+                serialized["learning_session"] = asdict(saved_session)
+                serialized["next_round"] = (
+                    asdict(result["next_round"]) if result["next_round"] else None
+                )
+                connection.execute(
+                    "INSERT INTO completion_receipts(round_key,user_id,payload) VALUES(?,?,?)",
+                    (
+                        round_state.round_key,
+                        int(user["id"]),
+                        json.dumps({"round": asdict(saved_round), "outcome": serialized}),
+                    ),
+                )
+        for field in fields(round_state):
+            setattr(round_state, field.name, copy.deepcopy(getattr(saved_round, field.name)))
+        # An old retry must not rewind a session that has already progressed further.
+        if learning_session.completed_rounds <= saved_session.completed_rounds:
+            for field in fields(learning_session):
+                setattr(
+                    learning_session, field.name, copy.deepcopy(getattr(saved_session, field.name))
+                )
+        result["learning_session"] = learning_session
+        return result
+
+    def _finalize_round(
         self,
         user: dict[str, Any],
         round_state: GameRound,
@@ -877,9 +935,7 @@ class GameService:
             "familiarity_status": (
                 progress_snapshot["familiarity_status"] if progress_snapshot else None
             ),
-            "mastery_status": (
-                progress_snapshot["mastery_status"] if progress_snapshot else None
-            ),
+            "mastery_status": (progress_snapshot["mastery_status"] if progress_snapshot else None),
             "mastery_score": progress_snapshot["mastery_score"] if progress_snapshot else None,
             "word_priority_score": (
                 progress_snapshot["priority_score"] if progress_snapshot else None
@@ -1085,6 +1141,8 @@ class GameService:
             started_at=round_state.started_at,
             completed_at=completed_at,
         )
+        if round_state.active_seconds is not None:
+            time_taken_seconds = round_state.active_seconds
         times_seen = previous_times_seen + 1
         attempt_count = previous_attempt_count + 1
         wins = previous_wins + (1 if round_state.result == "won" else 0)
@@ -1352,8 +1410,7 @@ class GameService:
                 "next_review_in_days": next_review_in_days,
                 "is_active": True,
                 "reason": (
-                    "New words get one calmer follow-up before they are "
-                    "spaced further apart."
+                    "New words get one calmer follow-up before they are " "spaced further apart."
                 ),
             }
 
@@ -1365,8 +1422,7 @@ class GameService:
                 "next_review_in_days": next_review_in_days,
                 "is_active": True,
                 "reason": (
-                    "Familiar words can wait longer, but they still deserve "
-                    "a later check-in."
+                    "Familiar words can wait longer, but they still deserve " "a later check-in."
                 ),
             }
 

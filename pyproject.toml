@@ -8,14 +8,10 @@ dynamic = ["version"]
 description = "Local-first Streamlit Hangman for language learning."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
-    "streamlit==1.56.0",
-    "customtkinter==5.2.2",
-    "fastapi==0.115.6",
-    "uvicorn==0.32.1",
-]
+dependencies = ["customtkinter==5.2.2", "Pillow==12.3.0"]
 
 [project.optional-dependencies]
+legacy = ["streamlit==1.56.0", "fastapi==0.115.6", "uvicorn==0.32.1"]
 dev = [
     "pytest==9.0.3",
     "black==24.10.0",
@@ -24,10 +20,14 @@ dev = [
 ]
 
 [project.scripts]
-language-hangman = "src.cli:main"
+language-hangman = "desktop_app:main"
+language-hangman-admin = "src.cli:main"
 
 [tool.setuptools]
-py-modules = ["app"]
+py-modules = ["app", "desktop_app"]
+
+[tool.setuptools.package-data]
+"src.desktop" = ["content/*.json"]
 
 [tool.setuptools.dynamic]
 version = {attr = "src.__version__"}

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 
 from src import __release_name__, __version__
@@ -11,8 +12,22 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 APP_VERSION = __version__
 APP_RELEASE_NAME = __release_name__
 APP_VERSION_DISPLAY = f"v{APP_VERSION}"
-DATA_DIR = Path(os.getenv("LANGUAGE_HANGMAN_DATA_DIR", PROJECT_ROOT / "data"))
-WORDS_DIR = Path(os.getenv("LANGUAGE_HANGMAN_WORDS_DIR", DATA_DIR / "words"))
+
+
+def application_data_dir() -> Path:
+    if sys.platform == "win32":
+        return (
+            Path(os.getenv("LOCALAPPDATA", Path.home() / "AppData" / "Local")) / "LanguageHangman"
+        )
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Application Support" / "LanguageHangman"
+    return Path(os.getenv("XDG_DATA_HOME", Path.home() / ".local" / "share")) / "language-hangman"
+
+
+RESOURCE_ROOT = Path(getattr(sys, "_MEIPASS", PROJECT_ROOT))
+DATA_DIR = Path(os.getenv("LANGUAGE_HANGMAN_DATA_DIR", application_data_dir()))
+WORDS_DIR = Path(os.getenv("LANGUAGE_HANGMAN_WORDS_DIR", RESOURCE_ROOT / "data" / "words"))
+CURATED_WORDS_DIR = Path(__file__).resolve().parents[1] / "desktop" / "content"
 DATABASE_PATH = Path(os.getenv("LANGUAGE_HANGMAN_DB_PATH", DATA_DIR / "app.db"))
 AUTH_GATEWAY_ENABLED = os.getenv("LANGUAGE_HANGMAN_AUTH_GATEWAY_ENABLED", "0") == "1"
 AUTH_GATEWAY_LOGIN_URL = os.getenv("LANGUAGE_HANGMAN_LOGIN_URL", "http://localhost:8000/login")

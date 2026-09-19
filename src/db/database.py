@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import os
 import sqlite3
+import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 
 from src.utils.config import DATABASE_PATH, WORDS_DIR
@@ -248,7 +251,50 @@ def create_connection(db_path: Path | None = None) -> sqlite3.Connection:
     return connection
 
 
+SCHEMA_VERSION = 1
+
+
 def init_db(db_path: Path | None = None, seed_words: bool = True) -> Path:
+    """Upgrade on a staging copy; preserve the source until upgrade succeeds."""
+    target = Path(db_path or DATABASE_PATH)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    version = 0
+    if target.exists():
+        with create_connection(target) as connection:
+            version = connection.execute("PRAGMA user_version").fetchone()[0]
+        if version > SCHEMA_VERSION:
+            raise ValueError("This database needs a newer version of Language Hangman.")
+        if version == SCHEMA_VERSION:
+            if seed_words:
+                with create_connection(target) as connection:
+                    _seed_words_table(connection, words_dir=WORDS_DIR)
+            return target
+    descriptor, name = tempfile.mkstemp(prefix="upgrade-", suffix=".sqlite", dir=target.parent)
+    os.close(descriptor)
+    staging = Path(name)
+    try:
+        if target.exists():
+            backup_dir = target.parent / "backups"
+            backup_dir.mkdir(exist_ok=True)
+            stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%f")
+            with create_connection(target) as source:
+                with create_connection(backup_dir / f"pre-upgrade-{stamp}.sqlite") as backup:
+                    source.backup(backup)
+                with create_connection(staging) as copy:
+                    source.backup(copy)
+        _initialize_db(staging, seed_words=seed_words)
+        with create_connection(staging) as connection:
+            if connection.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
+                raise ValueError("Database upgrade integrity check failed.")
+            if connection.execute("PRAGMA foreign_key_check").fetchone():
+                raise ValueError("Database upgrade found broken relationships.")
+        os.replace(staging, target)
+    finally:
+        staging.unlink(missing_ok=True)
+    return target
+
+
+def _initialize_db(db_path: Path | None = None, seed_words: bool = True) -> Path:
     """Create the database file, schema, and starter word data."""
     resolved_path = Path(db_path or DATABASE_PATH)
 
@@ -256,6 +302,22 @@ def init_db(db_path: Path | None = None, seed_words: bool = True) -> Path:
         connection.executescript(SCHEMA_SQL)
         _run_migrations(connection)
         _ensure_indexes(connection)
+        connection.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS completion_receipts (
+                round_key TEXT PRIMARY KEY,
+                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                payload TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS active_practice (
+                user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+                payload TEXT NOT NULL,
+                revision INTEGER NOT NULL DEFAULT 1,
+                updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            );
+            PRAGMA user_version = 1;
+        """
+        )
 
         if seed_words:
             _seed_words_table(connection, words_dir=WORDS_DIR)

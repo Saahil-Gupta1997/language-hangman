@@ -1,5 +1,5 @@
-"""Application package for Language Learning Hangman."""
+"""Language Hangman application package."""
 
-__version__ = "1.0.0-beta"
+__version__ = "1.0.0rc1"
 version = __version__
-__release_name__ = "Beta"
+__release_name__ = "Desktop Release Candidate 1"

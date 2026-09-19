@@ -1,42 +1,14 @@
-# Beta Test Log
+# User acceptance log
 
-Use this template for each manual beta test pass.
+No independent learner sessions have been conducted in this implementation environment.
+Automated results are recorded separately in docs/VERIFICATION.md.
 
-## Test Session
+For each real tester, record:
+- Date, application version, OS and installation method.
+- Time to first completed round and whether the planned session was completed.
+- Confusing steps and actual reproduction steps for defects.
+- Whether progress survived closing/reopening.
+- Words recalled without hints the following day (an exploratory measure, not proof of efficacy).
+- Corrections made and retest outcome.
 
-- Test date:
-- Tester:
-- OS:
-- Python version:
-- Browser:
-- App version: v1.0.0-beta
-
-## Passed Flows
-
-- App starts:
-- New user signup:
-- Existing user login:
-- Language/profile selection:
-- Assessment/proficiency flow:
-- Easy Mode gameplay:
-- Hard Mode gameplay:
-- Hint reveal behavior:
-- Sound/mute behavior:
-- Round completion:
-- Performance/report saving:
-- Start another round:
-
-## Bugs Found
-
-- Bug:
-- Steps to reproduce:
-- Expected result:
-- Actual result:
-- Severity:
-
-## Notes
-
-- General observations:
-- UX confusion:
-- Content issues:
-- Follow-up ideas:
+Do not treat this template as evidence that acceptance testing has happened.

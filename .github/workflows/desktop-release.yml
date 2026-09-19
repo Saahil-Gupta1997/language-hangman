@@ -1,0 +1,50 @@
+name: Desktop release candidate
+on:
+  workflow_dispatch:
+  push:
+    tags: ['desktop-v*']
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test and build dependencies
+        run: python -m pip install -r requirements.txt -r requirements-build.txt
+      - name: Service and regression tests
+        run: python -m pytest -q
+      - name: Native desktop journey
+        run: python desktop_app.py --smoke-test desktop-evidence/source
+      - name: Install installer compiler
+        run: choco install innosetup --yes --no-progress
+      - name: Build application and installer
+        run: ./scripts/build_desktop.ps1
+      - name: Install into a disposable directory and test installed executable
+        shell: pwsh
+        run: |
+          $installer = (Get-ChildItem dist/installer/*Setup.exe).FullName
+          $installDir = Join-Path $env:RUNNER_TEMP 'HangmanInstalled'
+          $process = Start-Process $installer -ArgumentList @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART',"/DIR=$installDir") -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw 'Installer failed' }
+          $dataDir = Join-Path $env:LOCALAPPDATA 'LanguageHangman'
+          New-Item -ItemType Directory -Force $dataDir | Out-Null
+          $sentinel = Join-Path $dataDir 'installer-preservation.txt'
+          'preserve learner data' | Set-Content $sentinel
+          $process = Start-Process $installer -ArgumentList @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART',"/DIR=$installDir") -Wait -PassThru
+          if ($process.ExitCode -ne 0 -or -not (Test-Path $sentinel)) { throw 'Update did not preserve application data' }
+          $exe = Join-Path $installDir 'LanguageHangman.exe' 
+          $evidence = Join-Path $env:GITHUB_WORKSPACE 'desktop-evidence/installed'
+          $process = Start-Process $exe -ArgumentList @('--smoke-test', $evidence) -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw 'Installed app smoke failed' }
+          if (-not (Test-Path "$evidence/desktop-smoke.json")) { throw 'Missing smoke evidence' }
+          $process = Start-Process (Join-Path $installDir 'unins000.exe') -ArgumentList '/VERYSILENT' -Wait -PassThru
+          if ($process.ExitCode -ne 0 -or -not (Test-Path $sentinel)) { throw 'Uninstall/data preservation failed' }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-release-candidate
+          path: |
+            dist/installer/
+            desktop-evidence/

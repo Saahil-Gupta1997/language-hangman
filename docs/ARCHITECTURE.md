@@ -1,77 +1,51 @@
-# Architecture
+# Desktop architecture
 
-Language Learning Hangman is currently a local-first Streamlit application with a modular service layer. The goal of this version is to be easy to run, inspect, test, and extend.
+The supported runtime is a single native CustomTkinter process using SQLite. It
+starts no HTTP server and uses no authentication cookie or desktop-login handoff.
 
-## Runtime Shape
+`desktop_app → native views → PracticeService / AuthService / desktop_storage → repositories → SQLite`
 
-```text
-Browser
-  |
-  |-- Streamlit UI
-        |
-        |-- UI pages in src/ui/
-        |-- business services in src/services/
-        |-- repository/database layer in src/db/
-        |-- SQLite runtime database at data/app.db
-        |-- curated JSON word banks in data/words/
-```
+## Commit boundary
 
-## Core Boundaries
+`PracticeService` opens `BEGIN IMMEDIATE`, reads the durable active session, applies
+one action to private dataclass instances, and writes the new snapshot. If a round
+finishes, `GameService.finalize_round` uses the same context-local connection for
+result, progress, review, totals and completion receipt. Repository calls do not
+commit independently while a transaction is active. Errors roll back the entire
+action. The UI reloads persisted state after successful actions.
 
-- `src/ui/` owns Streamlit rendering and session-state orchestration.
-- `src/services/` owns application behavior such as auth, word selection, game flow, reports, review scheduling, and validation.
-- `src/db/` owns SQLite initialization and repository access.
-- `data/words/*.json` is source content and should be committed.
-- `data/app.db` is runtime user data and should not be committed.
+Each GameRound carries a stable UUID. A unique completion receipt records the
+outcome; repeated completion returns that result without repeating counter updates.
+Guesses include the expected round UUID so stale UI events cannot target a new round.
+SQLite writer serialization prevents simultaneous duplicate finalization. The desktop
+also holds an OS file lock so a second supported process cannot replace its database.
 
-## Auth Today
+Active practice snapshots are versioned JSON, not pickle. Completed learning cards
+and the selected next round are included, so restart works between rounds too.
+Time spent with Practice open is accumulated using a monotonic clock; paused and
+closed time is excluded. Abrupt process termination can lose the time since the last
+submitted action, but not previously saved guesses/results.
 
-The beta supports local accounts with PBKDF2 password hashes in SQLite. The preferred local entry point is the FastAPI gateway, with direct Streamlit and desktop launchers kept as fallbacks:
+## Upgrade and restore
 
-- `python -m src.cli run-auth-gateway` starts the polished FastAPI login page and Streamlit together.
-- `streamlit run app.py` keeps the Streamlit auth page as a development fallback.
-- `python desktop_app.py` remains an optional CustomTkinter wrapper for desktop-style local demos.
+Schema version 1 adds active_practice and completion_receipts to the legacy schema.
+Upgrades copy the source into a staging database, retain a pre-upgrade backup, apply
+legacy additive migrations and the new schema, verify integrity/foreign keys, then
+atomically replace the source. Newer schema versions are rejected. Normal desktop
+startup does not reseed the legacy word banks.
 
-The gateway path serves `/login` from FastAPI, posts credentials to `/api/auth`, sets a signed `httpOnly` cookie, and redirects to Streamlit.
+Restore rejects invalid databases and unsupported schemas, stages/upgrades the backup,
+and saves the previous live database before replacement. The desktop owns the database
+exclusively; using a legacy server against the same database simultaneously is unsupported.
 
-```text
-Browser
-  |
-  |-- http://localhost:8000/login
-        |
-        |-- FastAPI validates via AuthService
-        |-- FastAPI sets language_hangman_session cookie
-        |
-  |-- http://localhost:8501
-        |
-        |-- Streamlit reads Cookie header
-        |-- Streamlit restores current_user
-```
+## Scope and boundaries
 
-The signed token code lives in `src/services/session_token_service.py`. It uses HMAC signing from the Python standard library, not an external auth provider.
+The native UI is split into authentication, practice, reports and settings/help views.
+Legacy services remain for regression compatibility; the old home_page is not loaded
+by the desktop. The curated service filters new practice to `desktop-core` words while
+preserving older rows for historical results. The installer bundles only the native
+import graph, CustomTkinter resources and starter content.
 
-## Future Web Deployment Direction
-
-If the app grows into a hosted product, auth should move out of Streamlit and into a web gateway:
-
-```text
-Browser
-  |
-  |-- /login -> FastAPI static login page
-  |            posts credentials to /api/auth
-  |
-  |-- /app   -> Streamlit app behind a valid signed session cookie
-```
-
-The local FastAPI gateway is already a first step toward that shape. A production version would add HTTPS, a production secret, persistent database storage, and a reverse proxy or load balancer.
-
-## Why Not Cloud Yet?
-
-For the current portfolio beta, local-first is intentional:
-
-- No hosted secrets or account infrastructure are required.
-- The app is easy for reviewers to run from GitHub.
-- The database and word-bank behavior are transparent.
-- The code demonstrates modular Python design before adding deployment complexity.
-
-AWS is a good next milestone after the local beta is stable and documented.
+Reports derive metrics directly from completed game rows, avoiding reliance on a
+possibly stale materialised performance summary. New desktop features should use
+PracticeService rather than invoking low-level completion/snapshot APIs separately.

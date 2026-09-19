@@ -54,13 +54,13 @@ def _complete_word(
     }
 
 
-def test_beta_version_display_is_current() -> None:
-    assert __version__ == "1.0.0-beta"
+def test_release_version_display_is_current() -> None:
+    assert __version__ == "1.0.0rc1"
     assert version == __version__
-    assert __release_name__ == "Beta"
-    assert APP_VERSION_DISPLAY == "v1.0.0-beta"
+    assert __release_name__ == "Desktop Release Candidate 1"
+    assert APP_VERSION_DISPLAY == "v1.0.0rc1"
     version_file = (PROJECT_ROOT / "VERSION").read_text(encoding="utf-8").strip()
-    assert version_file == "v1.0.0-beta"
+    assert version_file == __version__
 
 
 def test_onboarding_state_guides_unassessed_users() -> None:

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from uuid import uuid4
 
 from src.utils.constants import DEFAULT_MAX_ATTEMPTS
 from src.utils.helpers import utc_now_iso
@@ -50,8 +51,10 @@ class GameRound:
     result: str = "in_progress"
     started_at: str = field(default_factory=utc_now_iso)
     completed_at: str | None = None
+    active_seconds: float | None = None
     saved: bool = False
     session_id: int | None = None
+    round_key: str = field(default_factory=lambda: uuid4().hex)
 
     @property
     def unique_letters(self) -> set[str]:

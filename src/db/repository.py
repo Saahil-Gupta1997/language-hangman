@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Iterator, Sequence
 
 from src.db.database import WORD_INSERT_SQL, create_connection
+from src.db.transaction import current_connection
 from src.utils.config import DATABASE_PATH
 from src.utils.constants import DEFAULT_DAILY_GOAL_SESSIONS, DEFAULT_DAILY_GOAL_WORDS
 from src.utils.helpers import utc_now_iso
@@ -22,6 +23,10 @@ class BaseRepository:
     @contextmanager
     def connection(self) -> Iterator[sqlite3.Connection]:
         """Yield a database connection that auto-closes after use."""
+        active = current_connection(self.db_path)
+        if active is not None:
+            yield active
+            return
         connection = create_connection(self.db_path)
         try:
             yield connection

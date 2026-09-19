@@ -1,17 +1,9 @@
-# Clean Release Checklist
+# Release checklist
 
-Use this checklist before sharing a zip of Language Learning Hangman.
-
-1. Run `python -m pytest`.
-2. Run `python -m src.cli validate-content --summary --coverage`.
-3. Run `python -m src.cli release-check`.
-4. Confirm the release copy does not include local-only artifacts:
-   `.venv`, `.idea`, `__pycache__`, `.pytest_cache`, `.ruff_cache`,
-   `.pytest_tmp`, `pytest_tmp*`, `pytest-cache-files-*`, `data/app.db`,
-   `.streamlit/secrets.toml`, `*.db`, `*.sqlite`, `*.sqlite3`, or `*.pyc`.
-5. Confirm `data/words/*.json` is included.
-6. Confirm no local learner data or runtime database files are included.
-
-For a clean zip, use `scripts/build_release.ps1`. It creates a shareable copy
-with source files and word-bank JSON while excluding local user data, caches,
-virtual environments, editor folders, and runtime database files.
+1. Run Ruff, all Python tests and scripts/check_curated_content.py.
+2. Run the Desktop release candidate Windows workflow; review installed-app results.
+3. Complete every blocking gate in docs/ACCEPTANCE.md and record actual evidence.
+4. Build with scripts/build_desktop.ps1; retain the installer SHA256 and build logs.
+5. Verify source ZIP contains no user databases, keys, backup files or local environments.
+6. Publish only the supported artifacts and exact limitations; never mark an unrun gate passed.
+7. Promote 1.0.0rc1 to 1.0.0 only after acceptance. Keep rollback backups and prior installers.

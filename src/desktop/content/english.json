@@ -1,0 +1,846 @@
+{
+  "language": "english",
+  "description": "English travel vocabulary. Definitions and examples are in English. Pronunciation spelling is approximate.",
+  "words": [
+    {
+      "word_id": "desktop_english_menu",
+      "word": "menu",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "A list of food and drinks you can order.",
+      "translation": "A list of food and drinks you can order.",
+      "hint": "A list of food and drinks you can order.",
+      "meaning_hint": "A list of food and drinks you can order.",
+      "example_sentence": "Could I see the menu, please?",
+      "sentence_translation": "Could I see the menu, please?",
+      "pronunciation_text": "MEN-yoo",
+      "usage_note": "Ask for the menu before choosing your meal.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Read it before ordering.",
+      "association_hint": "Read it before ordering.",
+      "situations": [
+        "restaurant"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "restaurant",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_bill",
+      "word": "bill",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "A statement showing how much you must pay.",
+      "translation": "A statement showing how much you must pay.",
+      "hint": "A statement showing how much you must pay.",
+      "meaning_hint": "A statement showing how much you must pay.",
+      "example_sentence": "Could we have the bill, please?",
+      "sentence_translation": "Could we have the bill, please?",
+      "pronunciation_text": "bil",
+      "usage_note": "In US restaurants, people also ask for the check.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Ask for it after your meal.",
+      "association_hint": "Ask for it after your meal.",
+      "situations": [
+        "restaurant"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "restaurant",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_water",
+      "word": "water",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "A clear liquid that people drink.",
+      "translation": "A clear liquid that people drink.",
+      "hint": "A clear liquid that people drink.",
+      "meaning_hint": "A clear liquid that people drink.",
+      "example_sentence": "I would like a glass of water.",
+      "sentence_translation": "I would like a glass of water.",
+      "pronunciation_text": "WAW-ter",
+      "usage_note": "Specify still or sparkling if the restaurant offers both.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "It can be still or sparkling.",
+      "association_hint": "It can be still or sparkling.",
+      "situations": [
+        "restaurant"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "restaurant",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_bread",
+      "word": "bread",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "Food made from flour and baked.",
+      "translation": "Food made from flour and baked.",
+      "hint": "Food made from flour and baked.",
+      "meaning_hint": "Food made from flour and baked.",
+      "example_sentence": "Please bring some bread for the table.",
+      "sentence_translation": "Please bring some bread for the table.",
+      "pronunciation_text": "bred",
+      "usage_note": "Bread is usually uncountable: say some bread or a slice of bread.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "You might put butter on it.",
+      "association_hint": "You might put butter on it.",
+      "situations": [
+        "restaurant"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "restaurant",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_spoon",
+      "word": "spoon",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "A utensil with a small bowl for eating or serving.",
+      "translation": "A utensil with a small bowl for eating or serving.",
+      "hint": "A utensil with a small bowl for eating or serving.",
+      "meaning_hint": "A utensil with a small bowl for eating or serving.",
+      "example_sentence": "I need a spoon for my soup.",
+      "sentence_translation": "I need a spoon for my soup.",
+      "pronunciation_text": "spoon (long oo)",
+      "usage_note": "A spoon is useful for soup; a fork is useful for solid food.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "A utensil used for soup.",
+      "association_hint": "A utensil used for soup.",
+      "situations": [
+        "restaurant"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "restaurant",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_order",
+      "word": "order",
+      "language": "english",
+      "category": "verb",
+      "difficulty": "beginner",
+      "meaning": "To ask a restaurant to prepare food or drink.",
+      "translation": "To ask a restaurant to prepare food or drink.",
+      "hint": "To ask a restaurant to prepare food or drink.",
+      "meaning_hint": "To ask a restaurant to prepare food or drink.",
+      "example_sentence": "Are you ready to order?",
+      "sentence_translation": "Are you ready to order?",
+      "pronunciation_text": "OR-der",
+      "usage_note": "Order can also be a noun: the waiter took our order.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Tell the waiter what you want.",
+      "association_hint": "Tell the waiter what you want.",
+      "situations": [
+        "restaurant"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "restaurant",
+        "verb"
+      ]
+    },
+    {
+      "word_id": "desktop_english_share",
+      "word": "share",
+      "language": "english",
+      "category": "verb",
+      "difficulty": "beginner",
+      "meaning": "To have or use something together with another person.",
+      "translation": "To have or use something together with another person.",
+      "hint": "To have or use something together with another person.",
+      "meaning_hint": "To have or use something together with another person.",
+      "example_sentence": "We would like to share a dessert.",
+      "sentence_translation": "We would like to share a dessert.",
+      "pronunciation_text": "shair",
+      "usage_note": "Share a dish when more than one person will eat it.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "One dessert for two people.",
+      "association_hint": "One dessert for two people.",
+      "situations": [
+        "restaurant"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "restaurant",
+        "verb"
+      ]
+    },
+    {
+      "word_id": "desktop_english_fresh",
+      "word": "fresh",
+      "language": "english",
+      "category": "adjective",
+      "difficulty": "beginner",
+      "meaning": "Recently made, picked, or prepared.",
+      "translation": "Recently made, picked, or prepared.",
+      "hint": "Recently made, picked, or prepared.",
+      "meaning_hint": "Recently made, picked, or prepared.",
+      "example_sentence": "Is the fish fresh today?",
+      "sentence_translation": "Is the fish fresh today?",
+      "pronunciation_text": "fresh (one syllable)",
+      "usage_note": "Fresh describes food quality, not necessarily its temperature.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Recently prepared food.",
+      "association_hint": "Recently prepared food.",
+      "situations": [
+        "restaurant"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "restaurant",
+        "adjective"
+      ]
+    },
+    {
+      "word_id": "desktop_english_spicy",
+      "word": "spicy",
+      "language": "english",
+      "category": "adjective",
+      "difficulty": "beginner",
+      "meaning": "Having a hot taste from spices such as chilli.",
+      "translation": "Having a hot taste from spices such as chilli.",
+      "hint": "Having a hot taste from spices such as chilli.",
+      "meaning_hint": "Having a hot taste from spices such as chilli.",
+      "example_sentence": "Is this curry very spicy?",
+      "sentence_translation": "Is this curry very spicy?",
+      "pronunciation_text": "SPY-see",
+      "usage_note": "Spicy describes flavour; hot can also describe temperature.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Chilli gives food this taste.",
+      "association_hint": "Chilli gives food this taste.",
+      "situations": [
+        "restaurant"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "restaurant",
+        "adjective"
+      ]
+    },
+    {
+      "word_id": "desktop_english_slowly",
+      "word": "slowly",
+      "language": "english",
+      "category": "adverb",
+      "difficulty": "beginner",
+      "meaning": "At a low speed.",
+      "translation": "At a low speed.",
+      "hint": "At a low speed.",
+      "meaning_hint": "At a low speed.",
+      "example_sentence": "Please speak slowly while I read the menu.",
+      "sentence_translation": "Please speak slowly while I read the menu.",
+      "pronunciation_text": "SLOH-lee",
+      "usage_note": "Slowly describes how an action happens.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "The opposite of quickly.",
+      "association_hint": "The opposite of quickly.",
+      "situations": [
+        "restaurant"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "restaurant",
+        "adverb"
+      ]
+    },
+    {
+      "word_id": "desktop_english_passport",
+      "word": "passport",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "An official document used to identify a traveller abroad.",
+      "translation": "An official document used to identify a traveller abroad.",
+      "hint": "An official document used to identify a traveller abroad.",
+      "meaning_hint": "An official document used to identify a traveller abroad.",
+      "example_sentence": "Please show your passport at the desk.",
+      "sentence_translation": "Please show your passport at the desk.",
+      "pronunciation_text": "PASS-port",
+      "usage_note": "Keep your passport accessible for identity checks.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "An official travel identity document.",
+      "association_hint": "An official travel identity document.",
+      "situations": [
+        "airport"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "airport",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_ticket",
+      "word": "ticket",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "A document or electronic record showing your right to travel.",
+      "translation": "A document or electronic record showing your right to travel.",
+      "hint": "A document or electronic record showing your right to travel.",
+      "meaning_hint": "A document or electronic record showing your right to travel.",
+      "example_sentence": "I booked my ticket yesterday.",
+      "sentence_translation": "I booked my ticket yesterday.",
+      "pronunciation_text": "TIK-it",
+      "usage_note": "An airline ticket and a boarding pass are different documents.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "You buy it to travel.",
+      "association_hint": "You buy it to travel.",
+      "situations": [
+        "airport"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "airport",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_gate",
+      "word": "gate",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "The airport area where passengers board a flight.",
+      "translation": "The airport area where passengers board a flight.",
+      "hint": "The airport area where passengers board a flight.",
+      "meaning_hint": "The airport area where passengers board a flight.",
+      "example_sentence": "Our flight leaves from gate twelve.",
+      "sentence_translation": "Our flight leaves from gate twelve.",
+      "pronunciation_text": "gayt",
+      "usage_note": "Check the departure screen because a gate can change.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Your boarding area at the airport.",
+      "association_hint": "Your boarding area at the airport.",
+      "situations": [
+        "airport"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "airport",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_luggage",
+      "word": "luggage",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "The bags and suitcases taken on a journey.",
+      "translation": "The bags and suitcases taken on a journey.",
+      "hint": "The bags and suitcases taken on a journey.",
+      "meaning_hint": "The bags and suitcases taken on a journey.",
+      "example_sentence": "Where can I collect my luggage?",
+      "sentence_translation": "Where can I collect my luggage?",
+      "pronunciation_text": "LUG-ij",
+      "usage_note": "Luggage is uncountable: say two bags, not two luggages.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Your travel bags and suitcases.",
+      "association_hint": "Your travel bags and suitcases.",
+      "situations": [
+        "airport"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "airport",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_flight",
+      "word": "flight",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "A journey made by an aircraft.",
+      "translation": "A journey made by an aircraft.",
+      "hint": "A journey made by an aircraft.",
+      "meaning_hint": "A journey made by an aircraft.",
+      "example_sentence": "Our flight arrives at six.",
+      "sentence_translation": "Our flight arrives at six.",
+      "pronunciation_text": "flyt",
+      "usage_note": "A flight number identifies a particular airline service.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "A journey through the air.",
+      "association_hint": "A journey through the air.",
+      "situations": [
+        "airport"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "airport",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_board",
+      "word": "board",
+      "language": "english",
+      "category": "verb",
+      "difficulty": "beginner",
+      "meaning": "To get onto a plane, train, or ship.",
+      "translation": "To get onto a plane, train, or ship.",
+      "hint": "To get onto a plane, train, or ship.",
+      "meaning_hint": "To get onto a plane, train, or ship.",
+      "example_sentence": "We can board the plane now.",
+      "sentence_translation": "We can board the plane now.",
+      "pronunciation_text": "bord",
+      "usage_note": "Wait until your boarding group is called.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Get onto the plane.",
+      "association_hint": "Get onto the plane.",
+      "situations": [
+        "airport"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "airport",
+        "verb"
+      ]
+    },
+    {
+      "word_id": "desktop_english_arrive",
+      "word": "arrive",
+      "language": "english",
+      "category": "verb",
+      "difficulty": "beginner",
+      "meaning": "To reach a destination.",
+      "translation": "To reach a destination.",
+      "hint": "To reach a destination.",
+      "meaning_hint": "To reach a destination.",
+      "example_sentence": "We arrive in London tonight.",
+      "sentence_translation": "We arrive in London tonight.",
+      "pronunciation_text": "uh-RYV",
+      "usage_note": "Say arrive in a city and arrive at an airport.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Reach the end of your journey.",
+      "association_hint": "Reach the end of your journey.",
+      "situations": [
+        "airport"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "airport",
+        "verb"
+      ]
+    },
+    {
+      "word_id": "desktop_english_delayed",
+      "word": "delayed",
+      "language": "english",
+      "category": "adjective",
+      "difficulty": "beginner",
+      "meaning": "Later than the expected or planned time.",
+      "translation": "Later than the expected or planned time.",
+      "hint": "Later than the expected or planned time.",
+      "meaning_hint": "Later than the expected or planned time.",
+      "example_sentence": "Our flight is delayed by an hour.",
+      "sentence_translation": "Our flight is delayed by an hour.",
+      "pronunciation_text": "dih-LAYD",
+      "usage_note": "Delayed does not mean cancelled; the service may still operate.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Later than scheduled.",
+      "association_hint": "Later than scheduled.",
+      "situations": [
+        "airport"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "airport",
+        "adjective"
+      ]
+    },
+    {
+      "word_id": "desktop_english_ready",
+      "word": "ready",
+      "language": "english",
+      "category": "adjective",
+      "difficulty": "beginner",
+      "meaning": "Prepared for an action or event.",
+      "translation": "Prepared for an action or event.",
+      "hint": "Prepared for an action or event.",
+      "meaning_hint": "Prepared for an action or event.",
+      "example_sentence": "Please have your passport ready.",
+      "sentence_translation": "Please have your passport ready.",
+      "pronunciation_text": "RED-ee",
+      "usage_note": "Ready for a flight means prepared to travel.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Prepared to go.",
+      "association_hint": "Prepared to go.",
+      "situations": [
+        "airport"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "airport",
+        "adjective"
+      ]
+    },
+    {
+      "word_id": "desktop_english_early",
+      "word": "early",
+      "language": "english",
+      "category": "adverb",
+      "difficulty": "beginner",
+      "meaning": "Before the expected or usual time.",
+      "translation": "Before the expected or usual time.",
+      "hint": "Before the expected or usual time.",
+      "meaning_hint": "Before the expected or usual time.",
+      "example_sentence": "We arrived early for our flight.",
+      "sentence_translation": "We arrived early for our flight.",
+      "pronunciation_text": "UR-lee",
+      "usage_note": "Early can also be an adjective, as in an early flight.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Before the planned time.",
+      "association_hint": "Before the planned time.",
+      "situations": [
+        "airport"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "airport",
+        "adverb"
+      ]
+    },
+    {
+      "word_id": "desktop_english_room",
+      "word": "room",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "A separate space inside a building.",
+      "translation": "A separate space inside a building.",
+      "hint": "A separate space inside a building.",
+      "meaning_hint": "A separate space inside a building.",
+      "example_sentence": "I booked a room for two nights.",
+      "sentence_translation": "I booked a room for two nights.",
+      "pronunciation_text": "room (long oo)",
+      "usage_note": "In a hotel, a room usually means the space where you stay.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "The space where you sleep in a hotel.",
+      "association_hint": "The space where you sleep in a hotel.",
+      "situations": [
+        "hotel"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "hotel",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_key",
+      "word": "key",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "An object used to open a lock.",
+      "translation": "An object used to open a lock.",
+      "hint": "An object used to open a lock.",
+      "meaning_hint": "An object used to open a lock.",
+      "example_sentence": "May I have the key to my room?",
+      "sentence_translation": "May I have the key to my room?",
+      "pronunciation_text": "kee",
+      "usage_note": "Many hotels use a key card instead of a metal key.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "It opens your room door.",
+      "association_hint": "It opens your room door.",
+      "situations": [
+        "hotel"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "hotel",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_towel",
+      "word": "towel",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "A piece of absorbent cloth used for drying.",
+      "translation": "A piece of absorbent cloth used for drying.",
+      "hint": "A piece of absorbent cloth used for drying.",
+      "meaning_hint": "A piece of absorbent cloth used for drying.",
+      "example_sentence": "Could I have a clean towel?",
+      "sentence_translation": "Could I have a clean towel?",
+      "pronunciation_text": "TOW-uhl",
+      "usage_note": "Ask for an extra towel if you need another one.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Dry your hands with it.",
+      "association_hint": "Dry your hands with it.",
+      "situations": [
+        "hotel"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "hotel",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_pillow",
+      "word": "pillow",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "A soft support for your head in bed.",
+      "translation": "A soft support for your head in bed.",
+      "hint": "A soft support for your head in bed.",
+      "meaning_hint": "A soft support for your head in bed.",
+      "example_sentence": "Could you bring an extra pillow?",
+      "sentence_translation": "Could you bring an extra pillow?",
+      "pronunciation_text": "PIL-oh",
+      "usage_note": "Extra means an additional one.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Your head rests on it in bed.",
+      "association_hint": "Your head rests on it in bed.",
+      "situations": [
+        "hotel"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "hotel",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_breakfast",
+      "word": "breakfast",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "The first meal of the day.",
+      "translation": "The first meal of the day.",
+      "hint": "The first meal of the day.",
+      "meaning_hint": "The first meal of the day.",
+      "example_sentence": "Is breakfast included in the room price?",
+      "sentence_translation": "Is breakfast included in the room price?",
+      "pronunciation_text": "BREK-fuhst",
+      "usage_note": "Included means you do not pay an additional charge for it.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "The meal you eat in the morning.",
+      "association_hint": "The meal you eat in the morning.",
+      "situations": [
+        "hotel"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "hotel",
+        "noun"
+      ]
+    },
+    {
+      "word_id": "desktop_english_stay",
+      "word": "stay",
+      "language": "english",
+      "category": "verb",
+      "difficulty": "beginner",
+      "meaning": "To remain in a place for a period of time.",
+      "translation": "To remain in a place for a period of time.",
+      "hint": "To remain in a place for a period of time.",
+      "meaning_hint": "To remain in a place for a period of time.",
+      "example_sentence": "We will stay for three nights.",
+      "sentence_translation": "We will stay for three nights.",
+      "pronunciation_text": "stay (rhymes with day)",
+      "usage_note": "Hotels commonly measure a stay in nights.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Remain at the hotel overnight.",
+      "association_hint": "Remain at the hotel overnight.",
+      "situations": [
+        "hotel"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "hotel",
+        "verb"
+      ]
+    },
+    {
+      "word_id": "desktop_english_reserve",
+      "word": "reserve",
+      "language": "english",
+      "category": "verb",
+      "difficulty": "beginner",
+      "meaning": "To arrange for something to be kept for your use.",
+      "translation": "To arrange for something to be kept for your use.",
+      "hint": "To arrange for something to be kept for your use.",
+      "meaning_hint": "To arrange for something to be kept for your use.",
+      "example_sentence": "I would like to reserve a room.",
+      "sentence_translation": "I would like to reserve a room.",
+      "pronunciation_text": "rih-ZURV",
+      "usage_note": "Book is another verb commonly used for arranging a room.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Arrange a room before you arrive.",
+      "association_hint": "Arrange a room before you arrive.",
+      "situations": [
+        "hotel"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "hotel",
+        "verb"
+      ]
+    },
+    {
+      "word_id": "desktop_english_quiet",
+      "word": "quiet",
+      "language": "english",
+      "category": "adjective",
+      "difficulty": "beginner",
+      "meaning": "Making little or no noise.",
+      "translation": "Making little or no noise.",
+      "hint": "Making little or no noise.",
+      "meaning_hint": "Making little or no noise.",
+      "example_sentence": "Could I have a quiet room?",
+      "sentence_translation": "Could I have a quiet room?",
+      "pronunciation_text": "KWY-uht",
+      "usage_note": "Quiet describes noise; quite is a different word.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "With very little noise.",
+      "association_hint": "With very little noise.",
+      "situations": [
+        "hotel"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "hotel",
+        "adjective"
+      ]
+    },
+    {
+      "word_id": "desktop_english_clean",
+      "word": "clean",
+      "language": "english",
+      "category": "adjective",
+      "difficulty": "beginner",
+      "meaning": "Free from dirt.",
+      "translation": "Free from dirt.",
+      "hint": "Free from dirt.",
+      "meaning_hint": "Free from dirt.",
+      "example_sentence": "The room is clean and comfortable.",
+      "sentence_translation": "The room is clean and comfortable.",
+      "pronunciation_text": "kleen",
+      "usage_note": "Clean can also be a verb: please clean the room.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "Free from dirt or mess.",
+      "association_hint": "Free from dirt or mess.",
+      "situations": [
+        "hotel"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "hotel",
+        "adjective"
+      ]
+    },
+    {
+      "word_id": "desktop_english_upstairs",
+      "word": "upstairs",
+      "language": "english",
+      "category": "adverb",
+      "difficulty": "beginner",
+      "meaning": "On or towards a higher floor in a building.",
+      "translation": "On or towards a higher floor in a building.",
+      "hint": "On or towards a higher floor in a building.",
+      "meaning_hint": "On or towards a higher floor in a building.",
+      "example_sentence": "Your room is upstairs.",
+      "sentence_translation": "Your room is upstairs.",
+      "pronunciation_text": "up-STAIRZ",
+      "usage_note": "The opposite is downstairs.",
+      "synonym": "",
+      "synonym_hint": "",
+      "association": "On a higher floor.",
+      "association_hint": "On a higher floor.",
+      "situations": [
+        "hotel"
+      ],
+      "source": "desktop-core",
+      "notes": "Original authored starter content; independent educator review pending.",
+      "tags": [
+        "hotel",
+        "adverb"
+      ]
+    }
+  ]
+}

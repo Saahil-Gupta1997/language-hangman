@@ -1,65 +1,50 @@
-"""Desktop launcher that shows the CustomTkinter login before Streamlit."""
+"""Supported native desktop entry point; no browser or local server required."""
 
-from __future__ import annotations
-
-import subprocess
-import sys
-
-from src.db.database import init_db
-from src.services.auth_service import AuthService
-from src.services.desktop_login_handoff import write_desktop_login_handoff
-from src.ui.login_page import LoginPage
-from src.utils.config import PROJECT_ROOT
+from src.desktop.runtime import InstanceLock
+from src.utils.config import DATABASE_PATH
 
 
-class DesktopLoginController:
-    """Wire the provided CustomTkinter login page into the Streamlit app."""
+def main():
+    import argparse
 
-    def __init__(self) -> None:
-        self.database_path = init_db()
-        self.auth_service = AuthService(db_path=self.database_path)
-        self.login_page = LoginPage(
-            on_sign_in=self.sign_in,
-            on_create_account=self.show_create_account_note,
-            on_guest=self.show_guest_note,
+    parser = argparse.ArgumentParser(description="Language Hangman desktop")
+    parser.add_argument("--smoke-test", metavar="OUTPUT_DIRECTORY")
+    args = parser.parse_args()
+    if args.smoke_test:
+        from src.desktop.smoke import run
+
+        return run(args.smoke_test)
+    import tkinter as tk
+    from tkinter import messagebox
+
+    try:
+        lock = InstanceLock(DATABASE_PATH.with_suffix(".lock"))
+    except RuntimeError as error:
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showinfo("Language Hangman", str(error))
+        root.destroy()
+        return 1
+    try:
+        from src.desktop.application import HangmanDesktop
+
+        app = HangmanDesktop()
+        app.mainloop()
+    except Exception as error:
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showerror(
+            "Unable to start",
+            "Hangman could not open its local data. "
+            "Check disk space and folder permissions, or restore a backup.\n"
+            f"Error type: {type(error).__name__}",
         )
-
-    def run(self) -> None:
-        self.login_page.mainloop()
-
-    def sign_in(self, username: str, password: str, remember_me: bool) -> None:
-        user = self.auth_service.authenticate_user(username=username, password=password)
-        if user is None:
-            self.login_page.show_error("Login Failed", "Invalid username or password.")
-            return
-
-        write_desktop_login_handoff(user_id=int(user["id"]), remember_me=remember_me)
-        self.launch_streamlit_app()
-        self.login_page.destroy()
-
-    def show_create_account_note(self) -> None:
-        # TODO: Add a CustomTkinter registration screen if desktop-only signup is required.
-        self.login_page.show_info(
-            "Create Account",
-            "Create account is available in the Streamlit app for now.",
-        )
-
-    def show_guest_note(self) -> None:
-        self.login_page.show_info(
-            "Demo Game",
-            "Guest/demo play is not available in this local beta yet.",
-        )
-
-    def launch_streamlit_app(self) -> None:
-        subprocess.Popen(
-            [sys.executable, "-m", "streamlit", "run", str(PROJECT_ROOT / "app.py")],
-            cwd=PROJECT_ROOT,
-        )
-
-
-def main() -> None:
-    DesktopLoginController().run()
+        root.destroy()
+        return 1
+    finally:
+        lock.close()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

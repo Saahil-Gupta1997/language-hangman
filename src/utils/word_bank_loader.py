@@ -512,11 +512,11 @@ def _normalize_word_entry(
         issues.append("Missing required field 'pronunciation_text'.")
     if not usage_note:
         issues.append("Missing required field 'usage_note'.")
-    if not synonym:
+    if not synonym and raw_word.get("source") != "desktop-core":
         issues.append("Missing required field 'synonym'.")
     if not association:
         issues.append("Missing required field 'association'.")
-    if not synonym_hint:
+    if not synonym_hint and raw_word.get("source") != "desktop-core":
         issues.append("Missing required field 'synonym_hint'.")
     if not association_hint:
         issues.append("Missing required field 'association_hint'.")
