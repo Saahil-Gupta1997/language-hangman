@@ -9,11 +9,17 @@ def main():
 
     parser = argparse.ArgumentParser(description="Language Hangman desktop")
     parser.add_argument("--smoke-test", metavar="OUTPUT_DIRECTORY")
+    # Internal: a child process of --smoke-test that is ended abruptly to test recovery.
+    parser.add_argument("--smoke-crash", nargs=2, help=argparse.SUPPRESS)
     args = parser.parse_args()
     if args.smoke_test:
         from src.desktop.smoke import run
 
         return run(args.smoke_test)
+    if args.smoke_crash:
+        from src.desktop.smoke import crash_child
+
+        return crash_child(*args.smoke_crash)
     import tkinter as tk
     from tkinter import messagebox
 
