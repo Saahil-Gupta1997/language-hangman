@@ -17,14 +17,15 @@ Invoke-Native { & $Python -m pip install --disable-pip-version-check -r requirem
 $version = (& $Python -c "import src; print(src.__version__)").Trim()
 if ($LASTEXITCODE -ne 0 -or -not $version) { throw "Could not read the application version." }
 Invoke-Native { & $Python -m PyInstaller --clean --noconfirm packaging/hangman.spec } "Application build failed."
-$candidates = @(
+# Select-Object keeps a single path intact (indexing a lone string would return a character).
+$iscc = @(
     (Get-Command ISCC.exe -ErrorAction SilentlyContinue).Source,
     "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
     "$env:ProgramFiles\Inno Setup 6\ISCC.exe",
     "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe"
-) | Where-Object { $_ -and (Test-Path -LiteralPath $_) }
-if (-not $candidates) { throw "Install Inno Setup 6 to build the installer." }
-Invoke-Native { & $candidates[0] "/DMyAppVersion=$version" packaging/hangman.iss } "Installer build failed."
+) | Where-Object { $_ -and (Test-Path -LiteralPath $_) } | Select-Object -First 1
+if (-not $iscc) { throw "Install Inno Setup 6 to build the installer." }
+Invoke-Native { & $iscc "/DMyAppVersion=$version" packaging/hangman.iss } "Installer build failed."
 # sha256sum-compatible lines: "<hash>  <file name>"
 Get-ChildItem dist/installer/*.exe | ForEach-Object {
     "{0}  {1}" -f (Get-FileHash -Algorithm SHA256 -LiteralPath $_.FullName).Hash.ToLower(), $_.Name
