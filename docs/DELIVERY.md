@@ -1,81 +1,153 @@
 # Delivery log — Language Hangman Desktop 1.0
 
-Project-management record for taking 1.0.0rc1 to a portfolio-ready 1.0. Test results live
-in [VERIFICATION.md](VERIFICATION.md); release gates and sign-off live in
-[ACCEPTANCE.md](ACCEPTANCE.md).
+Project-management record for taking 1.0.0rc1 to a portfolio-ready 1.0: register, RAID,
+decisions, AI assistance and milestone updates. Test results are in
+[VERIFICATION.md](VERIFICATION.md); gates and sign-off in [ACCEPTANCE.md](ACCEPTANCE.md).
 
-Status values: **Open**, **In progress**, **Fixed** (code changed, automated evidence),
-**Verified** (manual/native evidence recorded), **Pending owner** (needs a person or
-decision outside the engineering work), **Deferred** (accepted for a later release).
+Status values: **Open**, **Fixed** (code changed, automated evidence), **Verified**
+(native or installed evidence), **Pending owner** (needs a person or decision outside
+engineering), **Deferred** (accepted for a later release).
 
 ## Source revisions
 
-| Revision | Branch | Meaning |
-| --- | --- | --- |
-| `023f2bd` | master | v1.0.0-beta working copy, snapshotted before the upgrade |
-| `5a41404` | release/1.0 | 1.0.0rc1 exactly as received (zip SHA256 `0510a1a0…fe364`) |
-| `16f3fc3` | release/1.0 | rc1 + post-review fixes R-01..R-03; **baseline for this delivery** |
+| Revision | Meaning |
+| --- | --- |
+| `023f2bd` (master) | v1.0.0-beta working copy, snapshotted before the upgrade |
+| `5a41404` | 1.0.0rc1 exactly as received (zip SHA256 `0510a1a0…fe364`) |
+| `16f3fc3` | rc1 + post-review fixes R-01..R-03; **baseline for this delivery** |
+| `4ad1e34` | **1.0.0rc2 release candidate** (installer built from this commit) |
+| later commits | documentation and evidence only; no application change (check with `git diff 4ad1e34 -- src desktop_app.py packaging scripts`) |
 
 ## Defect and task register
 
-| ID | Pri | Title | Acceptance criteria | Status | Evidence |
+| ID | Pri | Title | Status | Evidence |
+| --- | --- | --- | --- | --- |
+| R-01 | P0 | Crash on every signed-in screen (pack/grid mix) | Verified | `16f3fc3`; smoke, installed smoke |
+| R-02 | P0 | `events.log` held open; Windows cleanup failed | Verified | smoke temp folder removed |
+| R-03 | P1 | Text-size change raised TclError after dropdowns | Verified | GUI scenario; smoke |
+| D-01 | P0 | Fresh profile could start Review with an unseen word | Verified | `d2e696f`; RQ-01..03 |
+| D-02 | P0 | Legacy vocabulary reachable from desktop practice | Verified | `d2e696f`; RQ-05/06; installer step 6 |
+| D-03 | P0 | Corrupt live database blocked start-up and restore | Verified (manual UI pass pending, G8) | `525c377`; RQ-07..11; installer step 7 |
+| T-04 | P0 | Build and validate the Windows release | Verified on build machine; G5–G8 pending owner | installer steps 1–8 |
+| T-05 | P0 | Content and learner acceptance | Pending owner (24/24 warnings dispositioned; review kit and session kit ready) | CONTENT_REVIEW.md, USER_ACCEPTANCE.md |
+| T-06 | P1 | Privacy-safe failure diagnostics | Fixed | RQ-19 |
+| D-07 | P1 | Automatic backup failure stopped start-up (`FileExistsError`) | Fixed | RQ-20 |
+| T-08 | P1 | Performance baseline | Done; supported history needs owner agreement (DEC-10) | performance.txt |
+| T-09 | P1 | Repository clarity (metadata, legacy labels, versions, dependencies, licence, provenance) | Done; licence pending owner (DEC-08) | `05eef7a`; CONTENT_REVIEW.md |
+| T-10 | P1 | TPM evidence | Done | this file, VERIFICATION.md, ACCEPTANCE.md, ARCHITECTURE.md |
+| D-11 | P2 | Legacy tests wrote `.session_secret` into real app data | Fixed | `tests/conftest.py` |
+| D-12 | P2 | "Why this word" showed wrong legacy reason text | Fixed | GUI and unit tests |
+| T-13 | P2 | GUI not exercised in PR CI | Fixed in workflow; not yet run on GitHub (expect D-29 to fail the release-check step on `release/1.0`) | `.github/workflows/ci.yml` |
+| T-14 | P2 | Line endings varied with checkout settings | Fixed | `.gitattributes` |
+| D-15 | P3 | Easy mode shows two distinct clues (synonym field is empty by design) | Accepted: no screen promises three clues; README states two | — |
+| T-16 | P3 | Black configured but not enforced (15 files differ) | Deferred; all new and changed code is formatted | — |
+| D-17 | P2 | Feedback lines mocked the learner or relied on idioms | Fixed; tone confirmation pending owner (DEC-07) | `25aebde` |
+| D-18 | P1 | Screenshot helper copied a screen region (could record other programs) | Fixed | `src/desktop/capture.py`; occlusion test |
+| D-19 | P3 | Destroyed windows left timers pending ("invalid command name" noise) | Fixed (9 lines → 0) | `release_window` |
+| D-20 | P2 | Smoke evidence listed fixed text, not results | Fixed | `desktop-smoke.json` |
+| D-21 | P1 | Build script failed when its log was captured; could not find a single Inno Setup install | Fixed | `03453ae`, `d8f49aa` |
+| D-22 | P1 | Window 167 px taller than a 1080p screen at 150% | Fixed | emulated scaling; GUI scenario |
+| D-23 | P1 | Keyboard focus could land below the visible area | Fixed | GUI scenario |
+| D-24 | P1 | Dropdowns (situation, difficulty, rounds, focus, text size) were mouse-only | Fixed; real keyboard pass pending (G6) | GUI scenario |
+| D-25 | P3 | Text size needed Ctrl+Shift+= | Fixed (Ctrl+=, numeric keypad) | GUI scenario |
+| D-26 | P2 | Intermittent Tk start-up failure in the test process | Fixed in tests; product unaffected (see VERIFICATION.md) | `4ad1e34` |
+| D-27 | P3 | Logging kept a handler for a different data folder | Fixed | `4ad1e34` |
+| T-28 | P1 | Installer ships no third-party licence notices (MIT/BSD/Apache components) | Open: add before public distribution, with DEC-08 | CONTENT_REVIEW.md provenance |
+| D-29 | P2 | `release-check` scans inside `.git`, so any clone on a branch named `release/…` reports `.git/refs/heads/release` and fails (would fail CI on this branch) | Open: not in the installer (legacy CLI only); fix in the next candidate by skipping `.git`. Workaround: run it in a `git worktree` | found during M5 |
+
+## RAID log
+
+| ID | Type | Description | Owner | Closure condition | Status |
 | --- | --- | --- | --- | --- | --- |
-| R-01 | P0 | Crash on every signed-in screen (pack/grid mix) | Native smoke passes past sign-in | Fixed | `16f3fc3`; baseline smoke |
-| R-02 | P0 | `events.log` held open; Windows cleanup fails | Smoke temp folder deleted on exit | Fixed | `16f3fc3`; baseline smoke |
-| R-03 | P1 | Text-size change raises TclError after dropdowns | Scaling works after any screen; regression test | Fixed | `16f3fc3`; `test_text_size_change_after_dropdown_is_destroyed` |
-| D-01 | P0 | Fresh profile can start Review with an unseen word | Fresh profile cannot start Review; every Review word meets the documented rule; situation enforced; short/exhausted queues controlled; Standard unaffected; tests drive `PracticeService` incl. later rounds | Fixed (`d2e696f`) | `tests/test_practice_rules.py`; native smoke; evidence `2026-09-19-m2-525c377` |
-| D-02 | P0 | Legacy vocabulary reachable from desktop practice | Standard and Review use only `desktop-core` after importing legacy data; no fallback bypass; counts reflect curated words; history preserved | Fixed (`d2e696f`) | `tests/test_practice_rules.py` (imported-database tests); evidence `2026-09-19-m2-525c377` |
-| D-03 | P0 | Corrupt live database blocks startup and restore | Valid backup restores a corrupt live DB; corrupt bytes quarantined; invalid backups change nothing; no partial replacement; recovery reachable when startup fails | Fixed (`525c377`); Windows manual journey pending (T-04) | `tests/test_recovery.py`; native smoke; evidence `2026-09-19-m2-525c377` |
-| T-04 | P0 | Build and validate the Windows release | Installer, SHA256, clean source archive, results tied to revision, notes, demo recording; manual checks recorded per ACCEPTANCE.md | Open | — |
-| T-05 | P0 | Content and learner acceptance | 24 heuristic warnings dispositioned; qualified review of 30 cards; 5 learner sessions recorded; material issues fixed and retested | Open | — |
-| T-06 | P1 | Privacy-safe failure diagnostics | Failures log operation code, stage, version; no names, passwords, payloads or paths | Fixed (`525c377`) | `test_diagnostics_contain_codes_but_no_personal_data`; evidence `2026-09-19-m2-525c377` |
-| D-07 | P1 | Automatic backup failure blocks startup (reproduced: `FileExistsError`) | Start with a visible "backup protection is reduced" warning | Fixed (`525c377`) | `test_automatic_backup_failure_does_not_block_start_up`; evidence `2026-09-19-m2-525c377` `repro_d07.py` |
-| T-08 | P1 | Performance baseline | Agreed history size; startup, guess, report and backup timings recorded with hardware | Open | — |
-| T-09 | P1 | Repository clarity | Metadata, entry point, legacy labels, version consistency, dependency docs, licence proposal, provenance | Open | — |
-| T-10 | P1 | TPM evidence | Architecture/data flow, traceability, RAID, decisions, evidence index, go/no-go, AI-assistance note | Open | — |
-| D-11 | P2 | Legacy gateway tests write `.session_secret` into the real app-data folder | Test suite writes nothing outside temporary folders | Fixed (`525c377`) | `tests/conftest.py`; checked with no data-folder override |
-| D-12 | P2 | "Why this word" shows legacy reason text (wrong category; claims recent words are avoided in Review) | Text states the desktop rule accurately | Fixed (`525c377`) | `test_why_this_word_describes_the_desktop_rule_not_a_category`; evidence `2026-09-19-m2-525c377` screenshots |
-| T-13 | P2 | GUI not exercised in PR CI; release workflow manual-only | Native smoke runs on Windows for every PR | Open | review finding |
-| T-14 | P2 | Line endings vary with checkout settings | `.gitattributes` makes source archives deterministic | Fixed (`22d33f9`) | `git ls-files --eol`: index all LF |
-| D-15 | P3 | Easy mode advertises three clues but the blank synonym repeats the association | Clue text and count agree | Open | review finding |
-| D-17 | P2 | Some wrong-guess feedback lines mock the learner (e.g. "Do you know the alphabet?") | Tone suitable for adult learners, confirmed in content review | Open (content review) | baseline `smoke-practice.png` |
-| D-18 | P1 | Screenshot helper copied a screen region and could record other programs | Evidence captures only the application window | Fixed (`525c377`); affected image deleted unviewed-in-repo | `src/desktop/capture.py`; occlusion check (red cover, 0% captured) |
-| D-19 | P3 | Tcl "invalid command name … after script" console noise when windows close within milliseconds | No user-visible effect in the windowed build; accepted | Deferred | smoke console output |
-| D-20 | P2 | Smoke evidence listed its checks as fixed text, not results | Each check recorded only after it passes; file written on failure too | Fixed (`525c377`) | `desktop-smoke.json` in M2 evidence |
-| T-16 | P3 | Black configured but not enforced (15 files differ) | Either enforced in CI or configuration removed | Open | baseline `checks.txt` |
+| RK-1 | Risk | Content errors reach learners (AI-assisted writing, no educator yet) | Owner | G9 review done, corrections applied and retested | Open |
+| RK-2 | Risk | Keyboard/screen-reader users blocked: CustomTkinter draws controls on canvases that Windows screen readers generally cannot read | Owner | G6 passed; screen-reader limitation stated in README | Open (limitation documented) |
+| RK-3 | Risk | SmartScreen "unknown publisher" warning deters installers | Owner | Signing certificate or documented expectation | Accepted: documented |
+| RK-4 | Risk | Real 100%/150% scaling differs from emulation | Owner | G7 passed | Open |
+| RK-5 | Risk | CustomTkinter 5.2.2 internals patched (dropdown leak, timers) break on upgrade | Engineering | Workarounds skip themselves if internals move; re-test on any upgrade | Mitigated |
+| A-1 | Assumption | Intended learner reads simple English (about CEFR A2) | Owner | Confirmed in CONTENT_REVIEW.md | Pending owner |
+| A-2 | Assumption | One learner per Windows account; a few profiles per computer | Owner | DEC-10 agreed | Pending owner |
+| I-1 | Issue | Validated installer `fd93a4d3…` deleted by a clean-up step before archiving | Engineering | Rebuilt from the same commit and all installer checks re-run (`2fc27de7…`); artifacts now copied out immediately after building | Closed |
+| I-2 | Issue | Commit `05eef7a` made after a test run whose failure a pipeline masked | Engineering | Cause (D-26) fixed; test runs now check pytest's exit code | Closed |
+| I-3 | Issue | A screenshot captured another program's window (D-18) | Engineering | Image deleted, never committed; window-only capture proven | Closed |
+| DP-1 | Dependency | Qualified content reviewer | Owner | Reviewer appointed | Open |
+| DP-2 | Dependency | Five learners matching the intended profile | Owner | Sessions scheduled | Open |
+| DP-3 | Dependency | GitHub repository for CI and release workflows | Owner | Repository published and workflows run | Open |
+| RK-6 | Risk | Distributing without third-party notices breaches bundled licences | Owner + engineering | T-28 closed | Open |
+| DP-4 | Dependency | Clean Windows machine or account without Python | Owner | G5 run | Open |
+
+## Decision log
+
+"Retrospective" entries explain choices already present in the repository when this work
+began. They are inferred from the code and documents, not from the owner, and need the
+owner's confirmation before they are quoted as the owner's reasoning.
+
+| ID | Decision | Rationale | Made by | Status |
+| --- | --- | --- | --- | --- |
+| DEC-01 | Native desktop app instead of the browser prototype | Offline, single-user, no server or cookies to secure; one install for learners | Retrospective (rc1 README and code) | Owner to confirm |
+| DEC-02 | SQLite with transactions per learner action | Local, file-based, atomic, easy to back up and restore | Retrospective | Owner to confirm |
+| DEC-03 | Explainable rules, no machine learning | Predictable, testable behaviour for a small corpus | Retrospective | Owner to confirm |
+| DEC-04 | 30 curated English words; other languages dropped | rc1 excluded the older corpus; an earlier review had found 42 misspelled French/Spanish words there. Quality over breadth (inferred) | Retrospective | Owner to confirm |
+| DEC-05 | Keep legacy browser code and banks for history and regression tests only | Imported progress still reports; the desktop reuses the game engine | Retrospective | Owner to confirm |
+| DEC-06 | Review = all active review items for curated words in the situation, due first, once per session | Keeps Review usable on the day of practice (due-only would wait a day); matches rc1's fallback but as one consistent rule | Claude Code (this delivery) | **Owner to confirm** |
+| DEC-07 | Replace mocking feedback lines with plain encouraging English | Learners of English; sarcasm and idioms confuse and may offend | Claude Code | **Owner to confirm tone** |
+| DEC-08 | Licence | Proposal: MIT for code; content licence (e.g. CC BY 4.0) only after provenance is confirmed | Proposal | **Owner decision needed before publishing** |
+| DEC-09 | Version the new candidate as 1.0.0rc2 | It differs from the rc1 build; still a release candidate until gates close | Claude Code | Done |
+| DEC-10 | Supported history: up to 5 profiles, 5,000 completed rounds per profile | Measured comfortably (all operations < 1 s) | Proposal | **Owner to agree** |
+| DEC-11 | Minimum window 800×600 logical pixels | Fits 1080p at 150% scaling | Claude Code | Done |
+| DEC-12 | GUI tests run one per process | Removes a test-harness-only Tcl interaction (D-26) | Claude Code | Done |
+| DEC-13 | Build locally from a clean checkout; GitHub workflows prepared but not yet run | No remote repository available | Claude Code | Done |
+
+## How AI assistance was used and verified
+
+- **Origin.** The beta and rc1 were built with AI coding assistance (the beta README names
+  Codex). This delivery was carried out by Claude Code (Anthropic) working on the owner's
+  computer at the owner's direction.
+- **What the AI did.** Reproduced defects before changing code; wrote fixes, regression
+  tests and documentation; built and installed the Windows release; measured performance;
+  recorded the demo; prepared the content-review and learner-session kits.
+- **How it was checked.** Every defect was reproduced first and re-run after the fix;
+  results are tied to commits and recorded with the commands used; the installer was
+  exercised by installing, upgrading, recovering and uninstalling it; screenshots were
+  checked to contain only the application window. Hypotheses that turned out wrong
+  (D-26's first two theories) were recorded and their code removed.
+- **What the AI must not do.** Fill in educator, learner or manual-test results; mark a gate
+  passed without evidence. Those records remain empty until people complete them.
+- **Owner review.** All code, content and decisions above are subject to the owner's review;
+  items marked "Owner to confirm" are not settled.
 
 ## Milestone updates
 
-### M1 — Baseline and defect reproduction (2026-09-19)
+### M1 — Baseline and defect reproduction
 
-- Revision `16f3fc3` checked out into a clean worktree; environment in
-  `evidence/2026-09-19-baseline-16f3fc3/environment.txt`.
-- Results: 134 passed, 0 skipped, 1 third-party deprecation warning; Ruff clean; release
-  check clean; curated check PASS with 24 warnings; legacy banks 324 valid / 759 warnings;
-  native smoke journey passed on Windows. Black reports 15 files (T-16).
-- The historical rc1 review reported 133 passed and one skipped GUI test. The difference is
-  the R-03 regression test, which runs (not skips) on a Windows desktop.
-- D-01, D-02 and D-03 reproduced with `repro_defects.py` (output in `defect-repro.txt`).
-  D-02 needs more than ten later rounds, because recently played words are excluded
-  from selection; a real imported database meets that condition.
+Revision `16f3fc3`: 134 passed, 0 skipped, 1 third-party warning; Ruff clean; native smoke
+passed; Black reports 15 files (T-16). D-01, D-02 and D-03 reproduced
+(`evidence/2026-09-19-baseline-16f3fc3/`). The historical rc1 figure (133 passed, 1 skipped)
+differs because the R-03 GUI test runs rather than skips on a Windows desktop.
 
-### M2 — P0 defects fixed with regression coverage (2026-09-19)
+### M2 — P0 defects fixed
 
-- D-01/D-02 (`d2e696f`): one rule for candidate lists (`None` = unrestricted, empty = none);
-  Review eligibility = active review items for curated words in the chosen situation, due
-  first, once per session; `WordService.source` enforces the curated corpus in listing,
-  counting, strict selection and every fallback. Legacy results and review items are kept
-  unchanged for history. Five words exist in both banks (bread, slowly, early, quiet,
-  clean); their shared record takes curated content, so earlier practice of them counts.
-- D-03 (`525c377`): recovery-safe restore (validate → stage → protect → set side files aside
-  → atomic switch); start-up quick-check; recovery window before any main window.
-- Also fixed: D-07, T-06, D-11, D-12, D-20, T-14. New: D-17 (tone), D-18 (screenshot
-  privacy), D-19 (console noise).
-- Results on a clean checkout of `525c377`: 158 passed, 0 skipped, 1 third-party warning
-  (stable over three consecutive runs); Ruff clean; release check clean; native smoke
-  journey passed 11 checks; defect reproductions no longer reproduce.
-- Incident: one smoke screenshot captured another program's window because the capture
-  copied a screen region. The image was deleted immediately and never committed; capture
-  now uses Windows PrintWindow on the application window only (D-18).
-- Remaining for release: T-04 (Windows build and manual checks), T-05 (content and learner
-  acceptance), T-08, T-09, T-10, T-13.
+D-01/D-02 in `d2e696f`, D-03 in `525c377`, plus D-07, T-06, D-11, D-12, D-20, T-14.
+158 passed ×3 on a clean checkout; reproductions no longer reproduce. Incident I-3.
+
+### M3 — Windows artifact built and validated
+
+1.0.0rc2 candidate `4ad1e34`: keyboard (D-23..D-25), screen fit (D-22), feedback tone (D-17),
+build-script fixes (D-21), test isolation (D-26). Installer `2fc27de7…58dc95` built from a
+clean checkout; install, genuine upgrade from rc1, beta import, recovery and uninstall all
+verified; installed smoke 16/16 without Python on `PATH`. Incidents I-1 and I-2.
+Dependencies: clean-machine and manual checks (owner).
+
+### M4 — Content and learner acceptance (prepared, pending people)
+
+24/24 editorial warnings dispositioned (7 notes rewritten). Reviewer worksheet, intended-
+learner definition and five-session protocol prepared. No review or session has taken place.
+
+### M5 — Documentation and evidence reconciled
+
+README, architecture, verification (with traceability), acceptance, this log, release notes
+and legacy notes updated; evidence under `docs/evidence/`; demo in `docs/media/`.
+
+### M6 — Release decision
+
+No-go for 1.0 final; recommendation to share 1.0.0rc2 as a tested release candidate
+(ACCEPTANCE.md go/no-go record). Owner decision pending.

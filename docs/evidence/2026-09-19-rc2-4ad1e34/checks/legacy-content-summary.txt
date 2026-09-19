@@ -1,0 +1,29 @@
+Files processed: 3
+Valid words: 324
+Invalid words: 0
+Duplicate words: 0
+Quality warnings: 759
+- english.json: 108 valid, 0 invalid, 0 duplicates, 243 warnings
+- french.json: 108 valid, 0 invalid, 0 duplicates, 270 warnings
+- spanish.json: 108 valid, 0 invalid, 0 duplicates, 246 warnings
+Quality warning preview:
+- english.json: Row 1 (apple): Example sentence looks generic; replace it with a natural learner scenario.
+- english.json: Row 1 (apple): Pronunciation text matches the word exactly; add learner-friendly guidance.
+- english.json: Row 1 (apple): Usage note looks templated; make it explain when a learner would say this word.
+- english.json: Row 2 (garden): Example sentence looks generic; replace it with a natural learner scenario.
+- english.json: Row 2 (garden): Pronunciation text matches the word exactly; add learner-friendly guidance.
+- english.json: Row 2 (garden): Usage note looks templated; make it explain when a learner would say this word.
+- english.json: Row 3 (river): Example sentence looks generic; replace it with a natural learner scenario.
+- english.json: Row 3 (river): Pronunciation text matches the word exactly; add learner-friendly guidance.
+- english.json: Row 3 (river): Usage note looks templated; make it explain when a learner would say this word.
+- english.json: Row 4 (window): Example sentence looks generic; replace it with a natural learner scenario.
+- english.json: Row 4 (window): Pronunciation text matches the word exactly; add learner-friendly guidance.
+- english.json: Row 4 (window): Usage note looks templated; make it explain when a learner would say this word.
+- english.json: Row 5 (school): Example sentence looks generic; replace it with a natural learner scenario.
+- english.json: Row 5 (school): Pronunciation text matches the word exactly; add learner-friendly guidance.
+- english.json: Row 5 (school): Usage note looks templated; make it explain when a learner would say this word.
+- english.json: Row 6 (family): Example sentence looks generic; replace it with a natural learner scenario.
+- english.json: Row 6 (family): Pronunciation text matches the word exactly; add learner-friendly guidance.
+- english.json: Row 6 (family): Usage note looks templated; make it explain when a learner would say this word.
+- english.json: Row 7 (market): Example sentence looks generic; replace it with a natural learner scenario.
+- english.json: Row 7 (market): Pronunciation text matches the word exactly; add learner-friendly guidance.

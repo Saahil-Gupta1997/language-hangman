@@ -1,0 +1,2 @@
+rc1 code revision: 5a41404
+rc1 data created in %LOCALAPPDATA%\LanguageHangman by rc1 services (rc1 UI crashes after sign-in, R-01): schema 1 | users upgrader + second | rounds 2 (1 win, 1 loss) | saved session paused mid-round with wrong letter z

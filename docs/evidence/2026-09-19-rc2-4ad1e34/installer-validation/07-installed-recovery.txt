@@ -1,0 +1,20 @@
+live data file corrupted (first 100 bytes zeroed)
+
+installed app, normal launch on the damaged data:
+window title: 'Language Hangman · Recovery · 1.0.0rc2'
+start-up to visible window: 0.89 s
+screenshot saved (app-only check 0.232): True
+closed normally, exit code 1
+
+restore as the recovery window's first button does (candidate code):
+recovery window would offer, newest first: ['safety backup', 'pre-upgrade backup', 'daily backup']
+restored: safety backup | damaged file kept as backups/quarantine-<timestamp>
+damaged bytes preserved exactly: True
+profiles after recovery: ['upgrader', 'second']
+upgrader signs in after recovery: True
+
+installed app, normal launch after recovery:
+window title: 'Language Hangman · 1.0.0rc2'
+start-up to visible window: 0.89 s
+screenshot saved (app-only check 0.154): True
+closed normally, exit code 0

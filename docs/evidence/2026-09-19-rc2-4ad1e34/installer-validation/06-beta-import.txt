@@ -1,0 +1,18 @@
+beta database: created by v1.0.0-beta code (023f2bd); schema user_version 0; learner beta-learner; 3 Hotel rounds (clean, small, early)
+import through the Restore / import code path, candidate code:
+1.0.0rc2 | previous data kept as backups/before-restore-20260919T125917594107.sqlite | user_version now 1
+
+installed app, normal launch on imported beta data:
+window title: 'Language Hangman · 1.0.0rc2'
+start-up to visible window: 1.05 s
+screenshot saved (app-only check 0.154): True
+closed normally, exit code 0
+
+verification with candidate code:
+beta credentials accepted: True
+beta history kept: {'rounds': 3, 'wins': 3, 'words': 3}
+upgrade profile replaced by import (all profiles replaced, as documented): True
+desktop Review in hotel: ['clean']
+desktop Review in airport: ['early']
+desktop Review in restaurant: refused (no eligible review words)
+legacy-only word kept for history: ('step9-expanded-core',)

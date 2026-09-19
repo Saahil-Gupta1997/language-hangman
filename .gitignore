@@ -31,3 +31,5 @@ frontend/vite.config.js
 frontend/vite.config.d.ts
 .env
 .env.*
+# Release evidence is committed as recorded, including installer and build logs
+!docs/evidence/**/*.log

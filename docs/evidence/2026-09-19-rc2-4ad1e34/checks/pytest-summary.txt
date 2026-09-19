@@ -1,0 +1,2 @@
+  <PROJECT>\.venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+163 passed, 1 warning in 128.38s (0:02:08)

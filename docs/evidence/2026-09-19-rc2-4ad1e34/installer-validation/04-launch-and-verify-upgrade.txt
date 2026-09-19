@@ -1,0 +1,14 @@
+installed app, normal launch on upgraded rc1 data:
+window title: 'Language Hangman · 1.0.0rc2'
+start-up to visible window: 1.84 s
+screenshot saved (app-only check 0.154): True
+closed normally, exit code 0
+
+verification with candidate code 4ad1e34:
+code version 1.0.0rc2
+rc1 credentials accepted: True
+wrong password rejected: True
+second profile present: True
+rc1 progress: {'rounds': 2, 'wins': 1, 'losses': 1, 'sessions': 0}
+paused rc1 session resumes: True (round 3 of 3)
+after finishing the resumed round: {'rounds': 3, 'wins': 2, 'losses': 1, 'sessions': 1}

@@ -1,0 +1,20 @@
+revision: 4ad1e34; hardware: AMD Ryzen 7 6800H (8C/16T), 15.2 GB RAM, NVMe SSD; Windows 11 Home 26200 at 125% scaling
+dataset: 5 profiles; 'heavy' 5,000 completed rounds (150 played through PracticeService, scaled by copying rows with spread dates), 999 sessions; 4 light profiles x 30 rounds; 5.30 MB
+
+version 1.0.0rc2; database 5.30 MB
+open + upgrade check + quick_check           n=10   median     18.2 ms   p95     28.7 ms   max     28.7 ms
+full backup (copy + validation)              n=5    median    124.6 ms   p95    134.4 ms   max    134.4 ms
+progress report, 5,000-round profile         n=20   median     56.6 ms   p95     67.4 ms   max     71.5 ms
+guess (round continues)                      n=123  median     13.5 ms   p95     17.4 ms   max    105.3 ms
+guess that completes a round (all writes)    n=30   median     28.3 ms   p95     35.5 ms   max     36.6 ms
+GUI: Home screen                             n=5    median    221.1 ms   p95    323.7 ms   max    323.7 ms
+GUI: Reports screen (5,000-row table)        n=5    median    313.4 ms   p95    331.0 ms   max    331.0 ms
+GUI: Practice setup screen                   n=5    median    299.9 ms   p95    343.2 ms   max    343.2 ms
+
+
+built EXE sha256 224bf1cc8adb8c273241f69877d6fb6776cb0e1d2fef371d1f707b0bb9e511f2 (identical to the installed EXE), start-up to visible window, 5 cold launches on a copy of the dataset:
+  launch 1 (includes daily backup): start-up to visible window: 1.26 s
+  launch 2 (backup already done): start-up to visible window: 0.79 s
+  launch 3 (backup already done): start-up to visible window: 0.79 s
+  launch 4 (backup already done): start-up to visible window: 0.79 s
+  launch 5 (backup already done): start-up to visible window: 0.75 s

@@ -1,0 +1,1 @@
+2fc27de78a94aca7c96637dafc70b15ff707349b403c878bfd050ad79a58dc95  LanguageHangman-1.0.0rc2-Setup.exe

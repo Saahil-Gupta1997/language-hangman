@@ -1,0 +1,9 @@
+candidate installer (built from 4ad1e34) sha256: 2fc27de78a94aca7c96637dafc70b15ff707349b403c878bfd050ad79a58dc95
+data sha256 before upgrade: 31f03abc35c4e317c863b0f8fea65c0ba44fa85911a87919f540b6ca23d13b49
+installed exe before (rc1): 5312e356785730a73ab8c90b60881f6cb4492d0c769d742031a739da571d2e63
+upgrade installer exit: 0
+data sha256 after upgrade:  31f03abc35c4e317c863b0f8fea65c0ba44fa85911a87919f540b6ca23d13b49
+learner data unchanged by the installer: True
+installed exe after: 224bf1cc8adb8c273241f69877d6fb6776cb0e1d2fef371d1f707b0bb9e511f2
+installed exe identical to candidate build: True
+uninstall entries: 1 -> version 1.0.0rc2

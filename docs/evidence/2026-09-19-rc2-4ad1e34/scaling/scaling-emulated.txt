@@ -1,0 +1,7 @@
+revision 4ad1e34; Windows display at 125% on a 1920x1080 panel; 100% and 150% emulated with CustomTkinter scaling (not the Windows setting)
+emulated 100%: work area 1920x1020, window 1078x807 at (430,106) -> inside work area
+emulated 100% minimum + Large text: window 818x647 -> fits work area height
+emulated 125%: work area 1920x1020, window 1343x997 at (297,5) -> inside work area
+emulated 125% minimum + Large text: window 1018x797 -> fits work area height
+emulated 150%: work area 1920x1020, window 1608x995 at (165,0) -> inside work area
+emulated 150% minimum + Large text: window 1218x947 -> fits work area height
