@@ -12,7 +12,12 @@ import customtkinter as ctk
 
 from src import __version__
 from src.desktop.runtime import log_event
-from src.desktop.widgets import BLUE, fit_to_work_area, keyboard_button
+from src.desktop.widgets import (
+    BLUE,
+    fit_to_work_area,
+    keyboard_button,
+    release_window,
+)
 from src.services.curated_content import seed_curated
 from src.services.desktop_storage import restore_database
 
@@ -84,12 +89,13 @@ class RecoveryWindow(ctk.CTk):
             self._label("No automatic backups were found in the data folder.", bold=True)
         buttons.append(self._button("Choose a backup file…", self.choose_backup))
         buttons.append(self._button("Open data folder", self.open_data_folder))
-        buttons.append(self._button("Quit", self.destroy))
+        buttons.append(self._button("Quit", self.close))
         self._label(
             "If a restore fails, the message explains why and your current data file stays "
             "unchanged. After recovery, you can export diagnostics from Settings."
         )
-        self.bind("<Escape>", lambda event: self.destroy())
+        self.bind("<Escape>", lambda event: self.close())
+        self.protocol("WM_DELETE_WINDOW", self.close)
         buttons[0].focus_set()
 
     def _label(self, text, bold=False, size=15):
@@ -157,7 +163,10 @@ class RecoveryWindow(ctk.CTk):
             parent=self,
         )
         self.restored = True
-        self.destroy()
+        self.close()
+
+    def close(self):
+        release_window(self)
 
     def open_data_folder(self):
         self.data_dir.mkdir(parents=True, exist_ok=True)

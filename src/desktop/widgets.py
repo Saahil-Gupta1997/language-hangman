@@ -10,6 +10,28 @@ FOCUS_RING = "#F59E0B"
 TITLE_BAR_ALLOWANCE = 48  # logical pixels for the title bar and window borders
 
 
+def release_window(window):
+    """Destroy a CustomTkinter root without leaving its timers or tracker entries behind.
+
+    CustomTkinter schedules timers that would otherwise fire after the window is gone
+    ("invalid command name ..." noise), and its scaling tracker keeps a reference to every
+    root it has seen, so the recovery-then-start path would keep the first window alive.
+    """
+    import tkinter
+
+    try:
+        for identifier in window.tk.call("after", "info"):
+            window.after_cancel(identifier)
+    except tkinter.TclError:
+        pass
+    try:
+        window.destroy()
+    except tkinter.TclError:
+        pass
+    ScalingTracker.window_widgets_dict.pop(window, None)
+    ScalingTracker.window_dpi_scaling_dict.pop(window, None)
+
+
 def _work_area():
     """Return the desktop work area (excluding the taskbar) in physical pixels, if known."""
     if sys.platform != "win32":

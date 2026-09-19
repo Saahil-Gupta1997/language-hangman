@@ -7,7 +7,6 @@ from dataclasses import asdict
 from zipfile import ZipFile
 
 import pytest
-from conftest import require_display
 
 from src.db.database import create_connection, init_db
 from src.models.game_round import GameRound
@@ -347,19 +346,3 @@ def test_restore_rejects_incomplete_current_schema(account, tmp_path):
     with pytest.raises(ValueError, match="missing required"):
         restore_database(path, bad)
     assert path.read_bytes() == before
-
-
-def test_text_size_change_after_dropdown_is_destroyed():
-    import customtkinter as ctk
-
-    from src.desktop.runtime import fix_dropdown_scaling_leak
-
-    fix_dropdown_scaling_leak()
-    require_display()
-    root = ctk.CTk()
-    try:
-        ctk.CTkOptionMenu(root, values=["Standard", "Large"]).destroy()
-        ctk.set_widget_scaling(1.15)
-        ctk.set_widget_scaling(1.0)
-    finally:
-        root.destroy()

@@ -22,7 +22,13 @@ from src.desktop.runtime import (
     log_event,
 )
 from src.desktop.settings_view import SettingsView
-from src.desktop.widgets import BLUE, fit_to_work_area, keyboard_button, scroll_into_view
+from src.desktop.widgets import (
+    BLUE,
+    fit_to_work_area,
+    keyboard_button,
+    release_window,
+    scroll_into_view,
+)
 from src.services.auth_service import AuthService
 from src.services.curated_content import seed_curated
 from src.services.desktop_storage import backup_database, open_live_database
@@ -225,5 +231,5 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
             self.practice.pause(self.user["id"])
         if self.guest:
             self.guest.close()
-        self.destroy()
+        release_window(self)
         close_logging()

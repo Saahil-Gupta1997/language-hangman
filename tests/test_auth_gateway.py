@@ -109,9 +109,10 @@ def test_gateway_preserves_password_spaces_and_rejects_invalid_language(tmp_path
     credentials = {"username": "spaceuser", "password": "  secret123  "}
     assert client.post("/api/register", json=credentials).status_code == 200
     assert client.post("/api/auth", json=credentials).status_code == 200
-    assert client.post(
-        "/api/auth", json={**credentials, "password": "secret123"}
-    ).status_code == 401
-    assert client.post(
-        "/api/register", json={**credentials, "target_language": "unknown"}
-    ).status_code == 422
+    assert (
+        client.post("/api/auth", json={**credentials, "password": "secret123"}).status_code == 401
+    )
+    assert (
+        client.post("/api/register", json={**credentials, "target_language": "unknown"}).status_code
+        == 422
+    )

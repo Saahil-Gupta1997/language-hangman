@@ -90,6 +90,12 @@ def configure_logging(data_dir):
     logger = logging.getLogger("hangman")
     logger.setLevel(logging.INFO)
     logger.propagate = False
+    target = str((directory / "events.log").resolve())
+    for existing in list(logger.handlers):
+        # A handler left from another data folder would send events to the wrong place.
+        if getattr(existing, "baseFilename", None) != target:
+            logger.removeHandler(existing)
+            existing.close()
     if not logger.handlers:
         handler = RotatingFileHandler(directory / "events.log", maxBytes=256_000, backupCount=3)
         handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))

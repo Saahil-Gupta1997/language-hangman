@@ -1,4 +1,7 @@
-"""Recovery from a damaged live database (D-03), degraded start-up (D-07), diagnostics (T-06)."""
+"""Recovery from a damaged live database (D-03) and diagnostics (T-06).
+
+The degraded start-up check for D-07 needs a window and lives in tests/gui_scenarios.py.
+"""
 
 import json
 import logging
@@ -7,7 +10,6 @@ import sys
 import zipfile
 
 import pytest
-from conftest import require_display
 
 import src.services.desktop_storage as storage
 from src.db.database import init_db
@@ -255,17 +257,3 @@ def test_diagnostics_contain_codes_but_no_personal_data(saved_state, tmp_path):
     assert payload["recent_events"] == events
     for secret in ("keeper", "password123", str(tmp_path), "hotel"):
         assert secret not in text
-
-
-def test_automatic_backup_failure_does_not_block_start_up(tmp_path):
-    from src.desktop.application import HangmanDesktop
-
-    require_display()
-    (tmp_path / "backups").write_text("a file where the backups folder should be")
-    app = HangmanDesktop(tmp_path / "app.db", tmp_path)
-    try:
-        assert app.backup_warning and "backup protection is reduced" in app.backup_warning
-        assert any("stage=automatic_backup" in line for line in recent_events(tmp_path))
-        app.show_login(register=True)  # the app is usable
-    finally:
-        app.close_application()
