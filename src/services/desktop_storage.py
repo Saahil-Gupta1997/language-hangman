@@ -192,16 +192,46 @@ def _protect_current_database(db_path, backups_dir):
     return quarantine_database(db_path, backups_dir)
 
 
-def _set_aside_sidecars(db_path, backups_dir):
-    """Move journal side files away so SQLite cannot replay them into the restored file."""
-    moved = []
+def _set_aside_sidecars(db_path, backups_dir, moved):
+    """Move journal side files away so SQLite cannot replay them into the restored file.
+
+    Each completed move is appended to ``moved`` straight away, so that if a later move
+    fails the caller still knows which files to put back.
+    """
     for suffix in SIDECAR_SUFFIXES:
         sidecar = Path(f"{db_path}{suffix}")
         if sidecar.exists():
             destination = backups_dir / f"set-aside-{_stamp()}-{sidecar.name}"
             os.replace(sidecar, destination)
             moved.append((destination, sidecar))
-    return moved
+
+
+def _put_back_sidecars(moved):
+    """Return set-aside side files to their places; return those that could not be."""
+    stranded = []
+    for destination, original in reversed(moved):
+        try:
+            os.replace(destination, original)
+        except OSError:
+            stranded.append((destination, original))
+    return stranded
+
+
+def _incomplete_rollback_message(error, stranded, preserved):
+    moves = "\n".join(f"  {kept}  →  {original}" for kept, original in reversed(stranded))
+    copy = (
+        f"\n\nA copy of your data taken before this attempt is also kept at:\n  {preserved}"
+        if preserved is not None
+        else ""
+    )
+    return (
+        "The backup was not restored because the current data file could not be replaced "
+        f"({type(error).__name__}), and {len(stranded)} of its journal files could not be put "
+        "back. Your data file itself was not changed, but it may be incomplete or "
+        "inconsistent until they are back in place.\n\n"
+        "Close Language Hangman, then move each file back to its original folder and name:\n"
+        f"{moves}{copy}"
+    )
 
 
 def restore_database(db_path, source):
@@ -210,8 +240,9 @@ def restore_database(db_path, source):
     Steps: validate the backup; stage, upgrade and re-validate a copy; keep the current file
     (a validated safety backup when readable, otherwise a byte-for-byte quarantine copy);
     move journal side files aside; switch with one atomic rename. A failure before the
-    rename leaves the live file exactly as it was. Returns the safety backup or quarantine
-    folder, or None when there was no live file.
+    rename leaves the live file exactly as it was and puts back any side files already
+    moved; if one cannot be put back, RestoreError stage "rollback" says where it is kept.
+    Returns the safety backup or quarantine folder, or None when there was no live file.
     """
     db_path, source = Path(db_path), Path(source)
     validate_backup(source)
@@ -260,11 +291,14 @@ def restore_database(db_path, source):
 
         moved = []
         try:
-            moved = _set_aside_sidecars(db_path, backups_dir)
+            _set_aside_sidecars(db_path, backups_dir, moved)
             os.replace(staging, db_path)
         except OSError as error:
-            for destination, original in reversed(moved):
-                os.replace(destination, original)
+            stranded = _put_back_sidecars(moved)
+            if stranded:
+                raise RestoreError(
+                    "rollback", _incomplete_rollback_message(error, stranded, preserved)
+                ) from error
             raise RestoreError(
                 "replace",
                 "The backup was not restored because the current data file could not be "
