@@ -1,1 +1,1 @@
-"""Streamlit page modules."""
+"""LEGACY Streamlit page modules (browser prototype, unsupported; regression tests only)."""

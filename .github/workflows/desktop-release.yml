@@ -21,7 +21,10 @@ jobs:
         run: choco install innosetup --yes --no-progress
       - name: Build application and installer
         run: ./scripts/build_desktop.ps1
-      - name: Install into a disposable directory and test installed executable
+      # Installs, reinstalls the SAME build over itself (a data-preservation smoke check, not
+      # a version upgrade), runs the installed app's smoke journey and uninstalls. Genuine
+      # upgrades from an earlier release are recorded in docs/VERIFICATION.md.
+      - name: Install, reinstall, test installed executable, uninstall
         shell: pwsh
         run: |
           $installer = (Get-ChildItem dist/installer/*Setup.exe).FullName

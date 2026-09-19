@@ -1,3 +1,5 @@
+# LEGACY: builds the unsupported browser prototype (Streamlit + FastAPI), kept only for
+# reference. The supported product is the Windows desktop app; see docs/LEGACY_BROWSER.md.
 FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1

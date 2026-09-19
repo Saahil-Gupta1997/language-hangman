@@ -1,1 +1,1 @@
-"""Optional FastAPI auth gateway for Language Learning Hangman."""
+"""LEGACY FastAPI auth gateway (browser prototype, unsupported; regression tests only)."""

@@ -1,2 +1,3 @@
+# Build: runtime dependencies plus PyInstaller. Inno Setup 6 is installed separately.
 -r requirements-desktop.txt
 pyinstaller==6.11.1

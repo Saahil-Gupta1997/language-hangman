@@ -1,4 +1,7 @@
-# Language Learning Hangman Login UI
+# Language Learning Hangman Login UI (legacy)
+
+> **Legacy:** part of the unsupported browser prototype. Not used by the desktop
+> release; see `docs/LEGACY_BROWSER.md`.
 
 An optional React + TypeScript login client for the local Hangman gateway.
 

@@ -1,4 +1,8 @@
-"""Small local admin CLI for packaging, content, release, and backup workflows."""
+"""Legacy admin CLI from the browser prototype.
+
+Only `release-check` and `validate-content` are still used (by CI); the desktop app does not
+use this module.
+"""
 
 from __future__ import annotations
 

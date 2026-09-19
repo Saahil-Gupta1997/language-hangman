@@ -1,3 +1,5 @@
+# Development and regression testing: runs every test, including the legacy browser tests.
+# The desktop runtime needs only requirements-desktop.txt; builds use requirements-build.txt.
 streamlit==1.56.0
 customtkinter==5.2.2
 fastapi==0.115.6

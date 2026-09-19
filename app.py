@@ -1,4 +1,8 @@
-"""Streamlit entry point for Language Learning Hangman."""
+"""LEGACY Streamlit entry point, kept for regression tests only.
+
+Not part of the supported product. The supported entry point is desktop_app.py; see
+docs/LEGACY_BROWSER.md.
+"""
 
 from pathlib import Path
 

@@ -150,9 +150,16 @@ class SettingsView:
             "5. Close at any time. Profile sessions resume with saved guesses and clues."
         )
         self.text(
-            "Keyboard: Tab / Shift+Tab move between controls. Enter submits a guess. "
-            "Escape returns home. Ctrl plus/minus changes text size. "
-            "Letters with accents are accepted as single Unicode characters."
+            "Practice focus: Standard chooses from the 10 words for the situation. Review "
+            "only uses words you have already completed in that situation and that are still "
+            "in your review queue, due words first, each once per session. A new profile has "
+            "no review words yet, so the app offers Standard practice instead."
+        )
+        self.text(
+            "Keyboard: Tab and Shift+Tab move between controls; the current control has an "
+            "amber outline or fill. Enter or Space activates a button. In a list, Up and Down "
+            "change the choice and Enter or Space opens it. Enter submits a guess. Escape "
+            "returns home. Ctrl + (or Ctrl =) makes text larger; Ctrl - makes it standard."
         )
         self.text(
             "English starter scope: 30 introductory words across Restaurant, Airport and "
@@ -167,7 +174,9 @@ class SettingsView:
         self.text(
             "Recovery: Settings → full backup/restore. To import the older app, select its "
             "data/app.db using Restore on the sign-in screen. Never import an untrusted file. "
-            "Older results remain in reports; new practice uses the starter pack."
+            "Older results remain in reports; new practice uses the starter pack. If the app "
+            "cannot open its data, it shows a recovery window instead: restore a backup there. "
+            "The damaged file is kept in the backups folder, never deleted."
         )
         self.text(
             "Updates: close Hangman, create a backup, then run the newer installer. "
