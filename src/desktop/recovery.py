@@ -12,7 +12,7 @@ import customtkinter as ctk
 
 from src import __version__
 from src.desktop.runtime import log_event
-from src.desktop.widgets import BLUE, keyboard_button
+from src.desktop.widgets import BLUE, fit_to_work_area, keyboard_button
 from src.services.curated_content import seed_curated
 from src.services.desktop_storage import restore_database
 
@@ -52,8 +52,7 @@ class RecoveryWindow(ctk.CTk):
         self.db_path, self.data_dir = Path(db_path), Path(data_dir)
         self.restored = False
         self.title(f"Language Hangman · Recovery · {__version__}")
-        self.geometry("820x640")
-        self.minsize(640, 480)
+        fit_to_work_area(self, 820, 640, minimum=(640, 480))
         ctk.set_appearance_mode("light")
         header = ctk.CTkFrame(self, corner_radius=0, fg_color=BLUE)
         header.pack(fill="x")

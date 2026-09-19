@@ -1,0 +1,98 @@
+{
+  "board": {
+    "decision": "accepted",
+    "reason": "Boarding groups are airport-specific."
+  },
+  "bread": {
+    "decision": "accepted",
+    "reason": "Useful grammar note (uncountable) that applies in any situation."
+  },
+  "breakfast": {
+    "decision": "revised",
+    "reason": "Rewritten in plainer learner English with a concrete use; pending independent review."
+  },
+  "clean": {
+    "decision": "accepted",
+    "reason": "Useful grammar note; hotel context comes from the example."
+  },
+  "delayed": {
+    "decision": "revised",
+    "reason": "Rewritten in plainer learner English with a concrete use; pending independent review."
+  },
+  "early": {
+    "decision": "accepted",
+    "reason": "Useful grammar note; the airport example sentence gives context."
+  },
+  "flight": {
+    "decision": "revised",
+    "reason": "Rewritten in plainer learner English with a concrete use; pending independent review."
+  },
+  "fresh": {
+    "decision": "accepted",
+    "reason": "Clarifies meaning (quality, not temperature) for food."
+  },
+  "gate": {
+    "decision": "accepted",
+    "reason": "Departure screen and gate changes are airport-specific."
+  },
+  "luggage": {
+    "decision": "accepted",
+    "reason": "Useful grammar note (uncountable) for travellers."
+  },
+  "menu": {
+    "decision": "accepted",
+    "reason": "Context is explicit (choosing a meal); naming the restaurant adds nothing."
+  },
+  "order": {
+    "decision": "accepted",
+    "reason": "Mentions the waiter, so the restaurant context is explicit."
+  },
+  "passport": {
+    "decision": "revised",
+    "reason": "Rewritten in plainer learner English with a concrete use; pending independent review."
+  },
+  "pillow": {
+    "decision": "revised",
+    "reason": "Rewritten in plainer learner English with a concrete use; pending independent review."
+  },
+  "quiet": {
+    "decision": "accepted",
+    "reason": "Addresses the frequent quiet/quite confusion."
+  },
+  "ready": {
+    "decision": "revised",
+    "reason": "Rewritten in plainer learner English with a concrete use; pending independent review."
+  },
+  "reserve": {
+    "decision": "accepted",
+    "reason": "Offers the common synonym book for arranging a room."
+  },
+  "share": {
+    "decision": "accepted",
+    "reason": "Sharing a dish is a restaurant context by definition."
+  },
+  "slowly": {
+    "decision": "revised",
+    "reason": "Rewritten in plainer learner English with a concrete use; pending independent review."
+  },
+  "spicy": {
+    "decision": "accepted",
+    "reason": "Clarifies spicy versus hot, a common learner confusion with food."
+  },
+  "spoon": {
+    "decision": "accepted",
+    "reason": "Explains the difference from a fork; the meal context is clear."
+  },
+  "ticket": {
+    "decision": "accepted",
+    "reason": "Distinguishes ticket from boarding pass, an airport concept."
+  },
+  "towel": {
+    "decision": "accepted",
+    "reason": "Asking for an extra towel is a hotel context."
+  },
+  "upstairs": {
+    "decision": "accepted",
+    "reason": "Gives the opposite; the example sentence gives the hotel context."
+  }
+}

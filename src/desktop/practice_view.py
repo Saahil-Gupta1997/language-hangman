@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from tkinter import messagebox
 
-import customtkinter as ctk
-
+from src.desktop.widgets import keyboard_option_menu
 from src.models.game_round import GameRound
 from src.services.desktop_storage import (
     progress_report,
@@ -61,16 +60,16 @@ class PracticeView:
             "Set up your practice", "English starter pack · All vocabulary is introductory."
         )
         self.text("Situation")
-        self.situation = ctk.CTkOptionMenu(self.body, values=["Restaurant", "Airport", "Hotel"])
+        self.situation = keyboard_option_menu(self.body, ["Restaurant", "Airport", "Hotel"])
         self.situation.pack(anchor="w", padx=22, pady=8)
         self.text("Game difficulty")
-        self.mode = ctk.CTkOptionMenu(self.body, values=["Easy", "Hard"])
+        self.mode = keyboard_option_menu(self.body, ["Easy", "Hard"])
         self.mode.pack(anchor="w", padx=22, pady=8)
         self.text("Number of rounds")
-        self.rounds = ctk.CTkOptionMenu(self.body, values=["3", "5", "10"])
+        self.rounds = keyboard_option_menu(self.body, ["3", "5", "10"])
         self.rounds.pack(anchor="w", padx=22, pady=8)
         self.text("Practice focus")
-        self.focus = ctk.CTkOptionMenu(self.body, values=["Standard", "Review"])
+        self.focus = keyboard_option_menu(self.body, ["Standard", "Review"])
         self.focus.pack(anchor="w", padx=22, pady=8)
         self.text(
             "Standard chooses from all 10 words for the situation, favouring words that need "

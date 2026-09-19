@@ -10,6 +10,7 @@ import customtkinter as ctk
 
 from src import __version__
 from src.desktop.runtime import recent_events
+from src.desktop.widgets import keyboard_option_menu
 from src.services.curated_content import seed_curated
 from src.services.desktop_storage import (
     backup_database,
@@ -27,7 +28,7 @@ class SettingsView:
         self.clear("Settings")
         self.heading("Settings and recovery")
         self.text("Text size (Ctrl + plus / minus)")
-        scale = ctk.CTkOptionMenu(self.body, values=["Standard", "Large"], command=self.set_scale)
+        scale = keyboard_option_menu(self.body, ["Standard", "Large"], command=self.set_scale)
         scale.set(self.scale)
         scale.pack(anchor="w", padx=22, pady=8)
         self.text(

@@ -22,7 +22,7 @@ from src.desktop.runtime import (
     log_event,
 )
 from src.desktop.settings_view import SettingsView
-from src.desktop.widgets import BLUE, keyboard_button
+from src.desktop.widgets import BLUE, fit_to_work_area, keyboard_button, scroll_into_view
 from src.services.auth_service import AuthService
 from src.services.curated_content import seed_curated
 from src.services.desktop_storage import backup_database, open_live_database
@@ -30,6 +30,8 @@ from src.services.practice_service import PracticeService
 from src.utils.config import DATA_DIR, DATABASE_PATH
 
 WARNING_BACKGROUND = "#FEF3C7"
+# Supported minimum (logical pixels): fits a 1080p screen at 150% scaling.
+MINIMUM_WINDOW = (800, 600)
 
 
 class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk):
@@ -48,8 +50,7 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         seed_curated(self.db_path)
         super().__init__()
         self.title(f"Language Hangman · {__version__}")
-        self.geometry("1060x760")
-        self.minsize(820, 640)
+        fit_to_work_area(self, 1060, 760, minimum=MINIMUM_WINDOW)
         self.auth = AuthService(self.db_path)
         self.practice = PracticeService(self.db_path, curated=True)
         self.user = None
@@ -58,8 +59,11 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         self.page = ""
         self.protocol("WM_DELETE_WINDOW", self.close_application)
         self.bind("<Escape>", lambda event: self.show_home() if self.user else None)
-        self.bind("<Control-plus>", lambda event: self.set_scale("Large"))
-        self.bind("<Control-minus>", lambda event: self.set_scale("Standard"))
+        # "+" needs Shift on most keyboards, so accept Ctrl+= and the numeric keypad too.
+        for sequence in ("<Control-plus>", "<Control-equal>", "<Control-KP_Add>"):
+            self.bind(sequence, lambda event: self.set_scale("Large"))
+        for sequence in ("<Control-minus>", "<Control-KP_Subtract>"):
+            self.bind(sequence, lambda event: self.set_scale("Standard"))
         self.scale = "Standard"
         settings_path = self.data_dir / "settings.json"
         try:
@@ -209,6 +213,7 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         self.text(label)
         entry = ctk.CTkEntry(self.body, width=340, height=38, show="•" if password else "")
         entry.pack(anchor="w", padx=22, pady=(0, 8))
+        entry.bind("<FocusIn>", lambda event: scroll_into_view(entry), add="+")
         return entry
 
     @property
