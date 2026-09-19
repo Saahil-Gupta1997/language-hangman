@@ -116,28 +116,165 @@ def backup_database(db_path, destination):
     return destination
 
 
+SIDECAR_SUFFIXES = ("-journal", "-wal", "-shm")
+
+
+class DatabaseUnavailableError(RuntimeError):
+    """The live database cannot be opened, upgraded or validated at start-up."""
+
+
+def open_live_database(db_path):
+    """Open, upgrade and quick-check the live database for the desktop app.
+
+    Raises DatabaseUnavailableError (with a message safe to show and log) so the launcher
+    can offer recovery instead of failing to start.
+    """
+    try:
+        path = init_db(db_path, seed_words=False)
+    except ValueError as error:  # newer schema or a failed upgrade check
+        raise DatabaseUnavailableError(str(error)) from error
+    except (sqlite3.Error, OSError) as error:
+        raise DatabaseUnavailableError(
+            f"The data file could not be opened ({type(error).__name__})."
+        ) from error
+    if not database_is_healthy(path):
+        raise DatabaseUnavailableError("The data file failed its integrity check.")
+    return path
+
+
+class RestoreError(ValueError):
+    """A restore stopped before the live database was replaced; ``stage`` says where."""
+
+    def __init__(self, stage, message):
+        super().__init__(message)
+        self.stage = stage
+
+
+def database_is_healthy(path):
+    """Return True when the file opens read-only and passes SQLite's quick check."""
+    try:
+        connection = sqlite3.connect(Path(path).resolve().as_uri() + "?mode=ro", uri=True)
+        try:
+            return connection.execute("PRAGMA quick_check").fetchone()[0] == "ok"
+        finally:
+            connection.close()
+    except sqlite3.Error:
+        return False
+
+
+def quarantine_database(db_path, backups_dir):
+    """Copy a damaged database's bytes, and any side files, into a labelled folder."""
+    db_path = Path(db_path)
+    folder = Path(backups_dir) / f"quarantine-{_stamp()}"
+    folder.mkdir(parents=True)
+    import shutil
+
+    for suffix in ("", *SIDECAR_SUFFIXES):
+        original = Path(f"{db_path}{suffix}")
+        if original.exists():
+            shutil.copy2(original, folder / f"damaged-{original.name}")
+    (folder / "README.txt").write_text(
+        "These files are an exact copy of a Language Hangman database that could not be\n"
+        "opened or validated, saved before a backup was restored over it. They are kept\n"
+        "only for investigation or data recovery and are never used by the application.\n",
+        encoding="utf-8",
+    )
+    return folder
+
+
+def _protect_current_database(db_path, backups_dir):
+    """Keep the current file before replacement: a safety backup, else a quarantine copy."""
+    if database_is_healthy(db_path):
+        try:
+            return backup_database(db_path, backups_dir / f"before-restore-{_stamp()}.sqlite")
+        except ValueError:
+            pass  # Readable but not a valid Hangman database (e.g. newer schema): keep bytes.
+    return quarantine_database(db_path, backups_dir)
+
+
+def _set_aside_sidecars(db_path, backups_dir):
+    """Move journal side files away so SQLite cannot replay them into the restored file."""
+    moved = []
+    for suffix in SIDECAR_SUFFIXES:
+        sidecar = Path(f"{db_path}{suffix}")
+        if sidecar.exists():
+            destination = backups_dir / f"set-aside-{_stamp()}-{sidecar.name}"
+            os.replace(sidecar, destination)
+            moved.append((destination, sidecar))
+    return moved
+
+
 def restore_database(db_path, source):
-    """Stage and validate upgrades before atomically replacing the live file."""
+    """Replace the live database with a validated backup, even when the live file is damaged.
+
+    Steps: validate the backup; stage, upgrade and re-validate a copy; keep the current file
+    (a validated safety backup when readable, otherwise a byte-for-byte quarantine copy);
+    move journal side files aside; switch with one atomic rename. A failure before the
+    rename leaves the live file exactly as it was. Returns the safety backup or quarantine
+    folder, or None when there was no live file.
+    """
     db_path, source = Path(db_path), Path(source)
     validate_backup(source)
-    descriptor, name = tempfile.mkstemp(prefix="restore-", suffix=".sqlite", dir=db_path.parent)
-    os.close(descriptor)
+    backups_dir = db_path.parent / "backups"
+    try:
+        backups_dir.mkdir(parents=True, exist_ok=True)
+        descriptor, name = tempfile.mkstemp(prefix="restore-", suffix=".sqlite", dir=db_path.parent)
+        os.close(descriptor)
+    except OSError as error:
+        raise RestoreError(
+            "stage",
+            "The backup was not restored because the data folder is not writable "
+            f"({type(error).__name__}). Check free disk space and folder permissions, then "
+            "try again. Your current data is unchanged.",
+        ) from error
     staging = Path(name)
     try:
-        origin = sqlite3.connect(source.resolve().as_uri() + "?mode=ro", uri=True)
         try:
-            with create_connection(staging) as target:
-                origin.backup(target)
-        finally:
-            origin.close()
-        init_db(staging, seed_words=False)
-        validate_backup(staging)
-        safety = db_path.parent / "backups" / f"before-restore-{_stamp()}.sqlite"
-        backup_database(db_path, safety)
-        os.replace(staging, db_path)
+            origin = sqlite3.connect(source.resolve().as_uri() + "?mode=ro", uri=True)
+            try:
+                with create_connection(staging) as target:
+                    origin.backup(target)
+            finally:
+                origin.close()
+            init_db(staging, seed_words=False)
+            validate_backup(staging)
+        except (OSError, sqlite3.Error) as error:
+            raise RestoreError(
+                "stage",
+                "The backup could not be prepared for use "
+                f"({type(error).__name__}). Check free disk space, then try again. "
+                "Your current data is unchanged.",
+            ) from error
+
+        preserved = None
+        if db_path.exists():
+            try:
+                preserved = _protect_current_database(db_path, backups_dir)
+            except (OSError, sqlite3.Error) as error:
+                raise RestoreError(
+                    "protect",
+                    "The backup was not restored because a copy of your current data could "
+                    f"not be saved first ({type(error).__name__}). Free some disk space or "
+                    "check folder permissions, then try again. Your current data is unchanged.",
+                ) from error
+
+        moved = []
+        try:
+            moved = _set_aside_sidecars(db_path, backups_dir)
+            os.replace(staging, db_path)
+        except OSError as error:
+            for destination, original in reversed(moved):
+                os.replace(destination, original)
+            raise RestoreError(
+                "replace",
+                "The backup was not restored because the current data file could not be "
+                f"replaced ({type(error).__name__}). Close any program that may be using it, "
+                "such as a sync or antivirus tool, then try again. Your current data is "
+                "unchanged.",
+            ) from error
     finally:
         staging.unlink(missing_ok=True)
-    return safety
+    return preserved
 
 
 def delete_profile(db_path, user_id):
@@ -197,14 +334,36 @@ def progress_report(db_path, user_id):
     }
 
 
-def export_diagnostics(db_path, destination):
-    # Deliberately omit logs, local paths, names, words and saved-session payloads.
-    with create_connection(db_path) as connection:
-        payload = {
-            "application_version": __version__,
-            "schema_version": connection.execute("PRAGMA user_version").fetchone()[0],
-            "integrity_ok": connection.execute("PRAGMA integrity_check").fetchone()[0] == "ok",
-            "foreign_keys_ok": not bool(connection.execute("PRAGMA foreign_key_check").fetchone()),
-        }
+def export_diagnostics(db_path, destination, events=()):
+    """Write build details, database health and recent coded failure events.
+
+    ``events`` must already be filtered to the fixed ``op=… stage=… error=… version=…``
+    format. Local paths, names, passwords, words and saved-session payloads are never
+    included.
+    """
+    import platform
+    import sys
+
+    payload = {
+        "application_version": __version__,
+        "build": "installed" if getattr(sys, "frozen", False) else "source",
+        "python_version": platform.python_version(),
+        "os": f"{platform.system()} {platform.release()} ({platform.version()})",
+    }
+    try:
+        connection = sqlite3.connect(Path(db_path).resolve().as_uri() + "?mode=ro", uri=True)
+        try:
+            payload["schema_version"] = connection.execute("PRAGMA user_version").fetchone()[0]
+            payload["integrity_ok"] = (
+                connection.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
+            )
+            payload["foreign_keys_ok"] = not connection.execute(
+                "PRAGMA foreign_key_check"
+            ).fetchone()
+        finally:
+            connection.close()
+    except sqlite3.Error as error:
+        payload["database"] = f"unavailable ({type(error).__name__})"
+    payload["recent_events"] = list(events)
     with zipfile.ZipFile(destination, "x", zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("diagnostics.json", json.dumps(payload, indent=2))

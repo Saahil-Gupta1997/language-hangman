@@ -11,35 +11,45 @@ from tkinter import messagebox
 import customtkinter as ctk
 
 from src import __version__
-from src.db.database import init_db
 from src.desktop.auth_view import AuthView
 from src.desktop.practice_view import PracticeView
 from src.desktop.reports_view import ReportsView
-from src.desktop.runtime import close_logging, configure_logging, fix_dropdown_scaling_leak
+from src.desktop.runtime import (
+    close_logging,
+    configure_logging,
+    failure_location,
+    fix_dropdown_scaling_leak,
+    log_event,
+)
 from src.desktop.settings_view import SettingsView
+from src.desktop.widgets import BLUE, keyboard_button
 from src.services.auth_service import AuthService
 from src.services.curated_content import seed_curated
-from src.services.desktop_storage import (
-    backup_database,
-)
+from src.services.desktop_storage import backup_database, open_live_database
 from src.services.practice_service import PracticeService
 from src.utils.config import DATA_DIR, DATABASE_PATH
 
-BLUE = "#155E75"
+WARNING_BACKGROUND = "#FEF3C7"
 
 
 class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk):
     def __init__(self, db_path=DATABASE_PATH, data_dir=DATA_DIR):
         fix_dropdown_scaling_leak()
+        # Open the data before creating a window: failures raise DatabaseUnavailableError
+        # so the launcher can offer recovery instead of a half-built window.
+        self.data_dir = Path(data_dir)
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        self.logger = configure_logging(self.data_dir)
+        try:
+            self.db_path = open_live_database(db_path)
+        except Exception as error:
+            log_event("startup", "open_database", error.__cause__ or error)
+            raise
+        seed_curated(self.db_path)
         super().__init__()
         self.title(f"Language Hangman · {__version__}")
         self.geometry("1060x760")
         self.minsize(820, 640)
-        self.data_dir = Path(data_dir)
-        self.data_dir.mkdir(parents=True, exist_ok=True)
-        self.logger = configure_logging(self.data_dir)
-        self.db_path = init_db(db_path, seed_words=False)
-        seed_curated(self.db_path)
         self.auth = AuthService(self.db_path)
         self.practice = PracticeService(self.db_path, curated=True)
         self.user = None
@@ -63,6 +73,18 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         ctk.CTkLabel(
             self.header, text="Language Hangman", text_color="white", font=("Arial", 24, "bold")
         ).pack(side="left", padx=24, pady=18)
+        self.backup_warning = self.automatic_backup()
+        if self.backup_warning:
+            ctk.CTkLabel(
+                self,
+                text=self.backup_warning,
+                fg_color=WARNING_BACKGROUND,
+                text_color="#78350F",
+                corner_radius=8,
+                wraplength=900,
+                justify="left",
+                font=("Arial", 14, "bold"),
+            ).pack(fill="x", padx=20, pady=(10, 0), ipady=6)
         self.navigation = ctk.CTkFrame(self, fg_color="transparent")
         self.navigation.pack(fill="x", padx=20, pady=(10, 0))
         self.body = ctk.CTkScrollableFrame(self, fg_color="#F5F7FA", corner_radius=12)
@@ -73,12 +95,12 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
             font=("Arial", 12),
             text_color="#475569",
         ).pack(pady=(0, 10))
-        self.automatic_backup()
         self.show_login()
 
     def report_callback_exception(self, exception, value, traceback):
-        # Log event type only; exception messages can contain paths or user input.
-        self.logger.error("Callback failed: %s", exception.__name__)
+        # Log codes and the error type only; messages can contain paths or user input.
+        operation, stage = failure_location(traceback)
+        log_event(operation, getattr(value, "stage", stage), value.__cause__ or value)
         if isinstance(value, ValueError):
             message = str(value)
         elif isinstance(value, FileExistsError):
@@ -100,13 +122,27 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         messagebox.showerror("Action could not be completed", message, parent=self)
 
     def automatic_backup(self):
+        """Keep one backup per day (seven retained); return a warning instead of failing.
+
+        The live database has already opened and passed its check, so a failed backup
+        must not stop the learner from practising; it is reported on screen and logged.
+        """
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         destination = self.data_dir / "backups" / f"daily-{today}.sqlite"
-        if not destination.exists():
-            backup_database(self.db_path, destination)
-        daily = sorted((self.data_dir / "backups").glob("daily-*.sqlite"))
-        for old in daily[:-7]:
-            old.unlink()
+        try:
+            if not destination.exists():
+                backup_database(self.db_path, destination)
+            daily = sorted((self.data_dir / "backups").glob("daily-*.sqlite"))
+            for old in daily[:-7]:
+                old.unlink()
+        except (OSError, sqlite3.Error, ValueError) as error:
+            log_event("startup", "automatic_backup", error)
+            return (
+                "Automatic backup is unavailable today, so backup protection is reduced. "
+                "Your progress is still saved. Free some disk space or check folder "
+                "permissions, then create a full backup from Settings."
+            )
+        return None
 
     def clear(self, page):
         if self.page == "Practice" and self.user:
@@ -159,29 +195,7 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         return label
 
     def button(self, parent, label, command, side=None, width=180, pack=True):
-        button = ctk.CTkButton(
-            parent,
-            text=label,
-            command=command,
-            width=width,
-            height=38,
-            fg_color=BLUE,
-            hover_color="#0E4657",
-            font=("Arial", 14),
-        )
-        # CTk's canvas must be explicitly focusable for keyboard activation.
-        button._canvas.configure(takefocus=1)
-
-        def activate(event):
-            button.invoke()
-            return "break"
-
-        button.bind("<Return>", activate)
-        button.bind("<space>", activate)
-        button.bind(
-            "<FocusIn>", lambda event: button.configure(border_width=3, border_color="#F59E0B")
-        )
-        button.bind("<FocusOut>", lambda event: button.configure(border_width=0))
+        button = keyboard_button(parent, label, command, width=width)
         if pack:
             button.pack(
                 side=side or "top",

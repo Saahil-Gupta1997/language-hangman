@@ -158,12 +158,24 @@ class PracticeView:
                 self.text(f"Clue {index}: {text}")
             if not hints:
                 self.text("Clues will appear as lives are used.")
-            self.text(
-                f"Why this word: {state.selection_reason or 'Matches your chosen situation.'}"
-            )
+            self.text(f"Why this word: {self.selection_explanation(session)}")
             self.guess_entry.focus_set()
         self.button(self.body, "Save and return home", self.show_home)
         self.button(self.body, "Discard this session", self.discard_session)
+
+    @staticmethod
+    def selection_explanation(session):
+        """Describe the desktop selection rule; the legacy engine's reason text is not used."""
+        situation = str(session["situation"]).replace("_", " ").title()
+        if session["practice_mode"] == "review":
+            return (
+                f"you have practised it before in {situation} and it is in your review "
+                "queue (due words come first)."
+            )
+        return (
+            f"one of the 10 {situation} words; words you have not played recently are "
+            "chosen first when possible."
+        )
 
     def submit_guess(self):
         self.practice.guess(self.user, self.guess_entry.get(), self.payload["round"]["round_key"])

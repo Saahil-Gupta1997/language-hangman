@@ -9,6 +9,7 @@ from tkinter import filedialog, messagebox
 import customtkinter as ctk
 
 from src import __version__
+from src.desktop.runtime import recent_events
 from src.services.curated_content import seed_curated
 from src.services.desktop_storage import (
     backup_database,
@@ -47,8 +48,9 @@ class SettingsView:
             )
         self.button(self.body, "Export diagnostics", self.diagnostics)
         self.text(
-            "Diagnostics include only application/schema versions and database health. "
-            "They exclude profile names, passwords, gameplay and local file paths."
+            "Diagnostics include the version and build, database health and recent coded "
+            "failure events. They exclude profile names, passwords, words, saved sessions "
+            "and local file paths."
         )
 
     def set_scale(self, value):
@@ -85,9 +87,10 @@ class SettingsView:
         )
         if path and messagebox.askyesno(
             "Replace all local profiles?",
-            "This replaces ALL local "
-            "profiles and progress with the selected backup. A safety "
-            "backup is made first. You will be signed out.",
+            "This replaces ALL local profiles and progress on this computer with the "
+            "selected backup. The current data is kept in the backups folder first: as a "
+            "safety backup, or as an exact quarantine copy if it is damaged. You will be "
+            "signed out.",
             parent=self,
         ):
             if self.user:
@@ -116,7 +119,7 @@ class SettingsView:
     def diagnostics(self):
         path = self.save_path(".zip", "Export privacy-safe diagnostics")
         if path:
-            export_diagnostics(self.active_db, path)
+            export_diagnostics(self.active_db, path, events=recent_events(self.data_dir))
             messagebox.showinfo(
                 "Diagnostics saved", "The diagnostic archive is ready.", parent=self
             )

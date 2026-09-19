@@ -7,6 +7,7 @@ from dataclasses import asdict
 from zipfile import ZipFile
 
 import pytest
+from conftest import require_display
 
 from src.db.database import create_connection, init_db
 from src.models.game_round import GameRound
@@ -268,12 +269,17 @@ def test_profile_deletion_export_and_diagnostics_are_scoped(account, tmp_path):
     export_diagnostics(path, diagnostics)
     with ZipFile(diagnostics) as archive:
         data = json.loads(archive.read("diagnostics.json"))
-        assert set(data) == {
+        assert set(data) == {  # exact whitelist; see T-06 in docs/DELIVERY.md
             "application_version",
+            "build",
+            "python_version",
+            "os",
             "schema_version",
             "integrity_ok",
             "foreign_keys_ok",
+            "recent_events",
         }
+        assert "learner" not in json.dumps(data)
     delete_profile(path, user["id"])
     assert AuthService(path).get_user_by_id(other["id"])
     assert PracticeService(path).load(user["id"]) is None
@@ -344,17 +350,13 @@ def test_restore_rejects_incomplete_current_schema(account, tmp_path):
 
 
 def test_text_size_change_after_dropdown_is_destroyed():
-    import tkinter
-
     import customtkinter as ctk
 
     from src.desktop.runtime import fix_dropdown_scaling_leak
 
     fix_dropdown_scaling_leak()
-    try:
-        root = ctk.CTk()
-    except tkinter.TclError:
-        pytest.skip("Needs a graphical desktop.")
+    require_display()
+    root = ctk.CTk()
     try:
         ctk.CTkOptionMenu(root, values=["Standard", "Large"]).destroy()
         ctk.set_widget_scaling(1.15)

@@ -264,3 +264,16 @@ def test_imported_database_practice_uses_curated_words_only(imported):
     # Legacy history and review items are kept, unchanged, for reporting.
     assert progress_report(path, user["id"])["rounds"] == history_before + len(played)
     assert legacy_queue() == legacy_before
+
+
+def test_why_this_word_describes_the_desktop_rule_not_a_category():
+    from src.desktop.practice_view import PracticeView
+
+    review = PracticeView.selection_explanation({"situation": "hotel", "practice_mode": "review"})
+    standard = PracticeView.selection_explanation(
+        {"situation": "restaurant", "practice_mode": "standard"}
+    )
+    assert "practised it before in Hotel" in review and "due words come first" in review
+    assert "one of the 10 Restaurant words" in standard
+    for text in (review, standard):
+        assert "focus on" not in text.lower()

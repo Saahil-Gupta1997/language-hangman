@@ -27,23 +27,35 @@ def main():
         return 1
     try:
         from src.desktop.application import HangmanDesktop
+        from src.desktop.recovery import RecoveryWindow
+        from src.services.desktop_storage import DatabaseUnavailableError
+        from src.utils.config import DATA_DIR
 
-        app = HangmanDesktop()
-        app.mainloop()
+        while True:
+            try:
+                app = HangmanDesktop()
+            except DatabaseUnavailableError as error:
+                # Recovery never opens the damaged file; after a restore, start normally.
+                recovery = RecoveryWindow(DATABASE_PATH, DATA_DIR, str(error))
+                recovery.mainloop()
+                if recovery.restored:
+                    continue
+                return 1
+            app.mainloop()
+            return 0
     except Exception as error:
         root = tk.Tk()
         root.withdraw()
         messagebox.showerror(
             "Unable to start",
-            "Hangman could not open its local data. "
-            "Check disk space and folder permissions, or restore a backup.\n"
+            "Language Hangman could not start. Check disk space and folder permissions, "
+            "then reinstall if the problem continues. Your saved data is not deleted.\n"
             f"Error type: {type(error).__name__}",
         )
         root.destroy()
         return 1
     finally:
         lock.close()
-    return 0
 
 
 if __name__ == "__main__":
