@@ -17,6 +17,10 @@ Invoke-Native { & $Python -m pip install --disable-pip-version-check -r requirem
 $version = (& $Python -c "import src; print(src.__version__)").Trim()
 if ($LASTEXITCODE -ne 0 -or -not $version) { throw "Could not read the application version." }
 Invoke-Native { & $Python -m PyInstaller --clean --noconfirm packaging/hangman.spec } "Application build failed."
+# Third-party notices sit next to the program (T-28); the check fails the build if any
+# shipped file is not in the inventory or a notice is missing.
+Copy-Item -Recurse -Force packaging/third-party/* dist/LanguageHangman/
+Invoke-Native { & $Python scripts/third_party_notices.py check dist/LanguageHangman } "Third-party notices are incomplete."
 # Select-Object keeps a single path intact (indexing a lone string would return a character).
 $iscc = @(
     (Get-Command ISCC.exe -ErrorAction SilentlyContinue).Source,

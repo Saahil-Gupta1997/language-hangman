@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.12.1'  # must match the third-party notices
       - name: Install test and build dependencies
         run: python -m pip install -r requirements.txt -r requirements-build.txt
       - name: Service and regression tests
@@ -18,7 +18,7 @@ jobs:
       - name: Native desktop journey
         run: python desktop_app.py --smoke-test desktop-evidence/source
       - name: Install installer compiler
-        run: choco install innosetup --yes --no-progress
+        run: choco install innosetup --version 6.7.3 --yes --no-progress  # matches the notices
       - name: Build application and installer
         run: ./scripts/build_desktop.ps1
       # Installs, reinstalls the SAME build over itself (a data-preservation smoke check, not
@@ -42,6 +42,8 @@ jobs:
           $process = Start-Process $exe -ArgumentList @('--smoke-test', $evidence) -Wait -PassThru
           if ($process.ExitCode -ne 0) { throw 'Installed app smoke failed' }
           if (-not (Test-Path "$evidence/desktop-smoke.json")) { throw 'Missing smoke evidence' }
+          python scripts/third_party_notices.py check $installDir --installed
+          if ($LASTEXITCODE -ne 0) { throw 'Installed third-party notices are incomplete' }
           $process = Start-Process (Join-Path $installDir 'unins000.exe') -ArgumentList '/VERYSILENT' -Wait -PassThru
           if ($process.ExitCode -ne 0 -or -not (Test-Path $sentinel)) { throw 'Uninstall/data preservation failed' }
       - uses: actions/upload-artifact@v4

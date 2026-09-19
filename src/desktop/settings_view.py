@@ -10,7 +10,7 @@ import customtkinter as ctk
 
 from src import __version__
 from src.desktop.runtime import recent_events
-from src.desktop.widgets import keyboard_option_menu
+from src.desktop.widgets import TEXT_SCALING, keyboard_option_menu
 from src.services.curated_content import seed_curated
 from src.services.desktop_storage import (
     backup_database,
@@ -56,7 +56,7 @@ class SettingsView:
 
     def set_scale(self, value):
         self.scale = value
-        ctk.set_widget_scaling(1.15 if value == "Large" else 1.0)
+        ctk.set_widget_scaling(TEXT_SCALING[value])
         path = self.data_dir / "settings.json"
         temporary = path.with_suffix(".tmp")
         temporary.write_text(json.dumps({"text_size": value}), encoding="utf-8")
@@ -191,6 +191,13 @@ class SettingsView:
             "when reporting a bug. Do not send your full database publicly."
         )
         self.text(
-            "Release candidate: independent educator review, external learner acceptance "
-            "and Windows installer validation are required before a final 1.0 release."
+            "About: rule-based software built with AI assistance; it contains no machine "
+            "learning. Third-party software and its licences are listed in "
+            "THIRD-PARTY-NOTICES.txt and the licenses folder in the program's installation "
+            "folder (by default %LOCALAPPDATA%\\Programs\\LanguageHangman)."
+        )
+        self.text(
+            "Release candidate: a clean-computer installation, manual keyboard and display "
+            "checks, an independent review of the teaching cards and learner sessions are "
+            "still required before a final 1.0 release."
         )

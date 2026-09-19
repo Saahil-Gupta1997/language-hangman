@@ -1,0 +1,106 @@
+Language Hangman - third-party notices
+
+Language Hangman for Windows includes the third-party software listed below. Each
+component remains under its own licence; the full texts are in the 'licenses' folder
+next to this file. The licence for Language Hangman's own code and content has not
+yet been chosen by its owner.
+
+Language Hangman (this project)
+  Version:  see the title bar
+  Licence:  Not yet chosen by the owner (decision DEC-08)
+  Files:    LanguageHangman.exe, _internal/src/*
+  Note:     Application code (inside LanguageHangman.exe), the 30-word content file and the application icon.
+
+PyInstaller bootloader
+  Version:  6.11.1
+  Licence:  GPL-2.0-or-later with the PyInstaller bootloader exception
+  Files:    LanguageHangman.exe
+  Text:     licenses/PyInstaller-6.11.1-COPYING.txt
+  Note:     The exception allows the bootloader to be distributed with programs under any licence.
+
+Python (CPython) runtime and standard library
+  Version:  3.12.1
+  Licence:  PSF-2.0, with the licences of incorporated software
+  Files:    LanguageHangman.exe, _internal/python312.dll, _internal/base_library.zip, _internal/_bz2.pyd, _internal/_ctypes.pyd, _internal/_decimal.pyd, _internal/_elementtree.pyd, _internal/_hashlib.pyd, _internal/_lzma.pyd, _internal/_queue.pyd, _internal/_socket.pyd, _internal/_sqlite3.pyd, _internal/_ssl.pyd, _internal/_tkinter.pyd, _internal/_uuid.pyd, _internal/_wmi.pyd, _internal/pyexpat.pyd, _internal/select.pyd, _internal/unicodedata.pyd
+  Text:     licenses/Python-3.12.1-LICENSE.txt, licenses/Python-3.12.1-incorporated-software.txt
+  Note:     Standard-library modules are inside LanguageHangman.exe and base_library.zip. Statically linked: bzip2 1.0.8 (bzip2 licence), xz/liblzma 5.2.5 (public domain), libmpdec 2.5.1 (BSD-2-Clause), expat 2.5.0 (MIT), zlib 1.2.13 (Zlib).
+
+Microsoft Visual C++ runtime (VCRUNTIME140.dll)
+  Version:  14.38.33126.1
+  Licence:  Microsoft Distributable Code, redistributed as part of the Python runtime
+  Files:    _internal/VCRUNTIME140.dll
+  Text:     licenses/Python-3.12.1-LICENSE.txt
+  Note:     Conditions: 'Additional Conditions for this Windows binary build' in the Python licence file.
+
+OpenSSL
+  Version:  3.0.11
+  Licence:  Apache-2.0
+  Files:    _internal/libcrypto-3.dll, _internal/libssl-3.dll
+  Text:     licenses/Apache-2.0.txt
+  Note:     Used by Python's ssl and hashlib modules.
+
+libffi
+  Version:  3.4.4
+  Licence:  MIT
+  Files:    _internal/libffi-8.dll
+  Text:     licenses/Python-3.12.1-LICENSE.txt
+
+SQLite
+  Version:  3.43.1
+  Licence:  Public domain
+  Files:    _internal/sqlite3.dll
+  Note:     The SQLite authors have dedicated the code to the public domain.
+
+Tcl/Tk
+  Version:  8.6.13
+  Licence:  Tcl/Tk licence (BSD-style)
+  Files:    _internal/tcl86t.dll, _internal/tk86t.dll, _internal/_tcl_data/*, _internal/_tk_data/*, _internal/tcl8/*
+  Text:     licenses/Tcl-Tk-8.6.13-license.terms.txt
+
+zlib
+  Version:  1.2.13
+  Licence:  Zlib
+  Files:    _internal/zlib1.dll
+  Text:     licenses/Python-3.12.1-incorporated-software.txt
+
+Pillow
+  Version:  12.3.0
+  Licence:  MIT-CMU, with the licences of its bundled libraries
+  Files:    LanguageHangman.exe, _internal/PIL/*
+  Text:     licenses/Pillow-12.3.0-LICENSE.txt
+  Note:     The shipped modules use libjpeg-turbo 3.1.4.1, zlib-ng 2.3.3, libtiff 4.7.1, OpenJPEG 2.5.4, libwebp 1.6.0, libavif 1.4.2 and Little CMS 2.19. The licence file covers every library Pillow's Windows wheel can contain; its font module (FreeType, HarfBuzz) is not shipped, and this build contains no libimagequant or libxcb.
+
+CustomTkinter
+  Version:  5.2.2
+  Licence:  MIT
+  Files:    LanguageHangman.exe, _internal/customtkinter/*
+  Text:     licenses/CustomTkinter-5.2.2-LICENSE.txt
+  Note:     Includes its themes, icon and CustomTkinter_shapes_font.
+
+Roboto font (bundled by CustomTkinter)
+  Version:  2.137
+  Licence:  Apache-2.0
+  Files:    _internal/customtkinter/assets/fonts/Roboto/*
+  Text:     licenses/Apache-2.0.txt
+  Note:     Copyright 2011 Google Inc. Roboto is a trademark of Google.
+
+darkdetect
+  Version:  0.8.0
+  Licence:  BSD-3-Clause
+  Files:    LanguageHangman.exe
+  Text:     licenses/darkdetect-0.8.0-LICENSE.txt
+  Note:     A CustomTkinter dependency, inside LanguageHangman.exe.
+
+packaging
+  Version:  26.3
+  Licence:  Apache-2.0 OR BSD-2-Clause
+  Files:    LanguageHangman.exe
+  Text:     licenses/packaging-26.3-LICENSE.txt, licenses/packaging-26.3-LICENSE.BSD.txt, licenses/Apache-2.0.txt
+  Note:     A CustomTkinter dependency, inside LanguageHangman.exe.
+
+Inno Setup
+  Version:  6.7.3
+  Licence:  Inno Setup License
+  Files:    unins000.exe, unins000.dat
+  Text:     licenses/InnoSetup-6.7.3-license.txt
+  Note:     The setup program and the uninstaller it installs.
