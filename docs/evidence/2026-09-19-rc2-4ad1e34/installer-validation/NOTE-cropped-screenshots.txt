@@ -1,0 +1,10 @@
+Note added 2026-09-19 during rc3 (incident I-4 in docs/DELIVERY.md)
+
+The four installed-*.png screenshots in this folder are cropped. The helper that captured
+them ran in a process that was not DPI aware, so at the build machine's 125% display
+scaling Windows reported the window at 80% of its real size and only that part was
+captured: 834x678 of a 1043x847 window, 1074x798 of 1343x997. The cut-off text on the
+right is an artefact of the capture, not of the app at that size. The files are kept
+unchanged as the rc2 record. The rc2 installed-smoke/*.png images were captured inside
+the app process and are complete. The rc3 captures use a DPI-aware helper
+(docs/evidence/2026-09-19-rc3-fd3b25a/).

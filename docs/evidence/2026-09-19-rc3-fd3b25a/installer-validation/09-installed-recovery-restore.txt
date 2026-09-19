@@ -1,0 +1,14 @@
+restore as the recovery window's first button does (rc3 code, fd3b25a):
+recovery window would offer, newest first: ['safety backup', 'pre-upgrade backup', 'daily backup']
+restored: safety backup | damaged file kept as backups/quarantine-<timestamp>
+damaged bytes preserved exactly: True
+profiles after recovery: ['upgrader', 'second']
+upgrader signs in after recovery: True
+set-aside side files after restore: 0; side files next to app.db: 0
+
+installed rc3 app, normal launch after recovery:
+window title: 'Language Hangman · 1.0.0rc3'
+captured size (physical pixels): 1343x997
+start-up to visible window: 0.94 s
+screenshot saved (app-only check 0.120): True
+closed normally, exit code 0

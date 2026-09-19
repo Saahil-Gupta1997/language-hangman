@@ -1,0 +1,18 @@
+installed rc2 app, first normal launch (creates its data file):
+window title: 'Language Hangman · 1.0.0rc2'
+captured size (physical pixels): 1343x997
+start-up to visible window: 2.12 s
+screenshot saved (app-only check 0.120): True
+closed normally, exit code 0
+
+learner data created with rc2's own code (4ad1e34), same code as the installed rc2 app:
+4ad1e34
+rc2 data at LanguageHangman | schema 1 | users 2 | rounds 2 | saved sessions 1 | paused wrong letter z
+%LOCALAPPDATA%\LanguageHangman:
+app.db
+app.lock
+backups
+logs
+
+%LOCALAPPDATA%\LanguageHangman/backups:
+daily-2026-09-19.sqlite

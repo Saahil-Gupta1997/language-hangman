@@ -19,7 +19,7 @@ it is kept. Record consent (yes/no and date) outside this repository.
 
 ## Setup
 
-- A Windows computer with the rc2 installer (check its SHA256 matches ACCEPTANCE.md) or the
+- A Windows computer with the rc3 installer (check its SHA256 matches ACCEPTANCE.md) or the
   app already installed. Record the OS, display scaling and whether Python is installed.
 - A fresh profile for each participant; delete it afterwards (Settings › Delete my profile).
 - The facilitator observes and only helps when the participant is stuck for about a minute

@@ -1,0 +1,11 @@
+rc2 views (8621ff3 application.py and recovery.py, fixed wraplength) with rc3's widgets.py and GUI scenarios
+== recovery_window_fits_at_minimum_size
+AssertionError: ('Standard text, factor 1.0', 'Nothing has been deleted. To continue, restore a f', 827, 659)
+== main_window_text_wraps_at_minimum_size
+AssertionError: ('show_practice, Large text, factor 1.0', 'Standard chooses from all 10 words for the situati', 850, 840)
+
+rc3 (fd3b25a):
+== recovery_window_fits_at_minimum_size
+PASSED recovery_window_fits_at_minimum_size
+== main_window_text_wraps_at_minimum_size
+PASSED main_window_text_wraps_at_minimum_size

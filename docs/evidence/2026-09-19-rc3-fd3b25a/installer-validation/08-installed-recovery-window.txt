@@ -1,0 +1,14 @@
+live data file corrupted (first 100 bytes zeroed); settings.json present: no
+
+installed rc3 app, normal launch on the damaged data, Standard text (real 125% display scaling):
+window title: 'Language Hangman · Recovery · 1.0.0rc3'; visible after 0.99 s
+opening size (physical pixels): 1043x847
+after requesting 200x200, the window's minimum (physical pixels): 818x647
+closed, exit code 1
+
+same, with the saved text size set to Large (settings.json written in the app's own format):
+window title: 'Language Hangman · Recovery · 1.0.0rc3'; visible after 0.90 s
+opening size (physical pixels): 1043x847
+after requesting 200x200, the window's minimum (physical pixels): 818x647
+closed, exit code 1
+settings.json removed again

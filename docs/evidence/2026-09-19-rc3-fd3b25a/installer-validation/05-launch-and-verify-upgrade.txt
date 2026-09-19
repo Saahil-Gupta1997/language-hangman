@@ -1,0 +1,15 @@
+installed rc3 app, normal launch on the upgraded rc2 data:
+window title: 'Language Hangman · 1.0.0rc3'
+captured size (physical pixels): 1343x997
+start-up to visible window: 1.73 s
+screenshot saved (app-only check 0.120): True
+closed normally, exit code 0
+
+sign-in and data checked with rc3's code (fd3b25a, same commit as the installer):
+code version 1.0.0rc3
+previous-release credentials accepted: True
+wrong password rejected: True
+second profile present: True
+previous-release progress: {'rounds': 2, 'wins': 1, 'losses': 1, 'sessions': 0}
+paused previous-release session resumes: True (round 3 of 3)
+after finishing the resumed round: {'rounds': 3, 'wins': 2, 'losses': 1, 'sessions': 1}

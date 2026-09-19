@@ -1,0 +1,10 @@
+candidate installer (built from fd3b25a) sha256: 5e1b31077061dabd9cc764e07f8243f3054f526b8b1202181805b17022665f84
+learner data files before upgrade: 4; app.db sha256: e8324073733f8fa0dad6b469ea8a50d7f1c559f6c946a251852dd274e71dcc5a
+installed exe before (rc2): 224bf1cc8adb8c273241f69877d6fb6776cb0e1d2fef371d1f707b0bb9e511f2
+upgrade installer exit: 0
+learner data files after upgrade: 4; app.db sha256: e8324073733f8fa0dad6b469ea8a50d7f1c559f6c946a251852dd274e71dcc5a
+every learner data file unchanged by the installer: True
+installed exe after: 87b319ecf21564aaf432f1b29f67775cf707e46d3647c1446a513e2008f86f5f
+installed exe identical to the rc3 build: True
+uninstall entries: 1 -> version 1.0.0rc3
+notices in program folder: THIRD-PARTY-NOTICES.txt=True, licence texts=11

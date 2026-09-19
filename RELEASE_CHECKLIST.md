@@ -1,21 +1,29 @@
 # Release checklist
 
-1. On the release commit, from a clean checkout: `python -m pytest -rs` (check pytest's own
-   exit code, not a filtered summary), `python -m ruff check .`,
-   `python scripts/check_curated_content.py`, `python -m src.cli release-check`,
-   `python desktop_app.py --smoke-test <folder>`. Until D-29 is fixed, run `release-check` in a
-   `git worktree` of the commit (it wrongly flags `.git/refs/heads/release`).
-2. Build on Windows x64 with Python 3.12 and Inno Setup 6:
-   `./scripts/build_desktop.ps1 -Python <clean 3.12 environment>\python.exe`.
-3. **Immediately copy** `dist\installer\*.exe` and `SHA256.txt` out of the build tree
+1. Make a fresh clone (or `git worktree`) of the release commit. Before running anything
+   else, run `release-check` with `PYTHONDONTWRITEBYTECODE=1`: Python and pytest create
+   caches that the check rightly reports and that never reach the `git archive` source zip.
+2. Then `python -m ruff check .`, `python scripts/check_curated_content.py`,
+   `python -m pytest -rs` (read pytest's own exit code, not a filtered summary) and
+   `python desktop_app.py --smoke-test <folder>`.
+3. Build in a fresh clone of the same commit on Windows x64 with **Python 3.12.1** and
+   **Inno Setup 6.7.3** (the versions the third-party notices describe):
+   `./scripts/build_desktop.ps1 -Python <clean 3.12.1 environment>\python.exe`. The build
+   fails if the notices do not cover every shipped file or the versions differ; if a
+   dependency changes, run `python scripts/third_party_notices.py collect` with the build
+   interpreter, review the result and commit it first.
+4. **Immediately copy** `dist\installer\*.exe` and `SHA256.txt` out of the build tree
    (incident I-1: a later clean-up deleted a validated installer).
-4. Validate that exact installer: install, upgrade over the previous release with real data,
-   `LanguageHangman.exe --smoke-test <folder>` without Python on `PATH`, corrupt-data
-   recovery, uninstall with data preserved. Record results against its SHA256.
-5. Run the manual checks and record them (docs/ACCEPTANCE.md M1–M4).
-6. Content and learner gates: CONTENT_REVIEW.md and USER_ACCEPTANCE.md completed by people.
-7. Third-party notices included (T-28); licence chosen (DEC-08).
-8. Source archive from the tagged commit (`git archive`), excluding databases, secrets and
-   build output; publish `SHA256SUMS.txt` for every artifact.
-9. Update RELEASE_NOTES.md and the go/no-go record. Never mark an unrun gate passed.
-10. Promote the version (`src/__init__.py`) only after acceptance; rebuild and repeat 1–4.
+5. Validate that exact installer and record results against its SHA256: install the
+   previous release and let it create data; upgrade; `third_party_notices.py check
+   <install folder> --installed`; normal launch; `LanguageHangman.exe --smoke-test <folder>`
+   without Python on `PATH`; beta import; damaged-data recovery; uninstall with data
+   preserved. Capture screenshots with a DPI-aware process (incident I-4).
+6. Run the manual checks and record them (docs/ACCEPTANCE.md M1–M4).
+7. Content and learner gates: CONTENT_REVIEW.md and USER_ACCEPTANCE.md completed by people.
+8. Owner decisions recorded: licence (DEC-08) and installer terms (DEC-14) before publishing.
+9. Source archive from the tagged commit (`git archive`); extract it and run `release-check`
+   on the extracted tree; publish `SHA256SUMS.txt` for every artifact.
+10. Update RELEASE_NOTES.md and the go/no-go record. Never mark an unrun gate passed.
+11. Promote the version (`src/__init__.py`) only after acceptance and owner approval; rebuild
+    and repeat 1–5 and 9 on the final artifact.

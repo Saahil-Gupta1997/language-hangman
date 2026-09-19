@@ -1,0 +1,14 @@
+revision fd3b25a (fd3b25a); run from source in-process; 100% and 150% are EMULATED on a 125% screen; 125% is the real Windows setting
+recovery window, 100-emulated, Standard text, minimum size: text fits
+main window Practice and Help, 100-emulated, Standard text, minimum size: text fits
+recovery window, 100-emulated, Large text, minimum size: text fits
+main window Practice and Help, 100-emulated, Large text, minimum size: text fits
+recovery window, 125-real, Standard text, minimum size: text fits
+main window Practice and Help, 125-real, Standard text, minimum size: text fits
+recovery window, 125-real, Large text, minimum size: text fits
+main window Practice and Help, 125-real, Large text, minimum size: text fits
+recovery window, 150-emulated, Standard text, minimum size: text fits
+main window Practice and Help, 150-emulated, Standard text, minimum size: text fits
+recovery window, 150-emulated, Large text, minimum size: text fits
+main window Practice and Help, 150-emulated, Large text, minimum size: text fits
+exit=0

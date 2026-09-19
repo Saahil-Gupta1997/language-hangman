@@ -1,0 +1,30 @@
+revision 8621ff3 — python repro_d30.py
+=== Scenario A: RestoreError (stage=replace): The backup was not restored because the current data file could not be replaced (PermissionError). Close any program that may be using it, such as a sync or antivirus tool, then try again. Your current data is unchanged.
+--- after restore attempt
+  app.db-journal at original location: False
+  app.db-wal at original location: True
+  set-aside files in backups: ['set-aside-20260919T151629598242-app.db-journal']
+=== Scenario B: RestoreError (stage=replace): The backup was not restored because the current data file could not be replaced (PermissionError). Close any program that may be using it, such as a sync or antivirus tool, then try again. Your current data is unchanged.
+--- after restore attempt
+  app.db-journal at original location: False
+  app.db-wal at original location: True
+  set-aside files in backups: ['set-aside-20260919T151630200501-app.db-journal']
+
+revision fd3b25a — python repro_d30.py
+=== Scenario A: RestoreError (stage=replace): The backup was not restored because the current data file could not be replaced (PermissionError). Close any program that may be using it, such as a sync or antivirus tool, then try again. Your current data is unchanged.
+--- after restore attempt
+  app.db-journal at original location: True
+  app.db-wal at original location: True
+  set-aside files in backups: []
+=== Scenario B: RestoreError (stage=rollback): The backup was not restored because the current data file could not be replaced (PermissionError), and 1 of its journal files could not be put back. Your data file itself was not changed, but it may be incomplete or inconsistent until they are back in place.
+
+Close Language Hangman, then move each file back to its original folder and name:
+  <TEMP>  →  <TEMP>
+
+A copy of your data taken before this attempt is also kept at:
+  <TEMP>
+--- after restore attempt
+  app.db-journal at original location: False
+  app.db-wal at original location: True
+  set-aside files in backups: ['set-aside-20260919T151631933500-app.db-journal']
+

@@ -5,7 +5,12 @@ reviewer before 1.0 (gate G9 in [ACCEPTANCE.md](ACCEPTANCE.md)). This file is th
 reviewer's worksheet and the record of the result. **No independent review has taken
 place yet**; the "Reviewer verdict" columns below are empty until one does.
 
-## Intended learner (proposal — owner to confirm, assumption A-1)
+## Intended learner (proposed profile — owner to confirm, DEC-15)
+
+This is a **proposed** profile, used to choose the reviewer and the learners for the
+sessions. The cards have not been assessed against CEFR descriptors, and nothing in this
+project certifies them as A2 material; the reviewer's verdict below (G9) is the first
+check.
 
 - Adults or older teenagers preparing for travel, who already read short, simple English
   sentences (about CEFR A2). All explanations are in English only; the app does not
@@ -19,6 +24,9 @@ place yet**; the "Reviewer verdict" columns below are empty until one does.
 A qualified English-language teacher (for example CELTA, TESOL or equivalent experience
 teaching adults at A2–B1). Record name or initials, qualification, date and the file's
 revision (`git rev-parse HEAD`).
+
+The cards are unchanged from rc2 to rc3 (`git diff 4ad1e34 fd3b25a -- src/desktop/content`
+is empty), so a review of either candidate applies to both.
 
 ## What to check on every card
 
@@ -98,22 +106,26 @@ plain encouragement. Please confirm the tone (decision DEC-07).
 
 ### Third-party components bundled in the installer
 
-Licence fields as declared by each package's metadata (or the project, for runtime parts).
+The inventory, with versions, licences and the files each component covers, is
+[`packaging/third-party/THIRD-PARTY-NOTICES.txt`](../packaging/third-party/THIRD-PARTY-NOTICES.txt);
+the licence texts are in `packaging/third-party/licenses/`. Both are installed next to the
+program, and the build fails if they do not cover every shipped file (T-28, closed in rc3).
 
-| Component | Version | Licence |
-| --- | --- | --- |
-| Python runtime | 3.12.1 | PSF License |
-| Tcl/Tk | 8.6 | Tcl/Tk licence (BSD-style) |
-| SQLite (via Python) | bundled | Public domain |
-| OpenSSL, libffi, zlib (via Python) | bundled | Apache-2.0, MIT, zlib |
-| Microsoft Visual C++ runtime (`VCRUNTIME140.dll`) | bundled | Microsoft redistributable terms |
-| CustomTkinter | 5.2.2 | metadata: CC0-1.0 licence field, MIT classifier |
-| Roboto font (inside CustomTkinter) | — | Apache-2.0 |
-| darkdetect | 0.8.0 | BSD-3-Clause |
-| packaging | 26.3 | Apache-2.0 OR BSD-2-Clause |
-| Pillow | 12.3.0 | MIT-CMU |
-| PyInstaller bootloader | 6.11.1 | GPL-2.0-or-later with bootloader exception (permits distributing bundled apps) |
+In summary: Python 3.12.1 (PSF), with bzip2, xz, libmpdec, expat and zlib linked in;
+OpenSSL 3.0.11 (Apache-2.0); libffi 3.4.4 (MIT); SQLite 3.43.1 (public domain);
+Tcl/Tk 8.6.13; zlib 1.2.13; the Microsoft Visual C++ runtime; Pillow 12.3.0 (MIT-CMU, with
+its bundled image libraries); CustomTkinter 5.2.2 (MIT) with the Roboto font (Apache-2.0);
+darkdetect 0.8.0 (BSD-3-Clause); packaging 26.3 (Apache-2.0 or BSD-2-Clause); the PyInstaller
+6.11.1 bootloader (GPL-2.0-or-later with an exception permitting distribution with any
+program); and Inno Setup 6.7.3's setup and uninstall programs.
 
-Several of these require their notices to accompany binary copies. **The installer does not
-yet include a third-party notices file** (register T-28): add one before public
-distribution, alongside the project licence decision (DEC-08).
+Points for the owner:
+
+- **CustomTkinter's metadata disagrees with itself**: its `License` field says CC0-1.0, while
+  its LICENSE file and classifier say MIT. The MIT text is shipped; it satisfies either.
+- **Microsoft Distributable Code**: Python's licence asks anyone redistributing
+  `VCRUNTIME140.dll` to have end users agree to terms at least as protective as Microsoft's.
+  The installer currently shows no licence terms (RK-7, decision DEC-14, together with the
+  project licence DEC-08).
+- Pillow's Windows build used here contains no GPL components (no libimagequant); its font
+  module (FreeType, HarfBuzz) is not shipped.

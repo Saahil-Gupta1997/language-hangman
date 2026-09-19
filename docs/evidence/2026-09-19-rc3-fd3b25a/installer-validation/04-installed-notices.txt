@@ -1,0 +1,3 @@
+command: python scripts/third_party_notices.py check <install folder> --installed (fd3b25a)
+980 files checked, 12 notice files, 0 problems
+exit=0

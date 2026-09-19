@@ -1,0 +1,4 @@
+PASS: 30 unique words, 10 per situation, complete fields and contextual examples.
+Editorial heuristic warnings: 24, all dispositioned (7 revised, 17 accepted).
+Independent educator review remains pending.
+content exit=0

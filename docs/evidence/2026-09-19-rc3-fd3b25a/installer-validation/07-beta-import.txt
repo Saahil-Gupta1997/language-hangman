@@ -1,0 +1,18 @@
+v1.0.0-beta database (schema 0, created by the beta's own code): sha256 bf0d39e7a0aa8bea9e72fbe3394b1a379e711e8525549adb65a5840353ca1f71
+import with rc3's code (fd3b25a), exactly as the Restore / import button does:
+1.0.0rc3 | previous data kept as backups/before-restore-20260919T150724195352.sqlite | user_version now 1
+
+installed rc3 app, normal launch on the imported data:
+window title: 'Language Hangman · 1.0.0rc3'
+captured size (physical pixels): 1343x997
+start-up to visible window: 0.90 s
+screenshot saved (app-only check 0.120): True
+closed normally, exit code 0
+
+beta credentials accepted: True
+beta history kept: {'rounds': 3, 'wins': 3, 'words': 3}
+upgrade profile replaced by import (all profiles replaced, as documented): True
+desktop Review in hotel: ['clean']
+desktop Review in airport: ['early']
+desktop Review in restaurant: refused (no eligible review words)
+legacy-only word kept for history: ('step9-expanded-core',)

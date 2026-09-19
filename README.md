@@ -5,28 +5,31 @@ curated words for the Restaurant, Airport and Hotel. It is built with Python, Cu
 and SQLite. It is rule-based software built with AI assistance: it contains no machine
 learning, chatbot or network service, and it needs no account or internet connection.
 
-**Status: 1.0.0rc2, a tested release candidate. It is not the final 1.0.**
+**Status: 1.0.0rc3, a tested release candidate. It is not the final 1.0.**
 
-| Verified on the build machine (Windows 11) | Still pending, needs people |
+| Verified by automated and scripted checks on the build machine (Windows 11, 125%) | Still pending: needs people or the owner |
 | --- | --- |
-| 163 automated tests, lint, content and release checks on `4ad1e34` | Clean-computer install without Python (G5) |
-| Installer built from that commit; install, upgrade from rc1 with real data, beta import, recovery, uninstall | Keyboard-only, display scaling and recovery checks by hand (G6–G8) |
-| 16-step native journey in the installed app, without Python on `PATH` | Review of all 30 teaching cards by a qualified reviewer (G9) |
-| Performance with 5,000 rounds: every operation under 1 second | Five learner sessions (G10) |
-| | Third-party licence notices in the installer (G15); licence choice |
+| 174 automated tests, lint, content and release checks on `fd3b25a` | Installing on a clean Windows account without Python (G5) |
+| Installer built from that commit; install, upgrade from rc2 with its own data, beta import, recovery, uninstall | Keyboard-only use by a person; real 100% and 150% display scaling (G6–G8) |
+| 16-step scripted journey in the installed app, without Python on `PATH` | Review of all 30 teaching cards by a qualified reviewer (G9) |
+| Third-party notices installed and checked against every shipped file | Five learner sessions (G10) |
+| Window layout measured at the minimum size (real 125%, emulated 100% and 150%) | Owner decisions: licence, installer terms, Review rule, feedback tone, supported history, intended learner |
 
-The gates, evidence and go/no-go record are in [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md).
+Automated GUI checks call the app's own handlers and Tk's focus order; they are not a person
+using a keyboard. The build machine has had Python and earlier versions installed, so it is
+not a clean-machine test. Gates, evidence and the go/no-go record are in
+[docs/ACCEPTANCE.md](docs/ACCEPTANCE.md).
 
 ## Demo
 
-[2½-minute captioned recording](docs/media/language-hangman-1.0.0rc2-demo.mp4): a new
+[2½-minute captioned recording](docs/media/language-hangman-1.0.0rc3-demo.mp4): a new
 profile, Review offered as Standard for a new learner, a Standard session with learning
 cards, reports, a shortened Review, resuming after closing, word cards, text size, settings
-and recovery from a damaged data file. It is a scripted run of revision `4ad1e34` from
+and recovery from a damaged data file. It is a scripted run of revision `fd3b25a` from
 source, driven through the app's own controls and slowed so that captions can be read; only
 the app window is captured.
 
-Screenshots from the installed rc2 build:
+Screenshots from the installed rc3 build:
 
 | Practice round | Review shortened, with the reason | Recovery window |
 | --- | --- | --- |
@@ -49,13 +52,13 @@ Screenshots from the installed rc2 build:
 
 ## Install
 
-1. Download `LanguageHangman-1.0.0rc2-Setup.exe` from the release package and check it:
+1. Download `LanguageHangman-1.0.0rc3-Setup.exe` from the release package and check it:
 
    ```powershell
-   Get-FileHash .\LanguageHangman-1.0.0rc2-Setup.exe -Algorithm SHA256
+   Get-FileHash .\LanguageHangman-1.0.0rc3-Setup.exe -Algorithm SHA256
    ```
 
-   Expected: `2fc27de78a94aca7c96637dafc70b15ff707349b403c878bfd050ad79a58dc95`.
+   Expected: `5e1b31077061dabd9cc764e07f8243f3054f526b8b1202181805b17022665f84`.
 2. Run it. **The installer is not code-signed**, so Windows SmartScreen shows "Windows
    protected your PC" and "Unknown publisher". Choose *More info › Run anyway* only if the
    checksum matched. It installs for the current user; no administrator rights are needed.
@@ -71,7 +74,8 @@ sessions are kept; any database upgrade runs on a copy after a pre-upgrade backu
 - Data lives in `%LOCALAPPDATA%\LanguageHangman\app.db`; backups in its `backups` folder.
 - **Settings › Create full backup** saves every profile. **Restore** checks a backup,
   keeps a safety copy of the current data, and only then replaces it. An invalid backup
-  changes nothing.
+  changes nothing. If the switch itself fails, every file is put back; if Windows prevents
+  that, the message says exactly which file is where and how to put it back.
 - **If the data file is damaged**, the app opens a recovery window instead of failing.
   Choose the newest automatic backup (or your own) and confirm; the damaged file is kept
   in `backups\quarantine-…` and you can sign in again.
@@ -79,12 +83,23 @@ sessions are kept; any database upgrade runs on a copy after a pre-upgrade backu
   old database* and pick the beta's `data\app.db`. This replaces all current profiles after
   confirmation. Old results stay in reports; new practice uses the 30 curated words.
 - **Diagnostics** (Settings) export the app, Python and Windows versions, database checks
-  and recent failure records (operation, stage, error type). They exclude passwords, usernames, session
-  content and personal folder paths.
+  and recent failure records (operation, stage, error type). They exclude passwords,
+  usernames, session content and personal folder paths.
+
+## Performance (build machine)
+
+On an AMD Ryzen 7 6800H laptop with an NVMe SSD, with one profile holding 5,000 completed
+rounds (5.3 MB of data): guesses took a median of 13–28 ms (123 and 30 samples), reports
+65 ms (20 samples), a full backup 128 ms (5 samples) and screen changes 238–365 ms (5
+samples each, 95th percentile ≤ 386 ms). The installed program showed its window in
+0.78–0.84 s, and in 1.65 s on the day's first launch, which also makes the automatic
+backup. Details and method: [docs/VERIFICATION.md](docs/VERIFICATION.md#performance-build-machine).
 
 ## Known limitations
 
-- English only, about CEFR A2, 30 words; meanings are in English, not translations.
+- English only; 30 words. Meanings are in English, not translations. The intended learner
+  (reads short, simple English, about CEFR A2) is a proposed profile awaiting the owner and
+  a reviewer; the content is not certified for any level.
 - Pronunciation is an approximate respelling, not audio or IPA.
 - Easy mode offers two distinct clues per word (the synonym clue is empty by design).
 - Windows screen readers generally cannot read CustomTkinter controls.
@@ -93,18 +108,20 @@ sessions are kept; any database upgrade runs on a copy after a pre-upgrade backu
   private.
 - One copy of the app per Windows account at a time; guest practice is discarded on
   sign-out.
-- The installer is unsigned and does not yet include third-party licence notices (T-28);
-  it should not be distributed publicly until they are added.
-- Tested on Windows 11 only; Windows 10 is expected to work but has not been checked.
+- The installer is unsigned and shows no licence terms; the project's own licence is not
+  yet chosen (DEC-08, DEC-14). Third-party notices are installed next to the program.
+- Tested on the Windows 11 build machine only; Windows 10 and other machines are unchecked.
 - Supported history (proposed): up to 5 profiles and 5,000 rounds per profile.
 
 ## How it was built
 
-The beta and rc1 were written with AI coding assistance. The rc2 delivery (defect fixes,
+The beta and rc1 were written with AI coding assistance. The rc2 and rc3 work (defect fixes,
 tests, packaging, validation and these documents) was carried out by Claude Code at the
-owner's direction. Every fix was reproduced first and checked afterwards, and results are
-tied to commits. Educator, learner and manual checks are left for people to perform and
-record. See [How AI assistance was used and verified](docs/DELIVERY.md#how-ai-assistance-was-used-and-verified).
+owner's direction; an independent review of rc2 found the restore defect fixed in rc3.
+Every fix was reproduced first and checked afterwards, and results are tied to commits.
+Mistakes in the AI's own evidence are recorded rather than hidden (incidents I-1 to I-5).
+Educator, learner and manual checks are left for people to perform and record. See
+[How AI assistance was used and verified](docs/DELIVERY.md#how-ai-assistance-was-used-and-verified).
 
 ## Project documents
 
@@ -114,8 +131,9 @@ record. See [How AI assistance was used and verified](docs/DELIVERY.md#how-ai-as
 | [DELIVERY.md](docs/DELIVERY.md) | Defect and task register, RAID log, decision log, milestones, AI assistance |
 | [VERIFICATION.md](docs/VERIFICATION.md) | Results by revision, installer validation, performance, requirement traceability |
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Components, data flow, persistence, recovery |
-| [CONTENT_REVIEW.md](docs/CONTENT_REVIEW.md) | Intended learner, review worksheet for 30 cards, content provenance |
+| [CONTENT_REVIEW.md](docs/CONTENT_REVIEW.md) | Intended learner, review worksheet for 30 cards, provenance and third-party components |
 | [USER_ACCEPTANCE.md](docs/USER_ACCEPTANCE.md) | Five-session learner protocol |
+| [THIRD-PARTY-NOTICES.txt](packaging/third-party/THIRD-PARTY-NOTICES.txt) | Bundled components, versions and licences |
 | [RELEASE_NOTES.md](RELEASE_NOTES.md), [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) | What changed; how to release |
 | [LEGACY_BROWSER.md](docs/LEGACY_BROWSER.md) | The unsupported browser prototype |
 
@@ -129,19 +147,20 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe desktop_app.py
 ```
 
-(`./scripts/start.ps1` does the same for running the app.) Checks:
+(`./scripts/start.ps1` does the same for running the app.) Checks, in this order, on an
+untouched checkout (see [the verification sequence](docs/VERIFICATION.md#verification-sequence)):
 
 ```powershell
-python -m pytest -rs
+python -m src.cli release-check
 python -m ruff check .
 python scripts/check_curated_content.py
-python -m src.cli release-check
+python -m pytest -rs
 python desktop_app.py --smoke-test desktop-evidence
 ```
 
 The GUI tests and the smoke journey need a Windows desktop session; they use temporary
-data, never yours. Build the installer with Inno Setup 6 installed:
-`./scripts/build_desktop.ps1 -Python <python 3.12 exe>`, then follow
+data, never yours. Build the installer with Python 3.12.1 and Inno Setup 6.7.3:
+`./scripts/build_desktop.ps1 -Python <python 3.12.1 exe>`, then follow
 [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md).
 
 ### Code map
@@ -149,15 +168,16 @@ data, never yours. Build the installer with Inno Setup 6 installed:
 | Supported desktop app | Responsibility |
 | --- | --- |
 | `desktop_app.py` | Entry point: single instance, recovery window, smoke journey |
-| `src/desktop/` | Views, recovery window, keyboard and window helpers, logging |
+| `src/desktop/` | Views, recovery window, keyboard, wrapping and window helpers, logging |
 | `src/desktop/content/english.json` | The 30 curated words |
 | `src/services/practice_service.py` | Session orchestration; saves every action |
 | `src/services/game_service.py` | Game rules, Review eligibility, completion |
 | `src/services/curated_content.py`, `word_service.py` | Curated-only word selection |
-| `src/services/desktop_storage.py` | Backups, restore, recovery, export, diagnostics |
+| `src/services/desktop_storage.py` | Backups, restore with rollback, recovery, export, diagnostics |
 | `src/db/` | SQLite schema, migrations, transactions |
 | `packaging/`, `scripts/build_desktop.ps1` | PyInstaller and Inno Setup build |
-| `tests/` | 163 tests, including GUI scenarios run one per process |
+| `packaging/third-party/`, `scripts/third_party_notices.py` | Third-party notices and their coverage check |
+| `tests/` | 174 tests, including GUI scenarios run one per process |
 
 **Legacy, unsupported:** `app.py`, `src/ui/`, `src/gateway/`, `frontend/`, `Dockerfile`,
 `data/words/` and most of `src/cli.py` belong to the earlier browser prototype. They are not
@@ -167,4 +187,5 @@ See [LEGACY_BROWSER.md](docs/LEGACY_BROWSER.md).
 ## Licence
 
 Not yet chosen (decision DEC-08 is pending with the owner). Until then, all rights are
-reserved. Bundled third-party components keep their own licences.
+reserved. Bundled third-party components keep their own licences; see
+[THIRD-PARTY-NOTICES.txt](packaging/third-party/THIRD-PARTY-NOTICES.txt).

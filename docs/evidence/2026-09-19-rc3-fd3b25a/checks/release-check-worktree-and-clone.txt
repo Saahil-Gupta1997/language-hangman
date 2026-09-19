@@ -1,0 +1,12 @@
+== wt-rc3 (fd3b25a)
+is_clean: True
+artifact_count: 0
+artifacts: []
+relative_artifacts: []
+exit=0
+== clone-rc3 (fd3b25a)
+is_clean: True
+artifact_count: 0
+artifacts: []
+relative_artifacts: []
+exit=0

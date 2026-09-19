@@ -96,7 +96,11 @@ flowchart TD
 
 Any failure before the rename raises `RestoreError` with a stage (`stage`, `protect`,
 `replace`) and leaves the live file byte-for-byte unchanged. Journal side files are set
-aside because SQLite would otherwise replay an old journal into the restored database.
+aside because SQLite would otherwise replay an old journal into the restored database; each
+move is recorded as soon as it succeeds, so if a later move or the rename fails, every file
+already moved is put back. If a file cannot be put back, the stage is `rollback` and the
+message names where each file is kept, where it belongs and where the safety copy is; it
+never claims the data is unchanged (D-30).
 
 ## Guest and profile separation
 
@@ -117,7 +121,10 @@ passwords protect in-app access, not the files.
 - Data: `%LOCALAPPDATA%\LanguageHangman`; program: `%LOCALAPPDATA%\Programs\LanguageHangman`
   (per-user install, no administrator rights). Upgrades and uninstall keep the data.
 - Windows open inside the screen work area at any display scaling; supported minimum
-  800 × 600 logical pixels (fits 1080p at 150%).
+  800 × 600 logical pixels (fits 1080p at 150%); the recovery window's minimum is 640 × 480.
+- Body text wraps to the width each label actually gets (`wrap_to_width`), so a smaller
+  window, Large text or higher scaling never clips it (D-31). The recovery window uses the
+  saved text size.
 - Keyboard: Tab order through buttons, entries and dropdowns; amber focus indication;
   focused controls scroll into view; Up/Down change dropdowns; Enter/Space activate.
 - Two CustomTkinter 5.2.2 defects are worked around in `src/desktop/runtime.py` and
@@ -127,6 +134,9 @@ passwords protect in-app access, not the files.
 ## Boundaries
 
 The installer bundles only the desktop import graph, CustomTkinter resources and the
-curated content (`packaging/hangman.spec` excludes Streamlit, FastAPI and test tools).
+curated content (`packaging/hangman.spec` excludes Streamlit, FastAPI and test tools), plus
+`THIRD-PARTY-NOTICES.txt` and `licenses/` from `packaging/third-party/`. The build runs
+`scripts/third_party_notices.py check`, which fails if any shipped file is missing from the
+notices inventory or the build environment's versions differ from it.
 Legacy services remain because the desktop reuses the game engine; new desktop features
 should go through `PracticeService` rather than calling completion or snapshot code directly.

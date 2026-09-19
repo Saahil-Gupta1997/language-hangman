@@ -1,0 +1,8 @@
+ordinary clone, branch release/1.0 checked out then detached at 8621ff3 (rc2 code); .git/refs/heads/release exists: yes
+is_clean: False
+artifact_count: 2
+artifacts: ['<TEMP>', '<TEMP>']
+relative_artifacts: ['.git/logs/refs/heads/release', '.git/refs/heads/release']
+exit=1
+
+ordinary clone at fd3b25a (rc3 code): see checks/release-check-worktree-and-clone.txt (is_clean True, exit 0)
