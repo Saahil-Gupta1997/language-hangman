@@ -174,11 +174,18 @@ def emulate(window, size, factor):
         time.sleep(0.02)
 
 
+def every_widget(parent):
+    """Every descendant, because screens group their content into cards and columns."""
+    for child in parent.winfo_children():
+        yield child
+        yield from every_widget(child)
+
+
 def assert_text_fits(body, where):
     """No label wider than its space and no control past the right edge of the view."""
     canvas = body._parent_canvas
     right = canvas.winfo_rootx() + canvas.winfo_width()
-    for widget in body.winfo_children():
+    for widget in every_widget(body):
         if isinstance(widget, ctk.CTkLabel):
             needed, given = widget._label.winfo_reqwidth(), widget.winfo_width()
             assert needed <= given, (where, widget.cget("text")[:50], needed, given)

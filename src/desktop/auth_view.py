@@ -29,13 +29,15 @@ class AuthView:
             self.body,
             "Create profile" if register else "Sign in",
             lambda: self.authenticate(register),
+            variant="primary",
+            width=220,
         )
         self.button(
             self.body,
             "I already have a profile" if register else "Create a profile",
             lambda: self.show_login(not register),
         )
-        self.button(self.body, "Try guest practice", self.start_guest)
+        self.button(self.body, "Try guest practice", self.start_guest, variant="quiet")
         self.bind("<Return>", lambda event: self.authenticate(register))
         self.username_entry.focus_set()
 

@@ -22,13 +22,21 @@ from src.desktop.runtime import (
 )
 from src.desktop.settings_view import SettingsView
 from src.desktop.widgets import (
-    BLUE,
+    BORDER,
+    BRAND,
+    CANVAS,
+    INK,
+    MUTED,
+    SPACE,
+    SURFACE,
     TEXT_SCALING,
+    card,
     fit_to_work_area,
     keyboard_button,
     release_window,
     saved_text_size,
     scroll_into_view,
+    ui_font,
     wrap_to_width,
 )
 from src.services.auth_service import AuthService
@@ -75,11 +83,16 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         self.scale = saved_text_size(self.data_dir)
         ctk.set_appearance_mode("light")
         ctk.set_widget_scaling(TEXT_SCALING[self.scale])
-        self.header = ctk.CTkFrame(self, corner_radius=0, fg_color=BLUE)
+        self.header = ctk.CTkFrame(self, corner_radius=0, fg_color=BRAND, height=58)
         self.header.pack(fill="x")
+        self.header.pack_propagate(False)
         ctk.CTkLabel(
-            self.header, text="Language Hangman", text_color="white", font=("Arial", 24, "bold")
-        ).pack(side="left", padx=24, pady=18)
+            self.header, text="Language Hangman", text_color="white", font=ui_font(20, bold=True)
+        ).pack(side="left", padx=20)
+        self.profile_label = ctk.CTkLabel(
+            self.header, text="", text_color="#CBE3EC", font=ui_font(13)
+        )
+        self.profile_label.pack(side="right", padx=20)
         self.backup_warning = self.automatic_backup()
         if self.backup_warning:
             wrap_to_width(
@@ -90,19 +103,19 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
                     text_color="#78350F",
                     corner_radius=8,
                     justify="left",
-                    font=("Arial", 14, "bold"),
+                    font=ui_font(14, bold=True),
                 )
             ).pack(fill="x", padx=20, pady=(10, 0), ipady=6)
-        self.navigation = ctk.CTkFrame(self, fg_color="transparent")
-        self.navigation.pack(fill="x", padx=20, pady=(10, 0))
-        self.body = ctk.CTkScrollableFrame(self, fg_color="#F5F7FA", corner_radius=12)
-        self.body.pack(fill="both", expand=True, padx=20, pady=12)
+        self.navigation = ctk.CTkFrame(self, fg_color="transparent", height=44)
+        self.navigation.pack(fill="x", padx=16, pady=(SPACE, 0))
+        self.body = ctk.CTkScrollableFrame(self, fg_color=CANVAS, corner_radius=12)
+        self.body.pack(fill="both", expand=True, padx=16, pady=SPACE)
         ctk.CTkLabel(
             self,
             text="Local English vocabulary practice · Progress stays on this device",
-            font=("Arial", 12),
-            text_color="#475569",
-        ).pack(pady=(0, 10))
+            font=ui_font(12),
+            text_color=MUTED,
+        ).pack(pady=(0, SPACE))
         self.show_login()
 
     def report_callback_exception(self, exception, value, traceback):
@@ -161,61 +174,104 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
             child.destroy()
         for child in self.navigation.winfo_children():
             child.destroy()
+        signed_in = (self.user or {}).get("username", "")
+        self.profile_label.configure(text="Guest practice · not saved" if self.guest else signed_in)
         if self.user:
-            for index, (label, command) in enumerate(
-                [
-                    ("Home", self.show_home),
-                    ("Practice", self.show_practice),
-                    ("Reports", self.show_reports),
-                    ("Word cards", self.show_words),
-                    ("Settings", self.show_settings),
-                    ("Help", self.show_help),
-                    ("Sign out", self.logout),
-                ]
-            ):
-                # Tk forbids mixing pack and grid in one frame, so these are gridded only.
-                control = self.button(self.navigation, label, command, width=130, pack=False)
-                control.grid(row=index // 4, column=index % 4, sticky="ew", padx=4, pady=4)
-                self.navigation.grid_columnconfigure(index % 4, weight=1)
+            destinations = [
+                ("Home", self.show_home, "Home"),
+                ("Practice", self.show_practice, "Practice"),
+                ("Reports", self.show_reports, "Reports"),
+                ("Word cards", self.show_words, "Words"),
+                ("Settings", self.show_settings, "Settings"),
+                ("Help", self.show_help, "Help"),
+            ]
+            for label, command, name in destinations:
+                self.nav_button(label, command, active=self.page == name).pack(
+                    side="left", padx=(0, 4)
+                )
+            self.nav_button("Sign out", self.logout, variant="quiet").pack(side="right")
         else:
-            self.button(self.navigation, "Help", self.show_help, side="left")
-            self.button(self.navigation, "Restore / import old database", self.restore, side="left")
-            self.button(self.navigation, "Sign in", self.show_login, side="left")
+            self.nav_button("Sign in", self.show_login, active=page == "Login").pack(
+                side="left", padx=(0, 4)
+            )
+            self.nav_button("Restore / import old database", self.restore).pack(
+                side="left", padx=(0, 4)
+            )
+            self.nav_button("Help", self.show_help, active=page == "Help").pack(side="left")
 
-    def heading(self, text, description=""):
-        ctk.CTkLabel(self.body, text=text, anchor="w", font=("Arial", 27, "bold")).pack(
-            fill="x", padx=22, pady=(20, 6)
+    def nav_button(self, label, command, active=False, variant="nav"):
+        return keyboard_button(
+            self.navigation,
+            label,
+            command,
+            width=max(64, 9 * len(label) + 24),
+            height=34,
+            variant="nav_active" if active else variant,
         )
-        if description:
-            self.text(description)
 
-    def text(self, text, parent=None, bold=False):
+    def heading(self, text, description="", parent=None):
+        ctk.CTkLabel(
+            parent or self.body,
+            text=text,
+            anchor="w",
+            font=ui_font(26, bold=True),
+            text_color=INK,
+        ).pack(fill="x", padx=2 * SPACE, pady=(2 * SPACE, SPACE // 2))
+        if description:
+            self.text(description, parent=parent, muted=True)
+
+    def text(self, text, parent=None, bold=False, muted=False, size=15, pady=None):
         label = ctk.CTkLabel(
             parent or self.body,
             text=text,
             anchor="w",
             justify="left",
-            font=("Arial", 15, "bold" if bold else "normal"),
-            text_color="#172B4D",
+            font=ui_font(size, bold=bold),
+            text_color=MUTED if muted else INK,
         )
-        wrap_to_width(label).pack(fill="x", padx=22, pady=7)
+        wrap_to_width(label).pack(
+            fill="x", padx=2 * SPACE, pady=SPACE - 2 if pady is None else pady
+        )
         return label
 
-    def button(self, parent, label, command, side=None, width=180, pack=True):
-        button = keyboard_button(parent, label, command, width=width)
+    def card(self, parent=None, title="", fill="x"):
+        """A grouped panel in the page body; returns the frame to fill."""
+        panel = card(parent or self.body)
+        panel.pack(fill=fill, padx=2 * SPACE, pady=SPACE)
+        if title:
+            ctk.CTkLabel(
+                panel, text=title, anchor="w", font=ui_font(13, bold=True), text_color=MUTED
+            ).pack(fill="x", padx=2 * SPACE, pady=(SPACE + 2, 0))
+        return panel
+
+    def button(self, parent, label, command, side=None, width=180, pack=True, variant="secondary"):
+        button = keyboard_button(parent, label, command, width=width, variant=variant)
         if pack:
             button.pack(
                 side=side or "top",
-                padx=5 if side else 22,
-                pady=8,
+                padx=5 if side else 2 * SPACE,
+                pady=SPACE,
                 anchor="w" if not side else "center",
             )
         return button
 
-    def entry(self, label, password=False):
-        self.text(label)
-        entry = ctk.CTkEntry(self.body, width=340, height=38, show="•" if password else "")
-        entry.pack(anchor="w", padx=22, pady=(0, 8))
+    def entry(self, label, password=False, parent=None, width=340, side=None):
+        if label:
+            self.text(label, parent=parent, size=14, muted=True, pady=(SPACE, 2))
+        entry = ctk.CTkEntry(
+            parent or self.body,
+            width=width,
+            height=38,
+            show="•" if password else "",
+            corner_radius=8,
+            fg_color=SURFACE,
+            border_color=BORDER,
+            text_color=INK,
+            font=ui_font(15),
+        )
+        entry.pack(
+            side=side or "top", anchor="w", padx=(0 if side else 2 * SPACE, SPACE), pady=(0, SPACE)
+        )
         entry.bind("<FocusIn>", lambda event: scroll_into_view(entry), add="+")
         return entry
 

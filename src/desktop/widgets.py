@@ -9,6 +9,44 @@ BLUE = "#155E75"
 FOCUS_RING = "#F59E0B"
 TITLE_BAR_ALLOWANCE = 48  # logical pixels for the title bar and window borders
 
+# Design tokens. One brand colour, one neutral ramp, and three button weights, so that the
+# primary action on a screen is never drawn like its navigation (UI review, 2026-11-01).
+BRAND, BRAND_DARK, BRAND_TINT = "#155E75", "#0E4657", "#DCE7EC"
+INK, MUTED, FAINT = "#0F172A", "#475569", "#94A3B8"
+SURFACE, CANVAS, BORDER = "#FFFFFF", "#EEF2F6", "#CBD5E1"
+SUCCESS, DANGER, WARNING_INK = "#15803D", "#B91C1C", "#92400E"
+SPACE = 8  # spacing unit: paddings are multiples of this
+
+_FAMILY = None
+
+
+def ui_font(size=15, bold=False):
+    """Return the best available UI font at ``size``, preferring the Windows system face."""
+    global _FAMILY
+    if _FAMILY is None:
+        try:
+            import tkinter.font
+
+            available = set(tkinter.font.families())
+        except Exception:  # noqa: BLE001 - no root yet or a headless build
+            available = set()
+        _FAMILY = next(
+            (name for name in ("Segoe UI Variable Text", "Segoe UI", "Arial") if name in available),
+            "Arial",
+        )
+    return (_FAMILY, size, "bold") if bold else (_FAMILY, size)
+
+
+BUTTON_VARIANTS = {
+    # fg, hover, text, border width, border colour
+    "primary": (BRAND, BRAND_DARK, "white", 0, BRAND),
+    "secondary": (SURFACE, BRAND_TINT, BRAND, 2, BORDER),
+    "quiet": ("transparent", BRAND_TINT, MUTED, 0, BORDER),
+    "nav": ("transparent", BRAND_TINT, BRAND, 0, BRAND),
+    "nav_active": (BRAND, BRAND_DARK, "white", 0, BRAND),
+    "danger": (SURFACE, "#FEE2E2", DANGER, 2, "#FCA5A5"),
+}
+
 
 def release_window(window):
     """Destroy a CustomTkinter root without leaving its timers or tracker entries behind.
@@ -136,7 +174,24 @@ def keyboard_option_menu(parent, values, command=None, width=200):
     previous/next value; Enter or Space opens the list, which Windows then navigates with
     the arrow keys, Enter and Escape.
     """
-    menu = ctk.CTkOptionMenu(parent, values=list(values), command=command, width=width)
+    menu = ctk.CTkOptionMenu(
+        parent,
+        values=list(values),
+        command=command,
+        width=width,
+        height=36,
+        corner_radius=8,
+        # A filled control: on a white card an unfilled one reads as plain text.
+        fg_color=CANVAS,
+        button_color=BRAND,
+        button_hover_color=BRAND_DARK,
+        text_color=INK,
+        dropdown_fg_color=SURFACE,
+        dropdown_text_color=INK,
+        dropdown_hover_color=BRAND_TINT,
+        font=ui_font(14),
+        dropdown_font=ui_font(14),
+    )
     menu._canvas.configure(takefocus=1)
     normal = {key: menu.cget(key) for key in ("fg_color", "button_color", "text_color")}
 
@@ -167,20 +222,33 @@ def keyboard_option_menu(parent, values, command=None, width=200):
     return menu
 
 
-def keyboard_button(parent, label, command, width=180):
-    """Return a button that takes Tab focus, shows a focus ring and activates on Enter/Space."""
+def keyboard_button(
+    parent, label, command, width=180, variant="primary", height=38, font=None, takefocus=True
+):
+    """Return a button that takes Tab focus, shows a focus ring and activates on Enter/Space.
+
+    ``variant`` selects one of BUTTON_VARIANTS, so a screen's primary action, its secondary
+    actions and its navigation can be told apart. ``takefocus=False`` keeps a button out of
+    the Tab order for controls that duplicate a keyboard route (the A–Z letter keys), so the
+    keyboard journey stays the short one described in ACCEPTANCE.md.
+    """
+    fg, hover, text_color, border_width, border_color = BUTTON_VARIANTS[variant]
     button = ctk.CTkButton(
         parent,
         text=label,
         command=command,
         width=width,
-        height=38,
-        fg_color=BLUE,
-        hover_color="#0E4657",
-        font=("Arial", 14),
+        height=height,
+        corner_radius=8,
+        fg_color=fg,
+        hover_color=hover,
+        text_color=text_color,
+        border_width=border_width,
+        border_color=border_color,
+        font=font or ui_font(14, bold=variant in ("primary", "nav_active")),
     )
     # CTk's canvas must be explicitly focusable for keyboard activation.
-    button._canvas.configure(takefocus=1)
+    button._canvas.configure(takefocus=1 if takefocus else 0)
 
     def activate(event):
         button.invoke()
@@ -193,6 +261,184 @@ def keyboard_button(parent, label, command, width=180):
         button.configure(border_width=3, border_color=FOCUS_RING)
         scroll_into_view(button)
 
+    def focus_out(event):
+        button.configure(border_width=border_width, border_color=border_color)
+
     button.bind("<FocusIn>", focus_in)
-    button.bind("<FocusOut>", lambda event: button.configure(border_width=0))
+    button.bind("<FocusOut>", focus_out)
     return button
+
+
+def card(parent, fg_color=SURFACE, border=True):
+    """A panel that groups related content: white, rounded, with a hairline border."""
+    return ctk.CTkFrame(
+        parent,
+        fg_color=fg_color,
+        corner_radius=12,
+        border_width=1 if border else 0,
+        border_color=BORDER,
+    )
+
+
+def responsive_split(parent, threshold=900, weights=(3, 2)):
+    """Two panes side by side in a wide window, stacked in a narrow one.
+
+    Returns (container, left, right). The window's supported minimum is 800 logical pixels,
+    where two columns would squeeze the game board, so the panes stack instead (D-31).
+    """
+    container = ctk.CTkFrame(parent, fg_color="transparent")
+    left = ctk.CTkFrame(container, fg_color="transparent")
+    right = ctk.CTkFrame(container, fg_color="transparent")
+    state = {"wide": None}
+
+    def layout(event=None):
+        try:
+            factor = container._apply_widget_scaling(1.0)
+        except AttributeError:
+            factor = 1.0
+        width = (event.width if event is not None else container.winfo_width()) / factor
+        wide = width >= threshold
+        if wide == state["wide"]:
+            return
+        state["wide"] = wide
+        left.grid_forget()
+        right.grid_forget()
+        if wide:
+            left.grid(row=0, column=0, sticky="new", padx=(0, SPACE))
+            right.grid(row=0, column=1, sticky="new")
+            container.grid_columnconfigure(0, weight=weights[0])
+            container.grid_columnconfigure(1, weight=weights[1])
+        else:
+            left.grid(row=0, column=0, columnspan=2, sticky="ew")
+            right.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(SPACE, 0))
+            container.grid_columnconfigure(0, weight=1)
+            container.grid_columnconfigure(1, weight=0)
+
+    container.bind("<Configure>", layout)
+    layout()
+    return container, left, right
+
+
+def word_tiles(parent, masked_word):
+    """Show the word being guessed as letter tiles instead of a line of underscores."""
+    frame = ctk.CTkFrame(parent, fg_color="transparent")
+    letters = masked_word.split()
+    size = 44 if len(letters) <= 7 else (36 if len(letters) <= 10 else 28)
+    for column, letter in enumerate(letters):
+        revealed = letter != "_"
+        tile = ctk.CTkFrame(
+            frame,
+            width=size,
+            height=round(size * 1.2),
+            corner_radius=6,
+            fg_color=SURFACE if revealed else CANVAS,
+            border_width=2,
+            border_color=BRAND if revealed else BORDER,
+        )
+        tile.grid(row=0, column=column, padx=3)
+        tile.grid_propagate(False)
+        ctk.CTkLabel(
+            tile,
+            text=letter if revealed else " ",
+            font=ui_font(round(size * 0.55), bold=True),
+            text_color=BRAND,
+        ).place(relx=0.5, rely=0.5, anchor="center")
+    return frame
+
+
+def lives_pips(parent, remaining, total):
+    """Lives as filled and empty pips, with the count still written out for screen readers."""
+    frame = ctk.CTkFrame(parent, fg_color="transparent")
+    ctk.CTkLabel(
+        frame, text=f"{remaining} of {total} lives", font=ui_font(14, bold=True), text_color=MUTED
+    ).grid(row=0, column=0, padx=(0, SPACE))
+    for index in range(total):
+        ctk.CTkFrame(
+            frame,
+            width=14,
+            height=14,
+            corner_radius=7,
+            fg_color=BRAND if index < remaining else "transparent",
+            border_width=2,
+            border_color=BRAND if index < remaining else BORDER,
+        ).grid(row=0, column=index + 1, padx=2)
+    return frame
+
+
+def alphabet_grid(parent, on_letter, correct=(), wrong=(), columns=9):
+    """Clickable A–Z keys that also show which letters have been tried.
+
+    The keys are outside the Tab order: typing a letter and pressing Enter stays the
+    keyboard route, so these add a mouse route without lengthening it.
+    """
+    frame = ctk.CTkFrame(parent, fg_color="transparent")
+    correct, wrong = {c.lower() for c in correct}, {c.lower() for c in wrong}
+    for index, letter in enumerate("abcdefghijklmnopqrstuvwxyz"):
+        used = letter in correct or letter in wrong
+        variant = "primary" if letter in correct else ("quiet" if letter in wrong else "secondary")
+        key = keyboard_button(
+            frame,
+            letter.upper(),
+            (lambda letter=letter: on_letter(letter)) if not used else (lambda: None),
+            width=34,
+            height=34,
+            variant=variant,
+            font=ui_font(14, bold=not used),
+            takefocus=False,
+        )
+        if used:
+            key.configure(
+                state="disabled", text_color_disabled="white" if letter in correct else FAINT
+            )
+        key.grid(row=index // columns, column=index % columns, padx=2, pady=2)
+    return frame
+
+
+GALLOWS_PARTS = (
+    ("oval", (84, 46, 116, 78)),  # head
+    ("line", (100, 78, 100, 128)),  # body
+    ("line", (100, 92, 76, 112)),  # left arm
+    ("line", (100, 92, 124, 112)),  # right arm
+    ("line", (100, 128, 80, 160)),  # left leg
+    ("line", (100, 128, 120, 160)),  # right leg
+)
+
+
+def gallows(parent, wrong_count, max_wrong, background=SURFACE, height=150):
+    """Draw the hangman figure, filling in parts in proportion to the lives used.
+
+    Easy gives seven lives and Hard five, so parts are drawn proportionally rather than one
+    per wrong guess: the figure is complete exactly when the round is lost.
+    """
+    try:
+        factor = parent._apply_widget_scaling(1.0)
+    except AttributeError:
+        factor = 1.0
+    # The drawing is designed on a 200x180 grid and scaled to the requested height, so the
+    # whole board still fits the 800x600 minimum window without scrolling.
+    ratio = height / 180
+    width, height = round(200 * ratio * factor), round(180 * ratio * factor)
+    canvas = ctk.CTkCanvas(parent, width=width, height=height, bg=background, highlightthickness=0)
+
+    def at(*points):
+        """Scale the drawing's logical coordinates to the current display scaling."""
+        return [round(value * ratio * factor) for value in points]
+
+    for frame_line in (
+        (40, 165, 160, 165),
+        (60, 165, 60, 30),
+        (60, 30, 100, 30),
+        (100, 30, 100, 46),
+    ):
+        canvas.create_line(
+            *at(*frame_line), width=max(2, round(4 * factor)), fill=FAINT, capstyle="round"
+        )
+    drawn = round(len(GALLOWS_PARTS) * min(wrong_count, max_wrong) / max(1, max_wrong))
+    for shape, points in GALLOWS_PARTS[:drawn]:
+        if shape == "oval":
+            canvas.create_oval(*at(*points), width=max(2, round(3 * factor)), outline=INK)
+        else:
+            canvas.create_line(
+                *at(*points), width=max(2, round(3 * factor)), fill=INK, capstyle="round"
+            )
+    return canvas

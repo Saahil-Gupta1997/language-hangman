@@ -42,7 +42,7 @@ class SettingsView:
             self.password_delete = self.entry(
                 "Re-enter password to delete this profile", password=True
             )
-            self.button(self.body, "Delete my profile", self.delete_user)
+            self.button(self.body, "Delete my profile", self.delete_user, variant="danger")
         else:
             self.text(
                 "Guest profiles are temporary. Create a local profile for persistent progress."

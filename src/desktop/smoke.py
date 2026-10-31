@@ -57,10 +57,16 @@ def _screenshot(window, output, name, shots):
         pass  # No window capture here (e.g. not Windows); never fall back to the screen.
 
 
+def _descendants(parent):
+    for child in parent.winfo_children():
+        yield child
+        yield from _descendants(child)
+
+
 def _on_screen_button(app, prefix):
     return next(
         widget
-        for widget in app.body.winfo_children()
+        for widget in _descendants(app.body)
         if isinstance(widget, ctk.CTkButton) and widget.cget("text").startswith(prefix)
     )
 
