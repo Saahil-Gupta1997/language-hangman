@@ -5,7 +5,10 @@
    caches that the check rightly reports and that never reach the `git archive` source zip.
 2. Then `python -m ruff check .`, `python scripts/check_curated_content.py`,
    `python -m pytest -rs` (read pytest's own exit code, not a filtered summary) and
-   `python desktop_app.py --smoke-test <folder>`.
+   `python desktop_app.py --smoke-test <folder>`. If the interface changed, measure
+   performance **now**, before building: in rc4 a redesign made a guess four times slower
+   than the previous release, and the installer had to be discarded and rebuilt (I-7).
+   The tooling for every step below is in `scripts/validation/` (I-6).
 3. Build in a fresh clone of the same commit on Windows x64 with **Python 3.12.1** and
    **Inno Setup 6.7.3** (the versions the third-party notices describe):
    `./scripts/build_desktop.ps1 -Python <clean 3.12.1 environment>\python.exe`. The build

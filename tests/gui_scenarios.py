@@ -94,6 +94,20 @@ def text_size_after_dropdown_is_destroyed(data):
         release_window(root)
 
 
+def settle(window, seconds=1.2):
+    """Let CustomTkinter finish applying a size change before measuring the layout.
+
+    It pins a window's size for about a second after creation or a scaling change, so a
+    measurement taken immediately can be against a layout that is still moving.
+    """
+    import time
+
+    deadline = time.monotonic() + seconds
+    while time.monotonic() < deadline:
+        window.update()
+        time.sleep(0.02)
+
+
 def focused_control_scrolls_into_view(data):
     from src.desktop.application import MINIMUM_WINDOW
 
@@ -102,7 +116,7 @@ def focused_control_scrolls_into_view(data):
         app.logout()
         app.geometry(f"{MINIMUM_WINDOW[0]}x{MINIMUM_WINDOW[1]}")
         app.show_login(register=True)
-        app.update()
+        settle(app)
         last = [w for w in app.body.winfo_children() if isinstance(w, ctk.CTkButton)][-1]
         # Fire the focus binding directly; focus_force() would take OS focus from other apps.
         last._canvas.event_generate("<FocusIn>", when="now")
@@ -162,16 +176,12 @@ def emulate(window, size, factor):
     CustomTkinter pins the window's size for one second after a scaling change, so wait
     that out before resizing.
     """
-    import time
 
     from src.desktop.widgets import TEXT_SCALING
 
     ctk.set_window_scaling(factor)
     ctk.set_widget_scaling(factor * TEXT_SCALING[size])
-    deadline = time.monotonic() + 1.2
-    while time.monotonic() < deadline:
-        window.update()
-        time.sleep(0.02)
+    settle(window)
 
 
 def every_widget(parent):
