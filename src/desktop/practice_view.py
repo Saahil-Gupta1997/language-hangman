@@ -15,14 +15,11 @@ from src.desktop.widgets import (
     SPACE,
     SUCCESS,
     SURFACE,
-    alphabet_grid,
+    GameBoard,
     card,
-    gallows,
     keyboard_option_menu,
-    lives_pips,
     responsive_split,
     ui_font,
-    word_tiles,
 )
 from src.models.game_round import GameRound
 from src.services.desktop_storage import (
@@ -214,19 +211,10 @@ class PracticeView:
         container.pack(fill="x", padx=2 * SPACE)
         board = card(left)
         board.pack(fill="x")
-        # The figure sits beside the word, which reads like a hangman board and keeps the
-        # whole board inside the 800x600 minimum window without scrolling.
-        top = ctk.CTkFrame(board, fg_color="transparent")
-        top.pack(fill="x", padx=SPACE, pady=(SPACE, 0))
-        gallows(board, len(state.wrong_letters), state.max_attempts).pack(in_=top, side="left")
-        beside = ctk.CTkFrame(top, fg_color="transparent")
-        beside.pack(side="left", expand=True)
-        word_tiles(beside, state.masked_word).pack(pady=(0, SPACE))
-        lives_pips(beside, state.remaining_attempts, state.max_attempts).pack()
-        correct = [letter for letter in state.guessed_letters if letter not in state.wrong_letters]
-        alphabet_grid(board, self.guess_letter, correct=correct, wrong=state.wrong_letters).pack(
-            padx=SPACE, pady=(0, SPACE)
-        )
+        # One drawn canvas rather than about 55 widgets: see GameBoard for why.
+        self.board = GameBoard(board, self.guess_letter)
+        self.board.pack(fill="x", padx=SPACE, pady=SPACE)
+        self.board.redraw(state)
         guess_row = ctk.CTkFrame(board, fg_color="transparent")
         guess_row.pack(fill="x", padx=SPACE, pady=(0, SPACE + 4))
         self.text(
@@ -241,8 +229,10 @@ class PracticeView:
         self.guess_entry = self.entry("", parent=entry_row, width=120, side="left")
         self.button(entry_row, "Submit guess", self.submit_guess, side="left", variant="primary")
         self.bind("<Return>", lambda event: self.submit_guess())
-        self.status_card(right, state)
-        self.clue_card(right, state, session)
+        self.board_status = self.status_card(right, state)
+        self.board_clues = self.clue_card(right, state, session)
+        self.board_round_key = state.round_key
+        self.board_clue_count = len(set(get_revealed_hints(state).values()))
         self.guess_entry.focus_set()
 
     def status_card(self, parent, state):
@@ -251,22 +241,22 @@ class PracticeView:
         colour = INK if last is None else (DANGER if last in state.wrong_letters else SUCCESS)
         panel = card(parent)
         panel.pack(fill="x", pady=(0, SPACE))
-        self.text(
+        label = self.text(
             self.payload["message"], parent=panel, bold=True, size=15, pady=(SPACE + 4, SPACE + 4)
-        ).configure(text_color=colour)
+        )
+        label.configure(text_color=colour)
+        return label
 
     def clue_card(self, parent, state, session):
         panel = card(parent)
         panel.pack(fill="x")
+        self.clue_session = session
         ctk.CTkLabel(
             panel, text="Clues", anchor="w", font=ui_font(13, bold=True), text_color=MUTED
         ).pack(fill="x", padx=2 * SPACE, pady=(SPACE + 4, 0))
-        hints = get_revealed_hints(state)
-        if hints:
-            for index, text in enumerate(dict.fromkeys(hints.values()), 1):
-                self.text(f"{index}. {text}", parent=panel, size=14)
-        else:
-            self.text("Clues appear as lives are used.", parent=panel, muted=True, size=14)
+        clues = ctk.CTkFrame(panel, fg_color="transparent")
+        clues.pack(fill="x")
+        self.fill_clues(clues, state)
         self.text(
             f"Why this word: {self.selection_explanation(session)}",
             parent=panel,
@@ -274,6 +264,17 @@ class PracticeView:
             size=13,
             pady=(SPACE, SPACE + 4),
         )
+        return clues
+
+    def fill_clues(self, parent, state):
+        for child in parent.winfo_children():
+            child.destroy()
+        hints = get_revealed_hints(state)
+        if hints:
+            for index, text in enumerate(dict.fromkeys(hints.values()), 1):
+                self.text(f"{index}. {text}", parent=parent, size=14)
+        else:
+            self.text("Clues appear as lives are used.", parent=parent, muted=True, size=14)
 
     def render_result(self, state, session):
         won = state.result == "won"
@@ -324,8 +325,32 @@ class PracticeView:
         self.submit_guess()
 
     def submit_guess(self):
-        self.practice.guess(self.user, self.guess_entry.get(), self.payload["round"]["round_key"])
-        self.show_practice()
+        guessed = self.guess_entry.get().strip().lower()
+        payload = self.practice.guess(
+            self.user, self.guess_entry.get(), self.payload["round"]["round_key"]
+        )
+        self.payload = payload
+        state = GameRound(**payload["round"])
+        # Rebuilding the screen costs about a second: CustomTkinter widgets are expensive to
+        # create, and the board has around a hundred. While the round continues, update the
+        # parts that changed. A finished round changes the whole screen, so it is redrawn.
+        if state.saved or payload.get("notice") or state.round_key != self.board_round_key:
+            self.show_practice()
+        else:
+            self.refresh_round(state, guessed)
+
+    def refresh_round(self, state, guessed=None):
+        """Update the board in place after a guess that leaves the round in progress."""
+        self.board.redraw(state)
+        last = state.guessed_letters[-1] if state.guessed_letters else None
+        colour = INK if last is None else (DANGER if last in state.wrong_letters else SUCCESS)
+        self.board_status.configure(text=self.payload["message"], text_color=colour)
+        clue_count = len(set(get_revealed_hints(state).values()))
+        if clue_count != self.board_clue_count:  # a clue appears only when a life is used
+            self.fill_clues(self.board_clues, state)
+            self.board_clue_count = clue_count
+        self.guess_entry.delete(0, "end")
+        self.guess_entry.focus_set()
 
     def advance(self):
         self.practice.next_round(self.user["id"])

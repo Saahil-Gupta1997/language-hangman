@@ -20,6 +20,7 @@ SCENARIOS = [
     "automatic_backup_failure_does_not_block_start_up",
     "recovery_window_fits_at_minimum_size",
     "main_window_text_wraps_at_minimum_size",
+    "letter_keys_guess_on_click",
 ]
 
 

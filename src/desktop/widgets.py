@@ -319,81 +319,6 @@ def responsive_split(parent, threshold=900, weights=(3, 2)):
     return container, left, right
 
 
-def word_tiles(parent, masked_word):
-    """Show the word being guessed as letter tiles instead of a line of underscores."""
-    frame = ctk.CTkFrame(parent, fg_color="transparent")
-    letters = masked_word.split()
-    size = 44 if len(letters) <= 7 else (36 if len(letters) <= 10 else 28)
-    for column, letter in enumerate(letters):
-        revealed = letter != "_"
-        tile = ctk.CTkFrame(
-            frame,
-            width=size,
-            height=round(size * 1.2),
-            corner_radius=6,
-            fg_color=SURFACE if revealed else CANVAS,
-            border_width=2,
-            border_color=BRAND if revealed else BORDER,
-        )
-        tile.grid(row=0, column=column, padx=3)
-        tile.grid_propagate(False)
-        ctk.CTkLabel(
-            tile,
-            text=letter if revealed else " ",
-            font=ui_font(round(size * 0.55), bold=True),
-            text_color=BRAND,
-        ).place(relx=0.5, rely=0.5, anchor="center")
-    return frame
-
-
-def lives_pips(parent, remaining, total):
-    """Lives as filled and empty pips, with the count still written out for screen readers."""
-    frame = ctk.CTkFrame(parent, fg_color="transparent")
-    ctk.CTkLabel(
-        frame, text=f"{remaining} of {total} lives", font=ui_font(14, bold=True), text_color=MUTED
-    ).grid(row=0, column=0, padx=(0, SPACE))
-    for index in range(total):
-        ctk.CTkFrame(
-            frame,
-            width=14,
-            height=14,
-            corner_radius=7,
-            fg_color=BRAND if index < remaining else "transparent",
-            border_width=2,
-            border_color=BRAND if index < remaining else BORDER,
-        ).grid(row=0, column=index + 1, padx=2)
-    return frame
-
-
-def alphabet_grid(parent, on_letter, correct=(), wrong=(), columns=9):
-    """Clickable A–Z keys that also show which letters have been tried.
-
-    The keys are outside the Tab order: typing a letter and pressing Enter stays the
-    keyboard route, so these add a mouse route without lengthening it.
-    """
-    frame = ctk.CTkFrame(parent, fg_color="transparent")
-    correct, wrong = {c.lower() for c in correct}, {c.lower() for c in wrong}
-    for index, letter in enumerate("abcdefghijklmnopqrstuvwxyz"):
-        used = letter in correct or letter in wrong
-        variant = "primary" if letter in correct else ("quiet" if letter in wrong else "secondary")
-        key = keyboard_button(
-            frame,
-            letter.upper(),
-            (lambda letter=letter: on_letter(letter)) if not used else (lambda: None),
-            width=34,
-            height=34,
-            variant=variant,
-            font=ui_font(14, bold=not used),
-            takefocus=False,
-        )
-        if used:
-            key.configure(
-                state="disabled", text_color_disabled="white" if letter in correct else FAINT
-            )
-        key.grid(row=index // columns, column=index % columns, padx=2, pady=2)
-    return frame
-
-
 GALLOWS_PARTS = (
     ("oval", (84, 46, 116, 78)),  # head
     ("line", (100, 78, 100, 128)),  # body
@@ -402,43 +327,175 @@ GALLOWS_PARTS = (
     ("line", (100, 128, 80, 160)),  # left leg
     ("line", (100, 128, 120, 160)),  # right leg
 )
+LETTERS = "abcdefghijklmnopqrstuvwxyz"
 
 
-def gallows(parent, wrong_count, max_wrong, background=SURFACE, height=150):
-    """Draw the hangman figure, filling in parts in proportion to the lives used.
+class GameBoard(ctk.CTkCanvas):
+    """The figure, the word, the lives and the A-Z keys, drawn on one canvas.
 
-    Easy gives seven lives and Hard five, so parts are drawn proportionally rather than one
-    per wrong guess: the figure is complete exactly when the round is lost.
+    Built from widgets this board was about 55 CustomTkinter widgets, and each one costs
+    roughly 4 ms to create, so every guess rebuilt the screen for over a second. Drawing it
+    takes a couple of milliseconds, and the layout can follow the window width exactly.
+
+    The keys repeat the typing route for mouse users: they are not focusable, and the guess
+    entry and Submit button beside the board remain ordinary widgets.
     """
-    try:
-        factor = parent._apply_widget_scaling(1.0)
-    except AttributeError:
-        factor = 1.0
-    # The drawing is designed on a 200x180 grid and scaled to the requested height, so the
-    # whole board still fits the 800x600 minimum window without scrolling.
-    ratio = height / 180
-    width, height = round(200 * ratio * factor), round(180 * ratio * factor)
-    canvas = ctk.CTkCanvas(parent, width=width, height=height, bg=background, highlightthickness=0)
 
-    def at(*points):
-        """Scale the drawing's logical coordinates to the current display scaling."""
+    def __init__(self, parent, on_letter, background=SURFACE):
+        super().__init__(parent, bg=background, highlightthickness=0, height=10)
+        self.on_letter, self.background, self.state = on_letter, background, None
+        self._keys, self._hovered = {}, None
+        self.bind("<Configure>", lambda event: self.redraw(width=event.width))
+        self.bind("<Button-1>", self._click)
+        self.bind("<Motion>", self._hover)
+        self.bind("<Leave>", lambda event: self._hover(None))
+
+    def scaling(self):
+        try:
+            return self._apply_widget_scaling(1.0)
+        except AttributeError:
+            return 1.0
+
+    def redraw(self, state=None, width=None):
+        """Draw the board for ``state`` at the current width; cheap enough to call per guess."""
+        if state is not None:
+            self.state = state
+        if self.state is None:
+            return
+        factor = self.scaling()
+        available = (width if width is not None else self.winfo_width()) / factor
+        if available <= 1:
+            return
+        self.delete("all")
+        self._keys.clear()
+        figure = 160 if available >= 430 else 0
+        if figure:
+            self._figure(len(self.state.wrong_letters), self.state.max_attempts, factor)
+        reached = self._word(self.state, figure + 16, available - figure - 16, factor)
+        height = self._letter_keys(
+            self.state, available, max(reached, 150 if figure else 0) + 16, factor
+        )
+        self.configure(height=round(height * factor))
+
+    def _at(self, points, factor, ratio=1.0):
         return [round(value * ratio * factor) for value in points]
 
-    for frame_line in (
-        (40, 165, 160, 165),
-        (60, 165, 60, 30),
-        (60, 30, 100, 30),
-        (100, 30, 100, 46),
-    ):
-        canvas.create_line(
-            *at(*frame_line), width=max(2, round(4 * factor)), fill=FAINT, capstyle="round"
-        )
-    drawn = round(len(GALLOWS_PARTS) * min(wrong_count, max_wrong) / max(1, max_wrong))
-    for shape, points in GALLOWS_PARTS[:drawn]:
-        if shape == "oval":
-            canvas.create_oval(*at(*points), width=max(2, round(3 * factor)), outline=INK)
-        else:
-            canvas.create_line(
-                *at(*points), width=max(2, round(3 * factor)), fill=INK, capstyle="round"
+    def _figure(self, wrong_count, max_wrong, factor, height=150):
+        ratio = height / 180
+        line = max(2, round(3 * factor))
+        for frame in (
+            (40, 165, 160, 165),
+            (60, 165, 60, 30),
+            (60, 30, 100, 30),
+            (100, 30, 100, 46),
+        ):
+            self.create_line(
+                *self._at(frame, factor, ratio),
+                width=max(2, round(4 * factor)),
+                fill=FAINT,
+                capstyle="round",
             )
-    return canvas
+        drawn = round(len(GALLOWS_PARTS) * min(wrong_count, max_wrong) / max(1, max_wrong))
+        for shape, points in GALLOWS_PARTS[:drawn]:
+            scaled = self._at(points, factor, ratio)
+            if shape == "oval":
+                self.create_oval(*scaled, width=line, outline=INK)
+            else:
+                self.create_line(*scaled, width=line, fill=INK, capstyle="round")
+
+    def _word(self, state, left, available, factor):
+        """Letter tiles, then the lives. Returns the lowest y the word block reaches."""
+        letters = state.masked_word.split()
+        size = min(44, max(20, int(available / max(1, len(letters))) - 6))
+        x = left + max(0, (available - len(letters) * (size + 6)) / 2)
+        top = 34
+        for letter in letters:
+            revealed = letter != "_"
+            self.create_rectangle(
+                *self._at((x, top, x + size, top + size * 1.2), factor),
+                fill=SURFACE if revealed else CANVAS,
+                outline=BRAND if revealed else BORDER,
+                width=max(1, round(2 * factor)),
+            )
+            if revealed:
+                self.create_text(
+                    *self._at((x + size / 2, top + size * 0.6), factor),
+                    text=letter,
+                    fill=BRAND,
+                    font=ui_font(max(10, round(size * 0.55)), bold=True),
+                )
+            x += size + 6
+        lives_y = top + size * 1.2 + 22
+        pip, gap = 12, 6
+        block = state.max_attempts * (pip + gap)
+        start = left + max(0, (available - block) / 2)
+        self.create_text(
+            *self._at((start - 10, lives_y), factor),
+            text=f"{state.remaining_attempts} of {state.max_attempts} lives",
+            fill=MUTED,
+            font=ui_font(14, bold=True),
+            anchor="e",
+        )
+        for index in range(state.max_attempts):
+            lit = index < state.remaining_attempts
+            self.create_oval(
+                *self._at((start, lives_y - pip / 2, start + pip, lives_y + pip / 2), factor),
+                fill=BRAND if lit else self.background,
+                outline=BRAND if lit else BORDER,
+                width=max(1, round(2 * factor)),
+            )
+            start += pip + gap
+        return lives_y + pip
+
+    def _letter_keys(self, state, available, top, factor, columns=9):
+        correct = {c for c in state.guessed_letters if c not in state.wrong_letters}
+        wrong = set(state.wrong_letters)
+        size = min(34, max(18, int(available / columns) - 4))
+        left = max(0, (available - columns * (size + 4)) / 2)
+        for index, letter in enumerate(LETTERS):
+            x = left + (index % columns) * (size + 4)
+            y = top + (index // columns) * (size + 4)
+            used = letter in correct or letter in wrong
+            variant = (
+                "primary" if letter in correct else ("quiet" if letter in wrong else "secondary")
+            )
+            fill, _, text_colour, border, border_colour = BUTTON_VARIANTS[variant]
+            box = self.create_rectangle(
+                *self._at((x, y, x + size, y + size), factor),
+                fill=self.background if fill == "transparent" else fill,
+                outline=border_colour if border else BORDER,
+                width=max(1, round((border or 1) * factor)),
+            )
+            self.create_text(
+                *self._at((x + size / 2, y + size / 2), factor),
+                text=letter.upper(),
+                fill=FAINT if letter in wrong else text_colour,
+                font=ui_font(max(9, round(size * 0.42)), bold=not used),
+            )
+            self._keys[letter] = (box, used, (x, y, x + size, y + size))
+        rows = (len(LETTERS) + columns - 1) // columns
+        return top + rows * (size + 4) + 6
+
+    def _letter_at(self, event):
+        factor = self.scaling()
+        x, y = event.x / factor, event.y / factor
+        for letter, (_, used, (left, top, right, bottom)) in self._keys.items():
+            if left <= x <= right and top <= y <= bottom:
+                return None if used else letter
+        return None
+
+    def _click(self, event):
+        letter = self._letter_at(event)
+        if letter:
+            self.on_letter(letter)
+
+    def _hover(self, event):
+        letter = self._letter_at(event) if event is not None else None
+        if letter == self._hovered:
+            return
+        for name in (self._hovered, letter):
+            if name in self._keys:
+                box, used, _ = self._keys[name]
+                self.itemconfigure(box, fill=BRAND_TINT if name == letter and not used else SURFACE)
+        self._hovered = letter
+        self.configure(cursor="hand2" if letter else "")

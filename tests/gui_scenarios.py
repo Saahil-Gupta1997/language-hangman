@@ -258,6 +258,45 @@ def main_window_text_wraps_at_minimum_size(data):
         ctk.set_widget_scaling(1.0)
 
 
+def letter_keys_guess_on_click(data):
+    """The A-Z keys are drawn on a canvas, so clicking one must still submit that letter."""
+    app = signed_in_app(data)
+    try:
+        app.show_practice()
+        app.start_session()
+        board = app.board
+        app.update()
+        word = app.payload["round"]["word"]
+        letter = sorted(set(word))[0]
+        box, used, (left, top, right, bottom) = board._keys[letter]
+        assert not used, f"{letter} should not be used yet"
+        factor = board.scaling()
+        board.event_generate(
+            "<Button-1>",
+            x=round((left + right) / 2 * factor),
+            y=round((top + bottom) / 2 * factor),
+            when="now",
+        )
+        app.update()
+        assert letter in app.payload["round"]["guessed_letters"], (
+            f"clicking {letter} did not register",
+            app.payload["round"]["guessed_letters"],
+        )
+        # A used key must not fire again, and the board must redraw it as used.
+        assert app.board._keys[letter][1], "the clicked key should now be marked used"
+        before = list(app.payload["round"]["guessed_letters"])
+        app.board.event_generate(
+            "<Button-1>",
+            x=round((left + right) / 2 * factor),
+            y=round((top + bottom) / 2 * factor),
+            when="now",
+        )
+        app.update()
+        assert app.payload["round"]["guessed_letters"] == before, "a used key fired again"
+    finally:
+        app.close_application()
+
+
 SCENARIOS = {
     function.__name__: function
     for function in (
@@ -269,6 +308,7 @@ SCENARIOS = {
         automatic_backup_failure_does_not_block_start_up,
         recovery_window_fits_at_minimum_size,
         main_window_text_wraps_at_minimum_size,
+        letter_keys_guess_on_click,
     )
 }
 
