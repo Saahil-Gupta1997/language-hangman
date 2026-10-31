@@ -1,0 +1,11 @@
+candidate installer (built from d543579) sha256: abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c
+size: 14736907 bytes
+learner data files before upgrade: 1; app.db sha256: cea133473024a7ed63961089609e96b81640dc26f01aecd6a38e0178d17d02fb
+installed exe before (rc3): 87b319ecf21564aaf432f1b29f67775cf707e46d3647c1446a513e2008f86f5f
+upgrade installer exit: 0
+learner data files after upgrade: 1; app.db sha256: cea133473024a7ed63961089609e96b81640dc26f01aecd6a38e0178d17d02fb
+every learner data file unchanged by the installer: True
+installed exe after: e6b3c0f910b626036b0df0753481b9b6fe9fd8ca51ab3a3d0cbe9b54df571436
+installed exe identical to the rc4 build: True
+uninstall entries: 1 -> version 1.0.0rc4
+LICENSE.txt beside the program: True; notices: True; licence texts: 12

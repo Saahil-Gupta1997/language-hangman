@@ -1,0 +1,5 @@
+date: 2026-11-01T02:43:51.9201350+05:30
+pre-state: install dir exists=False, data dir exists=False, start menu entry=False, uninstall entries=0
+previous release: rc3 installer (built from fd3b25a) sha256: 5e1b31077061dabd9cc764e07f8243f3054f526b8b1202181805b17022665f84
+rc3 install exit: 0; registered version: 1.0.0rc3
+installed rc3 exe sha256: 87b319ecf21564aaf432f1b29f67775cf707e46d3647c1446a513e2008f86f5f

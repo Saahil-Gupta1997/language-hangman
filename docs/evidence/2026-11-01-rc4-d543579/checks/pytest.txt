@@ -1,0 +1,39 @@
+.......................................................................F [ 41%]
+........................................................................ [ 82%]
+...............................                                          [100%]
+================================== FAILURES ===================================
+____________ test_gui_scenario[focused_control_scrolls_into_view] _____________
+
+scenario = 'focused_control_scrolls_into_view'
+tmp_path = WindowsPath('<TEMP>')
+
+    @pytest.mark.parametrize("scenario", SCENARIOS)
+    def test_gui_scenario(scenario, tmp_path):
+        require_display()
+        completed = subprocess.run(
+            [sys.executable, str(RUNNER), scenario, str(tmp_path)],
+            capture_output=True,
+            text=True,
+            timeout=180,
+            check=False,
+        )
+>       assert completed.returncode == 0, completed.stdout + completed.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<TEMP>", line 319, in <module>
+E             SCENARIOS[name](data_dir)
+E           File "<TEMP>", line 114, in focused_control_scrolls_into_view
+E             assert top + last.winfo_height() <= visible_top + canvas.winfo_height(), "below the fold"
+E         AssertionError: below the fold
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['<PROJECT>\\.venv\\Scripts\\python.exe', '<HOME> top + last.winfo_height() <= visible_top + canvas.winfo_height(), "below the fold"\nAssertionError: below the fold\n').returncode
+
+tests\test_desktop_gui.py:37: AssertionError
+============================== warnings summary ===============================
+<PROJECT>\.venv\Lib\site-packages\starlette\testclient.py:40
+  <PROJECT>\.venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1 failed, 174 passed, 1 warning in 147.71s (0:02:27)
+pytest exit=1

@@ -188,6 +188,14 @@ def record(output, revision):
     film.show(app, "Settings: full backup, restore, export, delete and privacy-safe diagnostics", 4)
     app.close_application()
 
+    # Make a backup the way Settings does, so the recovery scene restores data that contains
+    # this profile. The daily automatic backup is taken at first launch, before the profile
+    # exists, so restoring it would sign the learner in to an empty database.
+    from src.services.desktop_storage import backup_database
+
+    saved_backup = data / "my-backup.sqlite"
+    backup_database(data / "app.db", saved_backup)
+
     film.card(["Simulated damage: the data file is corrupted while the app is closed."], 3)
     database = data / "app.db"
     damaged = bytearray(database.read_bytes())
@@ -199,12 +207,11 @@ def record(output, revision):
     except DatabaseUnavailableError as error:
         recovery = RecoveryWindow(database, data, str(error))
     film.show(recovery, "Instead of failing, the app opens recovery; nothing is deleted", 6)
-    filedialog.askopenfilename = lambda *args, **kwargs: ""
-    button_text = "Restore"
+    filedialog.askopenfilename = lambda *args, **kwargs: str(saved_backup)
     next(
         child
         for child in recovery.body.winfo_children()
-        if hasattr(child, "cget") and str(child.cget("text")).startswith(button_text)
+        if hasattr(child, "cget") and str(child.cget("text")).startswith("Choose a backup file")
     ).invoke()
     app = HangmanDesktop(database, data)
     sign_in(app, "Backup restored (the damaged file is kept); sign in again")

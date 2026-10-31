@@ -1,0 +1,22 @@
+revision d543579; hardware: AMD Ryzen 7 6800H (8C/16T), 15.2 GB RAM, NVMe SSD; Windows 11 Home 26200 at 125% scaling; the owner was using the computer during measurement
+dataset: 5 profiles; 'heavy' 5,000+ completed rounds (150 played through PracticeService, the rest copied rows with spread dates); 4.55 MB
+
+version 1.0.0rc4; database 4.55 MB
+open + upgrade check + quick_check           n=10   median     12.7 ms   p95     16.6 ms   max     16.6 ms
+full backup (copy + validation)              n=5    median    122.1 ms   p95    124.7 ms   max    124.7 ms
+progress report, large profile               n=20   median     55.3 ms   p95     74.2 ms   max     84.0 ms
+guess (round continues)                      n=115  median     13.4 ms   p95     29.3 ms   max     34.1 ms
+guess that completes a round (all writes)    n=30   median     29.7 ms   p95     39.8 ms   max     41.0 ms
+screen: Home                                 n=5    median    354.3 ms   p95    445.9 ms   max    445.9 ms
+screen: Reports (full history table)         n=5    median    564.7 ms   p95    585.1 ms   max    585.1 ms
+screen: Practice setup                       n=5    median    502.9 ms   p95    513.4 ms   max    513.4 ms
+
+guess to redrawn round (the game's hot path), same dataset-free fresh profile:
+1.0.0rc4: guess to redrawn round  n=55  median 39 ms  p95 606 ms  max 995 ms
+
+built EXE sha256 e6b3c0f910b626036b0df0753481b9b6fe9fd8ca51ab3a3d0cbe9b54df571436 (identical to the installed EXE), start-up to visible window, 5 launches on a fresh copy of the dataset:
+  launch 1 (includes the day's first automatic backup): start-up to visible window: 1.19 s
+  launch 2 (backup already done): start-up to visible window: 0.88 s
+  launch 3 (backup already done): start-up to visible window: 0.89 s
+  launch 4 (backup already done): start-up to visible window: 0.93 s
+  launch 5 (backup already done): start-up to visible window: 0.88 s

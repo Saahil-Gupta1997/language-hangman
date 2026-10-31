@@ -1,4 +1,51 @@
-# 1.0.0rc3 — Desktop release candidate 3 (2026-09-19)
+# 1.0.0rc4 — Desktop release candidate 4 (2026-11-01)
+
+A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
+keyboard and display checks, an educator's review of the 30 cards, five learner sessions and
+some owner decisions are still open (see [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)).
+
+- **Installer:** `LanguageHangman-1.0.0rc4-Setup.exe`, SHA256 `abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c`, built from `d543579`.
+  **Unsigned**: Windows SmartScreen will show "unknown publisher".
+- **Upgrading:** run the new installer; profiles, progress and paused rounds are kept
+  (checked from rc3 on the build machine).
+
+## New since 1.0.0rc3
+
+- **A redesigned practice screen.** The round is now a board: the hangman figure beside the
+  word as letter tiles, lives as pips, and an A–Z keyboard that also shows which letters you
+  have tried. Type a letter as before, or click a key.
+- **The rest of the app follows the same design**: a slim navigation strip that marks the
+  current page, one clear primary action per screen, stat tiles on Home and Reports, and
+  cards for learning content.
+- **The software is under the MIT licence.** `LICENSE.txt` installs beside the program. The
+  30 teaching cards and the icon are not covered until their authorship is confirmed.
+- **A guess is now seven times faster to draw than rc3** (39 ms against 285 ms).
+
+## Known limitations
+
+- English only; 30 words across Restaurant, Airport and Hotel; explanations are in English.
+  The intended learner (about CEFR A2) is a proposal awaiting review, not a certification.
+- Pronunciation is an approximate respelling, not audio or IPA.
+- Windows screen readers generally cannot read CustomTkinter's controls, and the A–Z keys
+  are drawn rather than separate controls; typing a letter remains the keyboard route.
+- The database is not encrypted; local passwords protect in-app access only. No email
+  password reset. Backups contain every profile's password hash: keep them private.
+- One app instance per Windows account; guest practice is deleted on sign-out or close.
+- The installer is unsigned and shows no licence terms during setup.
+- Moving between screens takes 350–570 ms on the build machine, slower than rc3, because
+  those screens now group content into cards.
+- No cloud sync, automatic updates, multiplayer, machine learning or other languages.
+
+## Verification
+
+On revision `d543579`: 175 automated tests passed (0 skipped), lint and content checks
+clean, release check clean. On the build machine (Windows 11 at 125%): upgrade from rc3 with
+data created by rc3, the 16-step journey in the installed app without Python, beta import,
+recovery at both text sizes, restore, uninstall, and the installed licence and notices. Not
+yet: a clean machine, real 100%/150% scaling, a person using the keyboard. Details:
+[docs/VERIFICATION.md](docs/VERIFICATION.md).
+
+## 1.0.0rc3 — Desktop release candidate 3 (2026-09-19)
 
 A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
 keyboard and display checks, an educator's review of the 30 cards, five learner sessions
@@ -11,7 +58,7 @@ and the owner's decisions are still open (see [docs/ACCEPTANCE.md](docs/ACCEPTAN
   (checked from rc2 on the build machine; rc1 to rc2 was checked for rc2). **From the older
   browser beta:** use *Restore / import old database* on the sign-in screen.
 
-## Fixed since 1.0.0rc2
+### Fixed since 1.0.0rc2
 
 - **Restore could leave a journal file stranded while saying nothing had changed.** If
   Windows refused to move the second of the data file's journal files, the first stayed in
@@ -27,7 +74,7 @@ and the owner's decisions are still open (see [docs/ACCEPTANCE.md](docs/ACCEPTAN
 - Help names where the notices are and describes the app as rule-based software built
   with AI assistance.
 
-## Known limitations
+### Known limitations
 
 - English only; 30 words across Restaurant, Airport and Hotel; explanations are in English.
   The intended learner (about CEFR A2) is a proposal awaiting review, not a certification.
@@ -40,7 +87,7 @@ and the owner's decisions are still open (see [docs/ACCEPTANCE.md](docs/ACCEPTAN
   chosen.
 - No cloud sync, automatic updates, multiplayer, machine learning or other languages.
 
-## Verification
+### Verification
 
 On revision `fd3b25a`: 174 automated tests passed (0 skipped), lint and content checks
 clean, release check clean in a clone, a worktree and the source archive. On the build

@@ -1,0 +1,5 @@
+command: python scripts/third_party_notices.py check <install folder> --installed (d543579)
+982 files checked, 13 notice files, 0 problems
+exit=0
+
+LICENSE.txt installed == repository LICENSE: yes

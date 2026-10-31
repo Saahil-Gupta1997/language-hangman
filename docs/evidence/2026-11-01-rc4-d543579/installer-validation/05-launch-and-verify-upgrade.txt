@@ -1,0 +1,14 @@
+installed rc4 app, normal launch on the upgraded rc3 data:
+window title: 'Language Hangman · 1.0.0rc4'
+start-up to visible window: 1.72 s
+captured 1343x997; app window: True
+closed normally, exit code 0
+
+sign-in and data checked with rc4's code (d543579, same commit as the installer):
+code version 1.0.0rc4
+previous-release credentials accepted: True
+wrong password rejected: True
+second profile present: True
+progress: {'rounds': 2, 'wins': 1, 'losses': 1, 'sessions': 0}
+paused round resumes: True (round 3 of 3)
+after finishing the resumed round: {'rounds': 3, 'wins': 2, 'losses': 1}

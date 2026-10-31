@@ -1,13 +1,18 @@
-# Verification — Language Hangman 1.0.0rc3
+# Verification — Language Hangman 1.0.0rc4
 
 What was actually executed, on which revision and artifact, with what result. Manual and
 human acceptance gates, and their status, are in [ACCEPTANCE.md](ACCEPTANCE.md). Nothing
 here was produced by a learner, an educator or a manual tester.
 
-**Release candidate:** revision `fd3b25aa93d5b7de1fb7763aaecd5cb5898aa979` (branch
-`release/1.0`); installer `LanguageHangman-1.0.0rc3-Setup.exe`, SHA256
-`5e1b31077061dabd9cc764e07f8243f3054f526b8b1202181805b17022665f84`. Evidence:
-[`evidence/2026-09-19-rc3-fd3b25a/`](evidence/2026-09-19-rc3-fd3b25a/).
+**Release candidate:** revision `d543579` (branch `release/1.0`); installer
+`LanguageHangman-1.0.0rc4-Setup.exe`, SHA256 `abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c`. Evidence:
+[`evidence/2026-11-01-rc4-d543579/`](evidence/2026-11-01-rc4-d543579/). Commits after
+`d543579` change tests and documents only (`git diff d543579 -- src desktop_app.py
+packaging scripts` is empty), so the installer matches the published source.
+
+The previous candidates' evidence stays in place: rc3 in
+[`evidence/2026-09-19-rc3-fd3b25a/`](evidence/2026-09-19-rc3-fd3b25a/), rc2 in
+[`evidence/2026-09-19-rc2-4ad1e34/`](evidence/2026-09-19-rc2-4ad1e34/).
 
 ## Environment: the build machine, not a clean machine
 
@@ -16,7 +21,7 @@ here was produced by a learner, an educator or a manual tester.
 | Machine | AMD Ryzen 7 6800H (8 cores/16 threads), 15.2 GB RAM, NVMe SSD |
 | OS | Windows 11 Home 10.0.26200, 1920×1080 panel at **125%** display scaling (the real setting) |
 | Runtime / build | Python 3.12.1 · CustomTkinter 5.2.2 · Pillow 12.3.0 · PyInstaller 6.11.1 · Inno Setup 6.7.3 |
-| Executed by | Claude Code (AI assistant) on the owner's computer, 2026-09-19 |
+| Executed by | Claude Code (AI assistant) on the owner's computer, 2026-09-19 (rc2, rc3) and 2026-11-01 (rc4) |
 
 This is the development and build machine: Python, the build tools and earlier versions of
 the app have all been on it. Installer results below are **build-machine** results. A clean
@@ -41,17 +46,25 @@ capture only the application's own window.
 | `16f3fc3` baseline | 134 passed | 0 | clean | PASS, 24 warnings | passed (10 checks) | P0 defects D-01..D-03 reproduced |
 | `525c377` M2 | 158 passed ×3 | 0 | clean | PASS | passed (11 checks) | reproductions no longer reproduce |
 | `4ad1e34` rc2 | 163 passed ×3 | 0 | clean | PASS, 24 dispositioned | passed (16), source and installed | independent review on Linux: 157 passed, 6 GUI skipped, 1 warning (reported to the owner; not run here) |
-| **`fd3b25a` rc3** | **174 passed** | **0** | clean | PASS, 24 dispositioned | **passed (16), source and installed** | run in a fresh worktree; 1 warning (Starlette, legacy tests only) |
+| `fd3b25a` rc3 | 174 passed | 0 | clean | PASS, 24 dispositioned | passed (16), source and installed | 1 warning (Starlette, legacy tests only) |
+| **`d543579` rc4** | **175 passed** | **0** | clean | PASS, 24 dispositioned | **passed (16), source and installed** | redesigned UI; new scenario clicks a letter key |
 
 On a machine without a display, the eight GUI scenarios skip by design (not run on Linux for
 rc3). `test_release_check_on_a_real_release_branch_clone_and_worktree` skips if Git is not
 installed. The GitHub workflows have not run: there is no remote repository (G13).
 
-### What was re-run for rc3, and what was carried forward
+### What was re-run for rc4, and what was carried forward
 
-Everything listed under rc3 below was run on `fd3b25a` or its installer. Carried forward
-without re-running: the D-26 harness investigation (the harness did not change) and the
-original D-01..D-03 reproduction scripts (their regression tests ran again in the 174).
+The interface changed in rc4, so everything that touches it was re-run on `d543579` or its
+installer: the suite, the smoke journey from source and from the installed build, the whole
+installer sequence, performance, the scaling checks, the demo and the screenshots.
+
+Carried forward without re-running, because neither the code nor the inputs changed: the
+D-26 harness investigation, the original D-01..D-03 reproduction scripts (their regression
+tests ran again inside the 175), and the rc3 defect reproductions for D-29 to D-31 (their
+regression tests also ran again). The v1.0.0-beta database used for the import check was
+rebuilt with the beta's own code, because the original was lost with a temporary folder
+(incident I-6); it contains the same three words.
 
 ## Verification sequence
 
@@ -74,26 +87,29 @@ For rc3, `release-check` was clean in a worktree and in an ordinary clone on `re
 (`checks/release-check-worktree-and-clone.txt`), and on the extracted source archive (see the
 release package's `VERIFICATION-*.txt`).
 
-## Installer validation (rc3, build machine)
+## Installer validation (rc4, build machine)
 
-Installer 14,717,048 bytes, SHA256 `5e1b3107…665f84`, built by `scripts/build_desktop.ps1` in
-a fresh clone of `fd3b25a`; installed EXE SHA256 `87b319ec…6f5f`. Unsigned.
+Installer 14,736,907 bytes, SHA256 `abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c`, built by `scripts/build_desktop.ps1` in a fresh
+clone of `d543579`; installed EXE SHA256
+`e6b3c0f910b626036b0df0753481b9b6fe9fd8ca51ab3a3d0cbe9b54df571436`. Unsigned.
 Files: `evidence/…/installer-validation/`.
 
 | # | Check | Result |
 | --- | --- | --- |
-| 1 | Pre-state; install 1.0.0rc2 (`2fc27de7…`) | Nothing installed before; rc2 installed and registered |
-| 2 | rc2 creates its own data: first normal launch of the installed rc2 app, then 2 profiles, a win, a loss and a paused round with rc2's code (`4ad1e34`) | Done |
-| 3 | **Upgrade**: run the rc3 installer over rc2 | Exit 0; all 4 data files byte-identical; installed EXE identical to the build; one `1.0.0rc3` registration |
-| 4 | Third-party notices in the installed folder (`third_party_notices.py check --installed`) | 980 files, 12 notice files, **0 problems** |
-| 5 | Normal launch of installed rc3 on the upgraded data; sign-in and data checked with `fd3b25a` code | Sign-in screen in 1.73 s; rc2 password accepted, wrong one rejected; 2 rounds kept; paused round resumes and completes |
-| 6 | Installed `--smoke-test`, `PATH` = Windows folders only, no `PYTHON*` variables | Exit 0; 16/16; real data untouched |
-| 7 | Import a v1.0.0-beta database (schema 0) through the restore path | Opens normally; beta sign-in and 3 rounds kept; Review offers only practised curated words |
-| 8 | Damage the live data file; launch the installed app normally, Standard and Large text | **Recovery window** in 0.90–0.99 s; captured at opening and minimum size: text wraps inside the window at real 125% |
-| 9 | Restore the newest automatic backup (the first button's code path) | Damaged bytes quarantined exactly; profiles back; no side files left; normal start in 0.94 s |
+| 1 | Pre-state; install 1.0.0rc3 (`5e1b3107…`) | Nothing installed before; rc3 installed and registered |
+| 2 | rc3 creates its own data with rc3's code (`fd3b25a`): 2 profiles, a win, a loss, a round paused mid-guess | Done |
+| 3 | **Upgrade**: run the rc4 installer over rc3 | Exit 0; the data file byte-identical; installed EXE identical to the build; one `1.0.0rc4` registration; `LICENSE.txt`, the notices and 12 licence texts beside the program |
+| 4 | Third-party notices in the installed folder | 982 files, 13 notice files, **0 problems**; installed `LICENSE.txt` identical to the repository's |
+| 5 | Normal launch of installed rc4 on the upgraded data; sign-in and data checked with `d543579` code | Sign-in screen in 1.72 s; rc3 password accepted, wrong one rejected; 2 rounds kept; paused round resumed and completed |
+| 6 | Installed `--smoke-test`, `PATH` = Windows folders only, no `PYTHON*` variables | Exit 0; 16/16 in 25 s; real data untouched |
+| 7 | Import a v1.0.0-beta database (schema 0) through the restore path | Opens normally; beta sign-in and 3 rounds kept; Review offers only practised curated words (`clean` in Hotel, `early` in Airport, Restaurant refused) |
+| 8 | Damage the live data file; launch the installed app, Standard and Large text | **Recovery window** in 0.89–0.94 s; captured at opening and minimum size; text fits at both sizes |
+| 9 | Restore the newest automatic backup (the first button's code path) | Damaged bytes quarantined exactly; both profiles back; **no stale side files**; normal start in 0.94 s |
 | 10 | Uninstall | Program, Start-menu entry and registration removed; all 8 data files kept byte-for-byte |
 
-Installed screenshots are captured by a DPI-aware helper (rc2's were cropped: incident I-4).
+A first rc4 installer passed this same sequence before performance measurement rejected the
+build (D-32); it was discarded, and every step above was run again on the rebuilt installer
+(incident I-7).
 
 ## Restore rollback (D-30)
 
@@ -131,24 +147,38 @@ problems. The rc2 program folder fails the same check (12 notices missing).
 
 ## Performance (build machine)
 
-Dataset: 5 profiles; one with **5,000 completed rounds** (150 played through the app's
-services, then scaled by copying rows with spread dates) and 999 sessions; 5.3 MB. Measured
-in-process from `fd3b25a` while the owner was using the computer (`performance.txt`).
+Dataset: 5 profiles; one with **5,000+ completed rounds** (150 played through the app's
+services, the rest copied rows with spread dates) and 4.55 MB. Measured in-process from
+`d543579` while the owner was using the computer (`performance.txt`). Single-machine
+observations, not guarantees.
 
-| Operation | Samples | Median | 95th percentile | Max |
+| Operation | Samples | Median | 95th percentile | rc3 median |
 | --- | --- | --- | --- | --- |
-| Open, upgrade check and quick check | 10 | 15 ms | 25 ms | 25 ms |
-| Full backup (copy and validation) | 5 | 128 ms | 131 ms | 131 ms |
-| Reports aggregation, 5,000 rounds | 20 | 65 ms | 79 ms | 81 ms |
-| Guess, round continues | 123 | 13 ms | 21 ms | 177 ms |
-| Guess that completes a round (all writes) | 30 | 28 ms | 36 ms | 48 ms |
-| Screen change: Home / Reports (5,000 rows) / Practice | 5 each | 238 / 365 / 317 ms | 323 / 386 / 341 ms | — |
+| Open, upgrade check and quick check | 10 | 12 ms | 15 ms | 15 ms |
+| Full backup (copy and validation) | 5 | 102 ms | 123 ms | 128 ms |
+| Reports aggregation, 5,000+ rounds | 20 | 55 ms | 74 ms | 65 ms |
+| Guess, round continues (service only) | 115 | 13 ms | 29 ms | 13 ms |
+| Guess that completes a round (all writes) | 30 | 30 ms | 40 ms | 28 ms |
+| **Guess to redrawn screen (the game's hot path)** | 55 | **39 ms** | 606 ms | 285 ms |
+| Screen change: Home / Reports / Practice setup | 5 each | 354 / 565 / 503 ms | 446 / 585 / 513 ms | 238 / 365 / 317 ms |
 
 Start-up of the built EXE to a visible window, 5 launches on a fresh copy of the dataset:
-**1.65 s** for the first launch of the day, which makes the day's automatic backup (and was
-the new EXE's first run), then **0.78–0.84 s**. rc2 measured 1.26 s and 0.75–0.79 s the same
-way. These are single-machine figures, not guarantees; the supported history size is a
-proposal awaiting the owner (DEC-10).
+**1.19 s** for the first launch of the day, which also makes the automatic backup, then
+**0.88–0.93 s** (rc3: 1.65 s and 0.78–0.84 s).
+
+Two honest comparisons with rc3:
+
+- **The hot path is seven times faster.** A guess that continues a round now updates the
+  board in place instead of rebuilding the screen, and the board is one drawn canvas
+  instead of about 55 widgets (D-32). The 95th percentile, 606 ms, is the guess that
+  *completes* a round, where the screen genuinely changes to the learning card.
+- **Navigation screens are 100–200 ms slower**, because Home, Reports and Practice setup
+  now group content into cards and stat tiles, which are more widgets than the plain
+  paragraphs they replaced. All stay well under a second.
+
+The redesign was measured only after the first rc4 installer had been built and validated,
+which is why that artifact was discarded (incident I-7); the checklist now measures before
+building when the interface changed.
 
 ## Requirement-to-test traceability
 
@@ -175,7 +205,9 @@ proposal awaiting the owner (DEC-10).
 | RQ-19 | Privacy-safe diagnostics with operation, stage, version | `test_diagnostics_contain_codes_but_no_personal_data` | — | Pass |
 | RQ-20 | Backup failure does not block start-up; visible warning | GUI `automatic_backup_failure_does_not_block_start_up` | — | Pass |
 | RQ-21 | Keyboard: dropdowns operable, focus visible and in view, text-size shortcuts; recovery actions reachable by Tab | GUI scenarios (4) | — | Handler level pass; **real keyboard pending** (G6) |
-| RQ-22 | Layout at 100/125/150% and minimum size; text wraps to the window (D-31) | GUI `window_opens_inside_the_work_area`, `recovery_window_fits_at_minimum_size`, `main_window_text_wraps_at_minimum_size` | installed at real 125%; `scaling/` | 125% pass; 100/150% emulated pass; **real 100/150% pending** (G7) |
+| RQ-22 | Layout at 100/125/150% and minimum size; text wraps to the window (D-31) | GUI `window_opens_inside_the_work_area`, `recovery_window_fits_at_minimum_size`, `main_window_text_wraps_at_minimum_size` | installed at real 125%; `scaling/` (12 captures: round and recovery, three scalings, two text sizes) | 125% pass; 100/150% emulated pass; **real 100/150% pending** (G7) |
+| RQ-27 | A letter key guesses that letter, and a used key does nothing | GUI `letter_keys_guess_on_click` | demo; smoke uses the typing route | Pass |
+| RQ-28 | A guess redraws the round without rebuilding the screen (D-32) | — | `performance.txt`: 39 ms median, 55 samples | Pass |
 | RQ-23 | Content structurally valid; warnings dispositioned | `scripts/check_curated_content.py` | — | Pass; **educator review pending** (G9) |
 | RQ-24 | Learner acceptance (5 sessions) | — | — | **Pending** (G10) |
 | RQ-25 | Third-party notices ship and match what is bundled (T-28) | `tests/test_third_party_notices.py` (3) | build check; step 4 | Pass (build machine) |
@@ -187,6 +219,12 @@ D-01..D-03 and D-07: reproduced on `16f3fc3` before any change
 (`evidence/2026-09-19-baseline-16f3fc3/`), re-run after (`evidence/2026-09-19-m2-525c377/`).
 D-29, D-30, D-31 and T-28: reproduced on the rc2 code and re-run on `fd3b25a`
 (`evidence/2026-09-19-rc3-fd3b25a/defects/`).
+
+## Corrections to earlier records
+
+**rc3 → rc4.** The redesigned interface made a guess four times slower than rc3 (1.13 s
+median against 285 ms). Measurement caught it before release, the board was rewritten, and
+the figures above are from the rebuilt artifact. The first rc4 installer was discarded.
 
 ## Corrections to the rc2 record
 
