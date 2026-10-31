@@ -113,7 +113,7 @@ are still there.
 
 | Item | Location | Identifier |
 | --- | --- | --- |
-| Source revision (installer) | branch `release/1.0` | `d543579` (later commits change tests and documents only) |
+| Source revision (installer) | branch `release/1.0` | `d543579` (later commits change tests, documents and release tooling only; nothing the installer bundles) |
 | Windows installer (unsigned) | release package | `LanguageHangman-1.0.0rc4-Setup.exe`, 14,736,907 bytes, SHA256 `abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c` |
 | Installed program | inside the installer | `LanguageHangman.exe` SHA256 `e6b3c0f910b626036b0df0753481b9b6fe9fd8ca51ab3a3d0cbe9b54df571436` |
 | Licence | `LICENSE`; installed as `LICENSE.txt` beside the program | MIT for the software; content and icon not yet licensed |

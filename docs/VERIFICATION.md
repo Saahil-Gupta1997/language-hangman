@@ -7,8 +7,9 @@ here was produced by a learner, an educator or a manual tester.
 **Release candidate:** revision `d543579` (branch `release/1.0`); installer
 `LanguageHangman-1.0.0rc4-Setup.exe`, SHA256 `abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c`. Evidence:
 [`evidence/2026-11-01-rc4-d543579/`](evidence/2026-11-01-rc4-d543579/). Commits after
-`d543579` change tests and documents only (`git diff d543579 -- src desktop_app.py
-packaging scripts` is empty), so the installer matches the published source.
+`d543579` change tests, documents and release tooling only: `git diff d543579 -- src
+desktop_app.py packaging` is empty, and the one change under `scripts/` is the demo
+recorder, which PyInstaller does not bundle. So the installer matches the published source.
 
 The previous candidates' evidence stays in place: rc3 in
 [`evidence/2026-09-19-rc3-fd3b25a/`](evidence/2026-09-19-rc3-fd3b25a/), rc2 in
