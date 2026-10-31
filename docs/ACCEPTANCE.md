@@ -39,8 +39,8 @@ steps is in the release package's `acceptance-kit` folder.
 2. Run the installer. Expect an "unknown publisher" SmartScreen warning (unsigned).
 3. Start from the Start menu. Create a profile; confirm a short password and a mismatched
    confirmation are rejected. Sign out; confirm a wrong password is rejected; sign in.
-4. Play a Standard session to the end. Try guest practice; sign out; confirm the guest's
-   progress is gone after restarting.
+4. Play a Standard session to the end, guessing both by typing and by clicking letter
+   keys. Try guest practice; sign out; confirm the guest's progress is gone after restarting.
 5. Open the program folder (`%LOCALAPPDATA%\Programs\LanguageHangman`) and confirm
    `THIRD-PARTY-NOTICES.txt` and the `licenses` folder are there and readable.
 
@@ -55,6 +55,8 @@ Unplug or ignore the mouse for the whole journey.
    Enter or Space opens the list, arrows move, Enter chooses, Escape closes.
 3. During a round: the guess box has focus; typing a letter and Enter submits; Tab reaches
    "Submit guess", "Save and return home" and "Discard"; focused controls scroll into view.
+   The A–Z letter keys are deliberately **not** in the Tab order (they repeat the typing
+   route for mouse users): confirm Tab skips them, and that clicking one guesses that letter.
 4. Escape returns home from any signed-in screen. Ctrl + (or Ctrl =) makes text larger;
    Ctrl − returns to standard; the setting is kept after restarting.
 5. Settings: reach backup, restore, export, delete and diagnostics by keyboard; dialogs
@@ -70,7 +72,8 @@ in to Windows, then start the app:
 1. The window fits on screen; the title bar is visible.
 2. Resize to the smallest size allowed. On Home, Practice (setup and a round), a learning
    card, Reports, Word cards, Settings and Help, no text or control is cut off at the right;
-   the page scrolls where needed.
+   the page scrolls where needed. In a round, check the whole board is usable: the figure,
+   the letter tiles, the lives and every A–Z key.
 3. Repeat step 2 with Large text.
 4. At this scaling, open the recovery window (M4 step 2) at its smallest size with Standard
    and with Large text: every instruction is readable without being cut off, and every
@@ -98,12 +101,12 @@ are still there.
 
 | Check | Tester | Date | OS and scaling | Revision | Installer SHA256 | Result | Evidence / notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| M1 | | | | fd3b25a | 5e1b3107…665f84 | Not run | |
-| M2 | | | | fd3b25a | 5e1b3107…665f84 | Not run | |
-| M3 100% | | | | fd3b25a | 5e1b3107…665f84 | Not run | |
-| M3 125% | | | | fd3b25a | 5e1b3107…665f84 | Not run | |
-| M3 150% | | | | fd3b25a | 5e1b3107…665f84 | Not run | |
-| M4 | | | | fd3b25a | 5e1b3107…665f84 | Not run | |
+| M1 | | | | RC4_REVISION | RC4_SHA | Not run | |
+| M2 | | | | RC4_REVISION | RC4_SHA | Not run | |
+| M3 100% | | | | RC4_REVISION | RC4_SHA | Not run | |
+| M3 125% | | | | RC4_REVISION | RC4_SHA | Not run | |
+| M3 150% | | | | RC4_REVISION | RC4_SHA | Not run | |
+| M4 | | | | RC4_REVISION | RC4_SHA | Not run | |
 
 ## Release evidence index
 

@@ -7,6 +7,8 @@ name = "language-learning-hangman"
 dynamic = ["version"]
 description = "Offline Windows desktop Hangman for English travel vocabulary (Python, CustomTkinter, SQLite)."
 readme = "README.md"
+license = "MIT"  # the project's own code; see LICENSE for what it does and does not cover
+license-files = ["LICENSE"]
 requires-python = ">=3.12"  # the only version built and tested
 # Runtime: the desktop app only. The browser prototype is "legacy" (unsupported).
 dependencies = ["customtkinter==5.2.2", "Pillow==12.3.0"]

@@ -1,6 +1,6 @@
 ; The build script passes /DMyAppVersion from src/__init__.py; this default must match it.
 #ifndef MyAppVersion
-  #define MyAppVersion "1.0.0rc3"
+  #define MyAppVersion "1.0.0rc4"
 #endif
 [Setup]
 AppId={{D16E40D9-2223-4FBE-A30C-B2A17B3D4506}
@@ -22,6 +22,7 @@ CloseApplications=yes
 RestartApplications=no
 [Files]
 Source: "..\dist\LanguageHangman\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\LICENSE"; DestDir: "{app}"; DestName: "LICENSE.txt"; Flags: ignoreversion
 [Tasks]
 Name: "desktopicon"; Description: "Create a desktop shortcut"; Flags: unchecked
 [Icons]

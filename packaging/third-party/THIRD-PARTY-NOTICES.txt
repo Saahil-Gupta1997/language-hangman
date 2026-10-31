@@ -2,14 +2,15 @@ Language Hangman - third-party notices
 
 Language Hangman for Windows includes the third-party software listed below. Each
 component remains under its own licence; the full texts are in the 'licenses' folder
-next to this file. The licence for Language Hangman's own code and content has not
-yet been chosen by its owner.
+next to this file. Language Hangman's own software is under the MIT licence; its
+teaching content and icon are not yet licensed (see LICENSE.txt).
 
 Language Hangman (this project)
   Version:  see the title bar
-  Licence:  Not yet chosen by the owner (decision DEC-08)
-  Files:    LanguageHangman.exe, _internal/src/*
-  Note:     Application code (inside LanguageHangman.exe), the 30-word content file and the application icon.
+  Licence:  MIT for the software; the teaching content and icon are not yet licensed
+  Files:    LanguageHangman.exe, _internal/src/*, LICENSE.txt
+  Text:     licenses/LanguageHangman-LICENSE.txt
+  Note:     Application code (inside LanguageHangman.exe). The 30-word content file and the application icon ship with it but are outside the MIT grant until their authorship is confirmed (decision DEC-08); see LICENSE.txt.
 
 PyInstaller bootloader
   Version:  6.11.1

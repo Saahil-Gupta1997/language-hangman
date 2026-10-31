@@ -37,11 +37,12 @@ COMPONENTS = [
     {
         "name": "Language Hangman (this project)",
         "version": "see the title bar",
-        "licence": "Not yet chosen by the owner (decision DEC-08)",
-        "files": ["LanguageHangman.exe", "_internal/src/*"],
-        "notices": [],
-        "notes": "Application code (inside LanguageHangman.exe), the 30-word content file "
-        "and the application icon.",
+        "licence": "MIT for the software; the teaching content and icon are not yet licensed",
+        "files": ["LanguageHangman.exe", "_internal/src/*", "LICENSE.txt"],
+        "notices": ["LanguageHangman-LICENSE.txt"],
+        "notes": "Application code (inside LanguageHangman.exe). The 30-word content file "
+        "and the application icon ship with it but are outside the MIT grant until their "
+        "authorship is confirmed (decision DEC-08); see LICENSE.txt.",
     },
     {
         "name": "PyInstaller bootloader",
@@ -179,6 +180,9 @@ COMPONENTS = [
     },
 ]
 NOTICE_FILES = ["THIRD-PARTY-NOTICES.txt", "licenses/*"]
+# Placed by the installer rather than by the application build, so they are expected in an
+# installed folder but not in dist/LanguageHangman.
+INSTALLED_ONLY = ("unins000.exe", "unins000.dat", "LICENSE.txt")
 
 
 def expected_versions():
@@ -295,6 +299,7 @@ def collect():
         "Apache-2.0.txt": metadata_file("packaging", "licenses/LICENSE.APACHE"),
         "PyInstaller-6.11.1-COPYING.txt": metadata_file("pyinstaller", "COPYING.txt"),
         "InnoSetup-6.7.3-license.txt": inno,
+        "LanguageHangman-LICENSE.txt": ROOT / "LICENSE",
     }
     licences = NOTICES / "licenses"
     shutil.rmtree(NOTICES, ignore_errors=True)
@@ -321,8 +326,8 @@ def summary():
         "",
         "Language Hangman for Windows includes the third-party software listed below. Each",
         "component remains under its own licence; the full texts are in the 'licenses' folder",
-        "next to this file. The licence for Language Hangman's own code and content has not",
-        "yet been chosen by its owner.",
+        "next to this file. Language Hangman's own software is under the MIT licence; its",
+        "teaching content and icon are not yet licensed (see LICENSE.txt).",
         "",
     ]
     for component in COMPONENTS:
@@ -345,7 +350,7 @@ def check(folder, installed=False):
     patterns = [pattern for component in COMPONENTS for pattern in component["files"]]
     patterns += NOTICE_FILES
     if not installed:
-        patterns = [p for p in patterns if not p.startswith("unins000")]
+        patterns = [p for p in patterns if p not in INSTALLED_ONLY]
     problems = []
     if not installed:  # run by the build with the interpreter that produced the folder
         problems += [
@@ -356,7 +361,7 @@ def check(folder, installed=False):
     problems += [f"not in the inventory: {name}" for name in uncovered]
     for component in COMPONENTS:
         for pattern in component["files"]:
-            if pattern.startswith("unins000") and not installed:
+            if pattern in INSTALLED_ONLY and not installed:
                 continue
             if not any(fnmatchcase(name, pattern) for name in files):
                 problems.append(f"expected but missing: {pattern} ({component['name']})")
