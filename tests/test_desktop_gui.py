@@ -23,6 +23,7 @@ SCENARIOS = [
     "letter_keys_guess_on_click",
     "removed_screens_and_settings_stay_removed",
     "plain_keys_reveal_accented_letters",
+    "board_stays_put_whatever_the_feedback_says",
     "long_phrases_fit_the_board_at_minimum_size",
     "level_word_card_shows_its_clues",
     "endless_play_runs_until_end_session",

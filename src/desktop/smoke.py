@@ -251,6 +251,7 @@ def _crash_journey(data, checks):
         app.advance()
         assert not app.payload["round"]["saved"]
         app.end_session()
+        app.update()  # let Reports finish its theme change before the window closes
         checks.append("learning card and next round resume after the process ends between rounds")
     finally:
         app.close_application()

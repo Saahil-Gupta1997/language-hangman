@@ -394,6 +394,27 @@ def plain_keys_reveal_accented_letters(data):
         app.close_application()
 
 
+def board_stays_put_whatever_the_feedback_says(data):
+    """D-33: a long feedback line must not move the keys under the mouse."""
+    from src.utils.feedback_lines import CORRECT_LINES, INCORRECT_LINES
+
+    app = signed_in_app(data)
+    try:
+        app.show_practice()
+        app.start_session()
+        app.update()
+        lines = sorted(CORRECT_LINES + INCORRECT_LINES, key=len)
+        seen = set()
+        for line in lines:
+            app.board_status.configure(text=line)
+            app.update()
+            app.update()
+            seen.add((app.board.winfo_width(), app.board._keys["a"][2]))
+        assert len(seen) == 1, f"the board moved: {sorted(seen)}"
+    finally:
+        app.close_application()
+
+
 def long_phrases_fit_the_board_at_minimum_size(data):
     """The longest words wrap at spaces and stay inside the canvas at every size."""
     from src.desktop.application import MINIMUM_WINDOW
@@ -487,6 +508,7 @@ SCENARIOS = {
         letter_keys_guess_on_click,
         removed_screens_and_settings_stay_removed,
         plain_keys_reveal_accented_letters,
+        board_stays_put_whatever_the_feedback_says,
         long_phrases_fit_the_board_at_minimum_size,
         level_word_card_shows_its_clues,
         endless_play_runs_until_end_session,

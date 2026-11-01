@@ -25,6 +25,7 @@ import customtkinter as ctk
 
 from src import __version__
 from src.services.auth_service import AuthService
+from src.services.curated_content import seed_curated
 from src.services.desktop_storage import backup_database, open_live_database, progress_report
 from src.services.practice_service import PracticeService
 from src.utils.constants import GENERAL_SITUATION
@@ -64,6 +65,7 @@ def performance(dataset):
     work = Path(tempfile.mkdtemp(prefix="hangman-perf-"))
     shutil.copy2(Path(dataset) / "app.db", work / "app.db")
     database = work / "app.db"
+    seed_curated(database)  # the app does this at every start; older datasets need it
     print(f"version {__version__}; database {database.stat().st_size / 1_048_576:.2f} MB")
     report("open + upgrade check + quick_check", timed(lambda: open_live_database(database), 10))
     counter = iter(range(1000))
@@ -146,6 +148,7 @@ def round_redraw(language=None, level=None, rounds=12):
             if hasattr(app, "rounds"):
                 app.rounds.set("10")
             app.start_session()
+        app.update()  # a new round's screen is drawn before the learner's first guess
         for letter in sorted({c.lower() for c in app.payload["round"]["word"] if c.isalpha()}):
             if app.payload["round"]["saved"]:
                 break
@@ -178,9 +181,9 @@ def long_session(rounds=200):
     app.authenticate(register=True)
     app.show_practice()
     app.start_session()
-    continuing, ending = [[], []], [[], []]
+    continuing, ending = {"first": [], "last": [], None: []}, {"first": [], "last": [], None: []}
     for number in range(rounds):
-        late = number >= rounds - 20
+        when = "first" if number < 20 else "last" if number >= rounds - 20 else None
         for letter in sorted({c.lower() for c in app.payload["round"]["word"] if c.isalpha()}):
             start = time.perf_counter()
             app.guess_entry.delete(0, "end")
@@ -188,16 +191,16 @@ def long_session(rounds=200):
             app.submit_guess()
             app.update()
             elapsed = (time.perf_counter() - start) * 1000
-            (ending if app.payload["round"]["saved"] else continuing)[late].append(elapsed)
+            (ending if app.payload["round"]["saved"] else continuing)[when].append(elapsed)
         app.advance()
         app.update()
     size = len(app.practice.load(app.user["id"])["session"]["round_reviews"])
     app.close_application()
     print(f"{rounds} rounds played; review records kept in the saved session: {size}")
-    report("guess, round continues, first 20 rounds", continuing[0])
-    report("guess, round continues, last 20 rounds", continuing[1])
-    report("guess that ends a round, first 20 rounds", ending[0])
-    report("guess that ends a round, last 20 rounds", ending[1])
+    report("guess, round continues, first 20 rounds", continuing["first"])
+    report("guess, round continues, last 20 rounds", continuing["last"])
+    report("guess that ends a round, first 20 rounds", ending["first"])
+    report("guess that ends a round, last 20 rounds", ending["last"])
 
 
 def settle(window, factor, size):

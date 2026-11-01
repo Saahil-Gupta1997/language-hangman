@@ -309,13 +309,15 @@ def responsive_split(parent, threshold=900, weights=(3, 2)):
         if wide:
             left.grid(row=0, column=0, sticky="new", padx=(0, SPACE))
             right.grid(row=0, column=1, sticky="new")
-            container.grid_columnconfigure(0, weight=weights[0])
-            container.grid_columnconfigure(1, weight=weights[1])
+            # "uniform" fixes the proportions: otherwise a long feedback line widens its
+            # column and moves the letter keys under the learner's mouse (D-33).
+            container.grid_columnconfigure(0, weight=weights[0], uniform="split")
+            container.grid_columnconfigure(1, weight=weights[1], uniform="split")
         else:
             left.grid(row=0, column=0, columnspan=2, sticky="ew")
             right.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(SPACE, 0))
-            container.grid_columnconfigure(0, weight=1)
-            container.grid_columnconfigure(1, weight=0)
+            container.grid_columnconfigure(0, weight=1, uniform="")
+            container.grid_columnconfigure(1, weight=0, uniform="")
 
     container.bind("<Configure>", layout)
     layout()
