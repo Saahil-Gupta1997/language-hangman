@@ -1,0 +1,4 @@
+The new rc9 checks, copied onto rc8's code (e2f34e5). Each must fail here and pass on rc9.
+FAILED tests/test_practice_rules.py::test_shipped_text_names_nothing_that_was_removed
+FAILED tests/test_desktop_gui.py::test_gui_scenario[window_stays_inside_a_narrow_work_area]
+2 failed, 27 deselected in 3.29s

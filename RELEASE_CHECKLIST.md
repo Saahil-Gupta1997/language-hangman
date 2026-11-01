@@ -25,7 +25,7 @@
    upgraded program folder with the build: only `LICENSE.txt` and the two uninstaller files
    should differ (D-34).
 6. Run the manual checks and record them (docs/ACCEPTANCE.md M1–M4).
-7. Content and learner gates: CONTENT_REVIEW.md and USER_ACCEPTANCE.md completed by people.
+7. Confirm the word lists are fine with the owner. This is their call and is not a recorded gate (DEC-36).
 8. Owner decisions recorded: licence (DEC-08) and installer terms (DEC-14) before publishing.
    Silent installs skip the licence page, so check it in the real wizard too.
 9. Source archive from the tagged commit (`git archive`); extract it and run `release-check`

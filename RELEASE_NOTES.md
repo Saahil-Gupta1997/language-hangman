@@ -1,4 +1,49 @@
-# 1.0.0rc8 — Desktop release candidate 8 (2026-11-01)
+# 1.0.0rc9 — Desktop release candidate 9 (2026-11-01)
+
+A tested release candidate, **not** the final 1.0 until the owner gives final approval. It
+supersedes rc8 for every purpose.
+
+- **Installer:** `LanguageHangman-1.0.0rc9-Setup.exe`, SHA256 `495c646d9e6e394921ef393b70e1cfb97340fdde5516e718360f979104aede1f`, built from `0d2b821`.
+  **Unsigned**: Windows SmartScreen will show "unknown publisher".
+- **Upgrading:** run the new installer; profiles, progress and paused rounds are kept (checked
+  from rc8 on the build machine).
+
+## New since 1.0.0rc8
+
+- **The window is centred with its frame (D-38).** On a screen barely wider than the window, its
+  outer edge used to run 8 pixels past the screen. GitHub's first Windows run found this.
+- **The not-reviewed notices are gone** from Practice setup and Help, and Help now names only the
+  owner's approval as outstanding. No word or clue changed.
+
+## Known limitations
+
+- Automated checks cover the words' structure, not their accuracy.
+- Words have clues but no example, pronunciation or usage note, and none were invented. Their
+  clues are in English, so they suit someone who reads English.
+- Accents are not practised, because a plain letter fills them in.
+- The restored lines mock the learner and use idioms that a learner of English may not follow.
+- Windows screen readers generally cannot read CustomTkinter's controls, and the letter keys
+  are drawn rather than separate controls; typing a letter remains the keyboard route.
+- The database is not encrypted; local passwords protect in-app access only. No email
+  password reset. Backups contain every profile's password hash: keep them private.
+- One app instance per Windows account; guest practice is deleted on sign-out or close.
+- The installer is unsigned. Whether its licence page fully meets the Microsoft terms in
+  Python's licence has not had a legal review.
+- On the build machine, the guess that ends a round takes 0.4–0.6 s and start-up about 1.2 s.
+- Real 150% display scaling has not been tested; it is emulated only.
+- No cloud sync, automatic updates, multiplayer, machine learning or placement test.
+
+## Verification
+
+Automated suite on the build commit `0d2b821`: 216 passed, 0 skipped, in a clean clone. Lint, content
+and release checks clean. GitHub Actions passed on Linux and Windows, including the smoke journey on
+Windows. On the build machine (Windows 11 at 125%): upgrade from rc8 with data created by rc8, the
+17-step journey in the installed app without Python, beta import, recovery at both text sizes,
+restore, uninstall, and the installed licence and notices. The owner reports a clean install on a
+separate system, keyboard-only use, real 100% scaling and recovery by hand on rc8; no detailed record
+is kept. Details: [docs/VERIFICATION.md](docs/VERIFICATION.md).
+
+## 1.0.0rc8 — Desktop release candidate 8 (2026-11-01)
 
 A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
 keyboard and display checks, a review of every word by qualified reviewers, five learner

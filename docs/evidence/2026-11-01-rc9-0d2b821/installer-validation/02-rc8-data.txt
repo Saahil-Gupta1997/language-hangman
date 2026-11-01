@@ -1,0 +1,3 @@
+learner data created by rc8's own code (f66aa51, the revision the rc8 installer used)
+f66aa51
+created with 1.0.0rc8: schema 1 | profiles 2 | rounds 2 | saved sessions 1 | 1.14 MB | paused wrong letter z

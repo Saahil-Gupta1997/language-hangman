@@ -1,0 +1,6 @@
+200 rounds played; review records kept in the saved session: 0
+guess, round continues, first 20 rounds      n=60   median     30.5 ms   p95     91.8 ms   max    925.1 ms
+guess, round continues, last 20 rounds       n=94   median     29.7 ms   p95     79.4 ms   max    101.2 ms
+guess that ends a round, first 20 rounds     n=20   median    443.9 ms   p95    539.4 ms   max    643.3 ms
+guess that ends a round, last 20 rounds      n=20   median    378.4 ms   p95    403.9 ms   max    424.3 ms
+long exit=0

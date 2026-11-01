@@ -5,32 +5,33 @@ Spanish, Italian and German at five levels. It is built with Python, CustomTkint
 It is rule-based software built with AI assistance: it contains no machine learning, chatbot or
 network service, and it needs no account or internet connection.
 
-**Status: 1.0.0rc8, a tested release candidate. It is not the final 1.0. Nobody has reviewed
-the words yet, and the app says so.**
+**Status: 1.0.0rc9, a tested release candidate. It is not the final 1.0 until the owner gives
+final approval.**
 
-| Verified by automated and scripted checks on the build machine (Windows 11, 125%) | Still pending: needs people or the owner |
+| Verified by automated and scripted checks | Reported by the owner on rc8, without a detailed record |
 | --- | --- |
-| 215 automated tests, lint, content and release checks on `e2f34e5`, three times (installer built from `f66aa51`, same application code) | Installing on a clean Windows account without Python (G5) |
-| Installer built from `f66aa51`; licence page shown; install, upgrade from rc7 with its own data, beta import, recovery, uninstall | Keyboard-only use by a person; real 100% and 150% display scaling (G6–G8) |
-| 17-step scripted journey in the installed app, without Python on `PATH` | Review of every word by qualified reviewers, one per language (G9) |
-| Third-party notices installed and checked against every shipped file | Five learner sessions (G10) |
-| Window layout and the game board measured at the minimum size (real 125%, emulated 100% and 150%) | Owner decisions: Review rule, supported history, intended learner |
+| 216 automated tests, lint, content and release checks on `0d2b821` | Clean install on a separate system (G5) |
+| GitHub Actions on Linux and Windows, including the smoke journey on Windows | Keyboard-only use (G6) |
+| Installer built from `0d2b821`; licence page shown; install, upgrade from rc8 with its own data, beta import, recovery, uninstall | Display at real 100% (G7) |
+| 17-step scripted journey in the installed app, without Python on `PATH` | Recovery by hand (G8) |
+| Third-party notices installed and checked against every shipped file | |
+| Window layout and the game board measured at the minimum size (real 125%, emulated 100% and 150%) | |
 
 Automated GUI checks call the app's own handlers and Tk's focus order; they are not a person
-using a keyboard. The build machine has had Python and earlier versions installed, so it is
-not a clean-machine test. Gates, evidence and the go/no-go record are in
+using a keyboard. The installer checks ran on the build machine, which has had Python and
+earlier versions installed. Gates, evidence and the go/no-go record are in
 [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md).
 
 ## Demo
 
-[2½-minute captioned recording](docs/media/language-hangman-1.0.0rc8-demo.mp4): a new
+[2½-minute captioned recording](docs/media/language-hangman-1.0.0rc9-demo.mp4): a new
 profile, Review my words refused for a new learner, play that runs until you end it, the card
 after each word, reports, Review my words, resuming after closing, a plain letter revealing an
 accent, text size, settings and recovery from a damaged data file. It is a scripted run of
-revision `f66aa51` from source, driven through the app's own controls and slowed so that
+revision `0d2b821` from source, driven through the app's own controls and slowed so that
 captions can be read; only the app window is captured.
 
-Screenshots from the installed rc8 build:
+Screenshots from the installed rc9 build:
 
 | Practice round | Review my words | Recovery window |
 | --- | --- | --- |
@@ -40,7 +41,7 @@ Screenshots from the installed rc8 build:
 
 - Local profiles protected by a password, and guest practice that is not saved.
 - 1,544 words in English, Spanish, Italian and German at five levels, each with three clues
-  in English. They come from the owner's older word sheet and **have not been reviewed**.
+  in English, from the owner's word sheet.
 - Easy (7 lives, clues after wrong guesses 1, 3 and 5) or Hard (5 lives, all clues with 2 lives
   left).
 - A game board: the figure, the word as letter tiles, lives as pips, and an A–Z keyboard that
@@ -60,13 +61,13 @@ Screenshots from the installed rc8 build:
 
 ## Install
 
-1. Download `LanguageHangman-1.0.0rc8-Setup.exe` from the release package and check it:
+1. Download `LanguageHangman-1.0.0rc9-Setup.exe` from the release package and check it:
 
    ```powershell
-   Get-FileHash .\LanguageHangman-1.0.0rc8-Setup.exe -Algorithm SHA256
+   Get-FileHash .\LanguageHangman-1.0.0rc9-Setup.exe -Algorithm SHA256
    ```
 
-   Expected: `f4b158b32f828184df6dd754bc72c8fc054e61ca4c0917202be8cb6d4b119288`.
+   Expected: `495c646d9e6e394921ef393b70e1cfb97340fdde5516e718360f979104aede1f`.
 2. Run it. **The installer is not code-signed**, so Windows SmartScreen shows "Windows
    protected your PC" and "Unknown publisher". Choose *More info › Run anyway* only if the
    checksum matched. Setup then shows the licence, which you need to accept. It installs for the
@@ -98,23 +99,21 @@ sessions are kept; any database upgrade runs on a copy after a pre-upgrade backu
 ## Performance (build machine)
 
 On an AMD Ryzen 7 6800H laptop with an NVMe SSD, on a fresh profile, a typical guess takes
-**33–51 ms** from submission to redrawn screen across three word lists (three runs of each, with
-48–102 samples a run; rc7 measured 32–44 ms in the same session). The guess that ends a round
-takes 402–661 ms at the 95th percentile (rc7: 409–592 ms). In one 200-round session, the last 20
-rounds were no slower than the first 20. With one profile holding 5,000+ completed rounds (5.57
-MB of data), reports aggregate in about 60 ms, a full backup takes about 120 ms, and moving between
-Home, Reports and Practice setup takes about 350–550 ms in typical runs. The installed program
-shows its window in 1.04–1.10 s, and in 2.23 s the first time it loads the words into a data file.
-Details and method:
+**32–41 ms** from submission to redrawn screen across three word lists (three runs of each, with
+48–102 samples a run; rc8 measured 32–41 ms in the same session). The guess that ends a round
+takes 463–564 ms at the 95th percentile (rc8: 443–553 ms). In one 200-round session, the last 20
+rounds were no slower than the first 20. With one profile holding 5,000+ completed rounds (5.54
+MB of data), reports aggregate in 60 ms, a full backup takes 130 ms, and moving between Home,
+Reports and Practice setup takes 356–566 ms. The installed program shows its window in 1.14–1.20
+s, and in 2.24 s the first time it loads the words into a data file. Details and method:
 [docs/VERIFICATION.md](docs/VERIFICATION.md#performance-build-machine).
 
 ## Known limitations
 
-- **The words are unreviewed.** Automated checks cover their structure, not whether a word,
-  clue or level is right. Levels are the old sheet's own labels and measure nothing.
+- Automated checks cover the words' structure, not whether a word, clue or level is right.
+  Levels are the old sheet's own labels and measure nothing.
 - Clues are in English in every language, not translations, so the app suits someone who reads
-  English. Who the app is for is still an open owner decision (DEC-15), and the content is not
-  certified for any level.
+  English, and the content is not certified for any level.
 - Words have no pronunciation, example or usage note, and none were invented.
 - Accents are not practised: a plain letter fills them in, so the game does not test where
   they go (owner decision DEC-28).
@@ -128,20 +127,21 @@ Details and method:
 - The installer is unsigned. Setup shows `LICENSE`, and `LICENSE.txt` and the third-party notices
   are installed next to the program. Whether that page fully meets the Microsoft terms in
   Python's licence is a legal question nobody has reviewed (RK-7).
-- Tested on the Windows 11 build machine only; Windows 10 and other machines are unchecked.
-- Supported history (proposed): up to 5 profiles and 5,000 rounds per profile.
+- Display scaling: real 100% was reported by the owner, real 125% is automated on the build
+  machine, and 150% is emulated only. Windows 10 is unchecked.
+- Supported history: up to 5 profiles and 5,000 rounds per profile, the largest size measured.
 
 ## How it was built
 
-The beta and rc1 were written with AI coding assistance. The rc2 to rc8 work (defect fixes,
+The beta and rc1 were written with AI coding assistance. The rc2 to rc9 work (defect fixes,
 the interface redesign, the word lists, tests, packaging, validation and these documents) was
 carried out by Claude Code at the owner's direction; an independent review of rc2 found the
 restore defect fixed in rc3. Every fix was reproduced first and checked afterwards, and results
 are tied to commits. Mistakes in the AI's own work are recorded rather than hidden — including
 the rc4 redesign that slowed the game, which measurement caught before release, five rc5 test
 scenarios that were written but not run until a count exposed them, and an rc5 layout defect
-that moved the letter keys, which a test caught in rc6 (D-33, incidents I-1 to I-14). Educator,
-learner and manual checks are left for people to perform and record. See
+that moved the letter keys, which a test caught in rc6 (D-33, incidents I-1 to I-14). Manual checks are
+left for people to perform. See
 [How AI assistance was used and verified](docs/DELIVERY.md#how-ai-assistance-was-used-and-verified).
 
 ## Project documents
@@ -152,8 +152,7 @@ learner and manual checks are left for people to perform and record. See
 | [DELIVERY.md](docs/DELIVERY.md) | Defect and task register, RAID log, decision log, milestones, AI assistance |
 | [VERIFICATION.md](docs/VERIFICATION.md) | Results by revision, installer validation, performance, requirement traceability |
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Components, data flow, persistence, recovery |
-| [CONTENT_REVIEW.md](docs/CONTENT_REVIEW.md) | How the word lists are reviewed, provenance and third-party components |
-| [USER_ACCEPTANCE.md](docs/USER_ACCEPTANCE.md) | Five-session learner protocol |
+| [PROVENANCE.md](docs/PROVENANCE.md) | Where the content came from, and third-party components |
 | [THIRD-PARTY-NOTICES.txt](packaging/third-party/THIRD-PARTY-NOTICES.txt) | Bundled components, versions and licences |
 | [RELEASE_NOTES.md](RELEASE_NOTES.md), [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) | What changed; how to release |
 | [LEGACY_BROWSER.md](docs/LEGACY_BROWSER.md) | The unsupported browser prototype |
@@ -200,7 +199,7 @@ data, never yours. Build the installer with Python 3.12.1 and Inno Setup 6.7.3:
 | `packaging/`, `scripts/build_desktop.ps1` | PyInstaller and Inno Setup build |
 | `packaging/third-party/`, `scripts/third_party_notices.py` | Third-party notices and their coverage check |
 | `scripts/validation/` | Release validation: window capture, fixtures, measurement, evidence, kit, demo |
-| `tests/` | 215 tests, including GUI scenarios run one per process |
+| `tests/` | 216 tests, including GUI scenarios run one per process |
 
 **Legacy, unsupported:** `app.py`, `src/ui/`, `src/gateway/`, `frontend/`, `Dockerfile`,
 `data/words/` and most of `src/cli.py` belong to the earlier browser prototype. They are not

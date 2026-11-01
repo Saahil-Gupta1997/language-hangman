@@ -1,0 +1,11 @@
+restore as the recovery window's first button does (rc9 code, 0d2b821):
+recovery window would offer: ['safety backup', 'pre-upgrade backup', 'daily backup']
+restored: safety backup
+damaged bytes preserved exactly: True
+profiles after recovery: ['upgrader', 'second']
+stale side files left behind: none
+
+installed rc9 app, normal launch after recovery:
+window title: 'Language Hangman · 1.0.0rc9'; visible after 1.15 s
+captured 1343x997; app window: True
+closed normally, exit code 0

@@ -1,0 +1,11 @@
+GitHub Actions results, read from the public API and, for the failure, from the log the owner pasted.
+
+Run 41323435670, commit 90a2a3a (rc8's tagged commit), first run ever:
+  test (Linux): success
+  windows-desktop: failure. 1 failed, 214 passed in Run tests; smoke journey skipped.
+  FAILED test_gui_scenario[window_opens_inside_the_work_area]
+  AssertionError: (1032, 711, (0, 0, 1024, 720)), on a 1024x720 work area with Python 3.12.10
+
+Run 41327746166, commit 0d2b821 (rc9's build commit):
+  test (Linux): success
+  windows-desktop: success, including Run tests and the Native desktop smoke journey

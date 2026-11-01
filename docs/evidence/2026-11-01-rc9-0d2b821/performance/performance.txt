@@ -1,0 +1,10 @@
+version 1.0.0rc9; database 5.54 MB
+open + upgrade check + quick_check           n=10   median     19.0 ms   p95     25.7 ms   max     25.7 ms
+full backup (copy + validation)              n=5    median    130.2 ms   p95    139.3 ms   max    139.3 ms
+progress report, large profile               n=20   median     59.7 ms   p95     67.9 ms   max     74.1 ms
+guess (round continues)                      n=86   median     13.4 ms   p95     30.4 ms   max     31.5 ms
+guess that completes a round (all writes)    n=30   median     70.9 ms   p95    106.1 ms   max    246.9 ms
+screen: Home                                 n=5    median    355.5 ms   p95    437.0 ms   max    437.0 ms
+screen: Reports (full history table)         n=5    median    566.3 ms   p95    774.1 ms   max    774.1 ms
+screen: Practice setup                       n=5    median    507.4 ms   p95    519.7 ms   max    519.7 ms
+performance exit=0
