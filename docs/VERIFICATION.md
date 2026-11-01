@@ -1,17 +1,18 @@
-# Verification — Language Hangman 1.0.0rc9
+# Verification — Language Hangman 1.0.0
 
 What was actually executed, on which revision and artifact, with what result. Gates and their
 status are in [ACCEPTANCE.md](ACCEPTANCE.md). Everything here was run by Claude Code, except where it
 says GitHub Actions or owner-reported. **Nothing here checks that the words or their clues are
 correct, or that the app improves learning.**
 
-**Release candidate:** revision `0d2b821` (branch `release/1.0`, `main` on GitHub); installer
-`LanguageHangman-1.0.0rc9-Setup.exe`, SHA256 `495c646d9e6e394921ef393b70e1cfb97340fdde5516e718360f979104aede1f`. Evidence:
-[`evidence/2026-11-01-rc9-0d2b821/`](evidence/2026-11-01-rc9-0d2b821/). Commits after
-`0d2b821` change documents and evidence only: `git diff 0d2b821 -- src desktop_app.py packaging`
+**Release:** revision `5f89265` (branch `release/1.0`, `main` on GitHub); installer
+`LanguageHangman-1.0.0-Setup.exe`, SHA256 `1707bd4a8a3c4f9d3baf2a216b97cdbd5e1acc43caadbea72f816a4ba7fcfa1e`. Evidence:
+[`evidence/2026-11-01-1.0.0-5f89265/`](evidence/2026-11-01-1.0.0-5f89265/). Commits after
+`5f89265` change documents and evidence only: `git diff 5f89265 -- src desktop_app.py packaging`
 is empty. So the installer matches the published source.
 
-The previous candidates' evidence stays in place: rc8 in
+The previous candidates' evidence stays in place: rc9 in
+[`evidence/2026-11-01-rc9-0d2b821/`](evidence/2026-11-01-rc9-0d2b821/), rc8 in
 [`evidence/2026-11-01-rc8-f66aa51/`](evidence/2026-11-01-rc8-f66aa51/), rc7 in
 [`evidence/2026-11-01-rc7-c58d208/`](evidence/2026-11-01-rc7-c58d208/), rc6 in
 [`evidence/2026-11-01-rc6-e0aa9c0/`](evidence/2026-11-01-rc6-e0aa9c0/), rc5 in
@@ -27,7 +28,7 @@ The previous candidates' evidence stays in place: rc8 in
 | Machine | AMD Ryzen 7 6800H (8 cores/16 threads), 15.2 GB RAM, NVMe SSD |
 | OS | Windows 11 Home 10.0.26200, 1920×1080 panel at **125%** display scaling (the real setting) |
 | Runtime / build | Python 3.12.1 · CustomTkinter 5.2.2 · Pillow 12.3.0 · PyInstaller 6.11.1 · Inno Setup 6.7.3 |
-| Executed by | Claude Code (AI assistant) on the owner's computer, 2026-09-19 (rc2, rc3) and 2026-11-01 (rc4 to rc9) |
+| Executed by | Claude Code (AI assistant) on the owner's computer, 2026-09-19 (rc2, rc3) and 2026-11-01 (rc4 to 1.0.0) |
 
 This is the development and build machine: Python, the build tools and earlier versions of
 the app have all been on it. Installer results below are **build-machine** results. The owner
@@ -35,10 +36,10 @@ reports a clean install on a separate system (G5). The owner was using the compu
 throughout, so no step sent operating-system keystrokes or mouse input, and screenshots
 capture only the application's own window.
 
-For rc9 the owner had rc8 installed. With their agreement it was replaced, and every step ran in
+For 1.0.0 the owner had rc9 installed. With their agreement it was replaced, and every step ran in
 a separate data folder set with `LANGUAGE_HANGMAN_DATA_DIR`. The hashes of their 4 data files are
-unchanged from before validation to after the demo, and rc9 was left installed with their desktop
-shortcut. rc9 has not yet been started on their real data.
+unchanged from before validation to after the demo, and 1.0.0 was left installed with their desktop
+shortcut. 1.0.0 has not yet been started on their real data.
 
 ## Kinds of evidence
 
@@ -74,8 +75,9 @@ shortcut. rc9 has not yet been started on their real data.
 | `f66aa51` rc8 build commit | 215 passed in the clean clone | 0 | clean | PASS, 1,544 words structurally valid | passed (17), source and installed | one test added for the licence page |
 | `e2f34e5` rc8 final tree | 215 passed, 0 skipped, ×3 | 0 | clean | PASS, 1,544 words structurally valid | passed (17) from source; installer code unchanged since `f66aa51` | three consecutive runs in a clean clone, each exit 0 (`checks-final/` in rc8's folder) |
 | `90a2a3a` rc8 on GitHub | Linux passed; Windows **214 passed, 1 failed** | 0 | clean | PASS | Windows skipped | first run ever; found D-38 (`github-actions.txt`) |
-| **`0d2b821` rc9 build commit** | **216 passed** in the clean clone; GitHub Linux and Windows jobs passed | **0** | clean | PASS, 1,544 words structurally valid | passed (17), source, installed and on GitHub's Windows machine | one GUI scenario added; it and the extended text sweep fail on rc8's code |
-| **`479ce34` rc9 final tree** | **216 passed, 0 skipped, ×3** | **0** | clean | PASS, 1,544 words structurally valid | passed (17) from source; installer code unchanged since `0d2b821` | three consecutive runs in a clean clone, each exit 0 (`checks-final/`). Run 2 took 12 minutes against about 4; Windows logged about 5 minutes of standby during it, which explains part of that |
+| `0d2b821` rc9 build commit | 216 passed in the clean clone; GitHub Linux and Windows jobs passed | 0 | clean | PASS, 1,544 words structurally valid | passed (17), source, installed and on GitHub's Windows machine | one GUI scenario added; it and the extended text sweep fail on rc8's code |
+| `479ce34` rc9 final tree | 216 passed, 0 skipped, ×3 | 0 | clean | PASS, 1,544 words structurally valid | passed (17) from source; installer code unchanged since `0d2b821` | three consecutive runs in a clean clone, each exit 0 (`checks-final/`). Run 2 took 12 minutes against about 4; Windows logged about 5 minutes of standby during it, which explains part of that |
+| **`5f89265` 1.0.0 build commit** | **216 passed** in the clean clone; GitHub Linux and Windows jobs passed (run 41334484841) | **0** | clean | PASS, 1,544 words structurally valid | passed (17), source, installed and on GitHub's Windows machine | the version and its wording only |
 
 **GitHub's first Windows run.** On `90a2a3a`, `window_opens_inside_the_work_area` failed on GitHub's
 1024×720 screen, with the window's right edge at 1032. This machine could not show it: at 125% it is
@@ -137,19 +139,18 @@ rc9 ran them this way). `test_release_check_on_a_real_release_branch_clone_and_w
 installed. The `CI` workflow runs on GitHub for every push; the release workflow has not run, because it needs a
 `desktop-v*` tag (G13).
 
-### What was re-run for rc9, and what was carried forward
+### What was re-run for 1.0.0, and what was carried forward
 
-The window calculation, the wording and the word files' notes changed in rc9, so the suite, the smoke
-journey from source and from the installed build, the whole installer sequence, the licence page,
-performance, the scaling checks, the demo and the screenshots were re-run on `0d2b821` or its
-installer.
+Only the version and the release-candidate wording changed, but the final artifact gets the whole
+sequence: the suite, the smoke journey from source and from the installed build, GitHub's run, the
+installer sequence, the licence page, performance, the scaling checks, the demo and the screenshots
+were all run on `5f89265` or its installer.
 
 Carried forward without re-running: the owner-reported checks G5, G6, G7 and G8 from rc8; rc7's proof
-that an upgrade clears a leftover file (its test ran again); the word conversion, re-run only to
-change the notes and compared field by field; the D-26 harness investigation; and the older defect
-reproductions, whose regression tests ran again inside the 216. The v1.0.0-beta database for the
-import check is the file rebuilt for rc4 with the beta's own code (SHA256 `a512e245…`); the original
-was lost (I-6).
+that an upgrade clears a leftover file (its test ran again); the word conversion; the D-26 harness
+investigation; and the older defect reproductions, whose regression tests ran again inside the 216.
+The v1.0.0-beta database for the import check is the file rebuilt for rc4 with the beta's own code
+(SHA256 `a512e245…`); the original was lost (I-6).
 
 ## Verification sequence
 
@@ -168,33 +169,33 @@ python -m pytest -rs            # read pytest's own exit code
 python desktop_app.py --smoke-test <output-folder>
 ```
 
-For rc9, `release-check` was clean in an ordinary clone of `0d2b821`
+For 1.0.0, `release-check` was clean in an ordinary clone of `5f89265`
 (`checks/release-check.txt`) and on the extracted source archive (see the release package's
 `VERIFICATION-*.txt`). The worktree case runs inside the suite.
 
-## Installer validation (rc9, build machine)
+## Installer validation (1.0.0, build machine)
 
-Installer 14,784,470 bytes, SHA256 `495c646d9e6e394921ef393b70e1cfb97340fdde5516e718360f979104aede1f`, built by `scripts/build_desktop.ps1` in a fresh
-clone of `0d2b821`; installed EXE SHA256
-`b094cc3c660389f11add37ff1270eb4b35943dabe4d74dcbf4fd4d256c8b727f`. Unsigned.
+Installer 14,786,721 bytes, SHA256 `1707bd4a8a3c4f9d3baf2a216b97cdbd5e1acc43caadbea72f816a4ba7fcfa1e`, built by `scripts/build_desktop.ps1` in a fresh
+clone of `5f89265`; installed EXE SHA256
+`ac6440292f3c03abbd2dfa17f5351b0fbb34f78769d7879157767d43e7dd1806`. Unsigned.
 Files: `evidence/…/installer-validation/`.
 
 | # | Check | Result |
 | --- | --- | --- |
-| 1 | The owner's rc8 uninstalled; pre-state; install 1.0.0rc8 (`f4b158b3…`) | Nothing installed before; rc8 installed and registered |
-| 2 | rc8 creates its own data with rc8's code (`f66aa51`): 2 profiles, a win, a loss, a round paused mid-guess | Done |
-| 3 | **Upgrade**: run the rc9 installer over rc8 | Exit 0; the data file byte-identical; installed EXE identical to the build; one `1.0.0rc9` registration; `LICENSE.txt`, the notices and 12 licence texts beside the program; all four word lists installed; no built file missing; the only program files not in the build are `LICENSE.txt` and the two uninstaller files |
+| 1 | The owner's rc9 uninstalled; pre-state; install 1.0.0rc9 (`495c646d…`) | Nothing installed before; rc9 installed and registered |
+| 2 | rc9 creates its own data with rc9's code (`0d2b821`): 2 profiles, a win, a loss, a round paused mid-guess | Done |
+| 3 | **Upgrade**: run the 1.0.0 installer over rc9 | Exit 0; the data file byte-identical; installed EXE identical to the build; one `1.0.0` registration; `LICENSE.txt`, the notices and 12 licence texts beside the program; all four word lists installed; no built file missing; the only program files not in the build are `LICENSE.txt` and the two uninstaller files |
 | 4 | Third-party notices in the installed folder | 985 files, 13 notice files, **0 problems**; installed `LICENSE.txt` identical to the repository's |
-| 5 | Normal launch of installed rc9 on the upgraded data; sign-in and data checked with `0d2b821` code | Sign-in screen in 2.29 s, including the first word load; rc8 password accepted, wrong one rejected; 2 rounds kept; the paused round resumed and completed |
-| 6 | Installed `--smoke-test`, `PATH` = Windows folders only, no `PYTHON*` variables | Exit 0; 17/17 in 25 s, including a German list on the A–Z keys; validation data untouched |
-| 7 | Import a v1.0.0-beta database (schema 0) through the restore path | Opens normally in 1.14 s; beta sign-in and 3 rounds kept; Review my words offers only practised words at that level (`clean`, `small` and `early` at Beginner; Novice refused) |
+| 5 | Normal launch of installed 1.0.0 on the upgraded data; sign-in and data checked with `5f89265` code | Sign-in screen in 2.35 s, including the first word load; rc9 password accepted, wrong one rejected; 2 rounds kept; the paused round resumed and completed |
+| 6 | Installed `--smoke-test`, `PATH` = Windows folders only, no `PYTHON*` variables | Exit 0; 17/17 in 26 s, including a German list on the A–Z keys; validation data untouched |
+| 7 | Import a v1.0.0-beta database (schema 0) through the restore path | Opens normally in 1.10 s; beta sign-in and 3 rounds kept; Review my words offers only practised words at that level (`clean`, `small` and `early` at Beginner; Novice refused) |
 | 8 | Damage the live data file; launch the installed app, Standard and Large text | **Recovery window** in 0.89–0.94 s; captured at opening and minimum size; text fits at both sizes |
-| 9 | Restore the newest automatic backup (the first button's code path) | Damaged bytes quarantined exactly; both profiles back; **no stale side files**; normal start in 1.15 s |
+| 9 | Restore the newest automatic backup (the first button's code path) | Damaged bytes quarantined exactly; both profiles back; **no stale side files**; normal start in 1.18 s |
 | 10 | Uninstall | Program, Start-menu entry and registration removed; all 7 data files kept byte-for-byte |
 
 **The licence page.** Silent installs skip it, so after these steps the real installer was started
 normally and left at its first page, with no input sent (`12-licence-page.txt`). The window was titled
-"Setup - Language Hangman version 1.0.0rc9" and showed the License Agreement, "I do not accept the
+"Setup - Language Hangman version 1.0.0" and showed the License Agreement, "I do not accept the
 agreement" selected and **Next disabled**. It was then ended from outside, and the installed EXE was
 unchanged. The owner reports a normal install on rc8.
 
@@ -214,7 +215,7 @@ Fault-injection tests in `tests/test_recovery.py`, run in the 216:
 | Putting a file back fails | `test_failed_rollback_says_where_the_side_files_are_kept` | Stage `rollback`; message names each kept file, its original place and the safety copy; no "unchanged" claim |
 
 The first and last fail on the rc2 code (`defects/D-30-restore-rollback.txt`). The installed
-build contains the same code (EXE built from `0d2b821`); its successful restore paths were
+build contains the same code (EXE built from `5f89265`); its successful restore paths were
 exercised in steps 7 and 9. Failures cannot be injected into the installed build.
 
 ## Recovery window and text wrapping (D-31)
@@ -234,65 +235,67 @@ exercised in steps 7 and 9. Failures cannot be injected into the installed build
 and the files they cover; `licenses/` holds 12 texts. The build copies them next to the
 program and runs `scripts/third_party_notices.py check`: it fails if a shipped file is not
 in the inventory, a notice is missing or changed, or the build environment's versions differ
-from the inventory. rc9 build folder: 982 files, 0 problems. Upgraded installed folder: 985
+from the inventory. 1.0.0 build folder: 982 files, 0 problems. Upgraded installed folder: 985
 files, 0 problems.
 
 ## Performance (build machine)
 
-rc9 and rc8 were measured in one session on 2026-11-01 from clean clones of `0d2b821` and
-`f66aa51`, with the same tool and interpreter and with the revisions alternating
+1.0.0 and rc9 were measured in one session on 2026-11-01 from clean clones of `5f89265` and
+`0d2b821`, with the same tool and interpreter and with the revisions alternating
 (`performance/`). The owner was using the computer. These are single-machine observations,
-not guarantees.
+not guarantees. The machine ran slower in this session than in rc9's: both revisions show it.
 
 **Guess to redrawn screen, the game's hot path** (a fresh profile; three runs of each; correct
 guesses only, about one in five of which ends a round):
 
 | Words | Samples per run | Median | 95th percentile | Longest guess |
 | --- | --- | --- | --- | --- |
-| rc8, English Beginner | 48 | 40 / 41 / 41 ms | 491 / 537 / 553 ms | 611 ms |
-| **rc9, English Beginner** | 48 | **39 / 40 / 41 ms** | **511 / 536 / 564 ms** | 624 ms |
-| rc8, Spanish Beginner | 59 | 32 / 37 / 41 ms | 473 / 483 / 494 ms | 543 ms |
-| **rc9, Spanish Beginner** | 59 | **32 / 37 / 40 ms** | **492 / 497 / 505 ms** | 621 ms |
-| rc8, German Expert | 102 | 32 / 32 / 35 ms | 443 / 465 / 470 ms | 564 ms |
-| **rc9, German Expert** | 102 | **33 / 34 / 35 ms** | **463 / 478 / 504 ms** | 606 ms |
+| rc9, English Beginner | 48 | 41 / 43 / 52 ms | 669 / 673 / 691 ms | 1,129 ms |
+| **1.0.0, English Beginner** | 48 | **38 / 40 / 48 ms** | **559 / 662 / 676 ms** | 745 ms |
+| rc9, Spanish Beginner | 59 | 40 / 41 / 49 ms | 642 / 645 / 678 ms | 787 ms |
+| **1.0.0, Spanish Beginner** | 59 | **38 / 38 / 41 ms** | **530 / 618 / 651 ms** | 689 ms |
+| rc9, German Expert | 102 | 34 / 37 / 40 ms | 535 / 579 / 631 ms | 695 ms |
+| **1.0.0, German Expert** | 102 | **34 / 38 / 45 ms** | **516 / 614 / 726 ms** | 819 ms |
 
-The two are level (G16). rc9's 95th percentiles are slightly higher in most rows, by less than
-sessions usually differ, and the cause has not been measured.
+The two are level, as expected, because 1.0.0 changes no game code (G16).
 
-**One long session** (rc9 only, one All words session of 200 rounds):
+**One long session** (1.0.0 only, one All words session of 200 rounds):
 
 | Guess | Rounds | Samples | Median | 95th percentile | Longest guess |
 | --- | --- | --- | --- | --- | --- |
-| Round continues | first 20 | 60 | 31 ms | 92 ms | 925 ms |
-| Round continues | last 20 | 94 | 30 ms | 79 ms | 101 ms |
-| Ends a round | first 20 | 20 | 444 ms | 539 ms | 643 ms |
-| Ends a round | last 20 | 20 | 378 ms | 404 ms | 424 ms |
+| Round continues | first 20 | 60 | 36 ms | 132 ms | 954 ms |
+| Round continues | last 20 | 94 | 37 ms | 111 ms | 130 ms |
+| Ends a round | first 20 | 20 | 621 ms | 732 ms | 766 ms |
+| Ends a round | last 20 | 20 | 549 ms | 618 ms | 633 ms |
 
 The saved session held no review records after 200 rounds, so it does not grow with play.
 
-**Other operations** (5 profiles, one with 5,000+ completed rounds, 5.54 MB; rc9, then rc8 straight
+**Other operations** (5 profiles, one with 5,000+ completed rounds, 5.54 MB; 1.0.0, then rc9 straight
 afterwards):
 
-| Operation | Samples | rc9 median | rc9 95th percentile | rc8 median | rc8 95th percentile |
+| Operation | Samples | 1.0.0 median | 1.0.0 95th percentile | rc9 median | rc9 95th percentile |
 | --- | --- | --- | --- | --- | --- |
-| Open, upgrade check and quick check | 10 | 19 ms | 26 ms | 17 ms | 19 ms |
-| Full backup (copy and validation) | 5 | 130 ms | 139 ms | 137 ms | 228 ms |
-| Reports aggregation, 5,000+ rounds | 20 | 60 ms | 68 ms | 59 ms | 79 ms |
-| Guess, round continues (service only) | 86 | 13 ms | 30 ms | 15 ms | 31 ms |
-| Guess that completes a round (all writes) | 30 | 71 ms | 106 ms | 76 ms | 98 ms |
-| Screen change: Home / Reports / Practice setup | 5 each | 356 / 566 / 507 ms | 437 / 774 / 520 ms | 368 / 553 / 496 ms | 454 / 628 / 516 ms |
+| Open, upgrade check and quick check | 10 | 17 ms | 22 ms | 18 ms | 22 ms |
+| Full backup (copy and validation) | 5 | 167 ms | 188 ms | 134 ms | 152 ms |
+| Reports aggregation, 5,000+ rounds | 20 | 81 ms | 114 ms | 69 ms | 112 ms |
+| Guess, round continues (service only) | 86 | 16 ms | 31 ms | 16 ms | 33 ms |
+| Guess that completes a round (all writes) | 30 | 82 ms | 110 ms | 83 ms | 114 ms |
+| Screen change: Home / Reports / Practice setup | 5 each | 554 / 851 / 844 ms | 625 / 919 / 865 ms | 522 / 848 / 729 ms | 626 / 875 / 766 ms |
+
+1.0.0 changes none of these paths, and rc8's repeats showed single runs moving by this much, so these
+gaps are not read as a change. They were not repeated for this release.
 
 **Start-up of the installed EXE to a visible window**, 5 launches on a fresh copy of the dataset:
-1.14–1.20 s, and 2.24 s for the first launch, which also loads the words for the first time and
-makes the day's automatic backup. rc8 measured 1.04–1.10 s and 2.23 s, in a different session.
+0.93–1.15 s, and 2.28 s for the first launch, which also loads the words for the first time and
+makes the day's automatic backup. rc9 measured 1.14–1.20 s and 2.24 s, in a different session.
 
 Three honest comparisons:
 
-- **Sessions differ more than versions do.** rc8's first run showed Home at 632 ms and its repeats at
-  345–534 ms. Compare only within a session, and repeat before believing a difference.
+- **Sessions differ more than versions do.** rc9's own Reports row was 566 ms in its session and 848
+  ms in this one. Compare only within a session, and repeat before believing a difference.
 - **The screen rows are small samples**, five each, so treat the differences as indications.
 - **Against rc3**, a typical guess is much faster and a round-ending guess slower. That is rc4's
-  trade-off, and rc9 keeps it. Navigation is slower than rc3, because screens group content into
+  trade-off, and 1.0.0 keeps it. Navigation is slower than rc3, because screens group content into
   cards.
 
 ### rc3 and rc4, earlier the same day (I-9)
@@ -312,7 +315,7 @@ discarded first rc4 build has none either, so "four times slower" cannot be conf
 
 ## Requirement-to-test traceability
 
-| Req | Requirement | Automated evidence | Native / installed evidence (rc9) | Result |
+| Req | Requirement | Automated evidence | Native / installed evidence (1.0.0) | Result |
 | --- | --- | --- | --- | --- |
 | RQ-01 | Fresh profile cannot start Review my words; All words offered | `test_fresh_profile_cannot_start_review` | smoke; step 6 | Pass |
 | RQ-02 | Review uses only eligible practised words at the level; due first; once per session | `test_review_uses_only_practised_words_from_the_level`, `test_review_from_the_app_plays_every_eligible_word_once_with_no_notice`, `test_review_plays_due_words_before_words_not_yet_due` | smoke | Pass (rule kept by the owner, DEC-06) |
@@ -329,7 +332,7 @@ discarded first rc4 build has none either, so "four times slower" cannot be conf
 | RQ-13 | Close and reopen during and between rounds | `test_guesses_and_hints_resume`, journey tests | smoke, real process termination (2) | Pass |
 | RQ-14 | Correct reports after wins, losses, abandoned sessions | `test_lost_round_and_repeated_guess`, journey tests | smoke | Pass |
 | RQ-15 | Backup/restore, export, profile deletion scoped | `test_profile_deletion_export_and_diagnostics_are_scoped`, backup tests | smoke | Pass |
-| RQ-16 | Genuine upgrade keeps credentials and progress | `test_legacy_upgrade_preserves_data_and_takes_backup` | steps 2–5 (data made by rc8) | Pass |
+| RQ-16 | Genuine upgrade keeps credentials and progress | `test_legacy_upgrade_preserves_data_and_takes_backup` | steps 2–5 (data made by rc9) | Pass |
 | RQ-17 | Uninstall preserves learner data | — | step 10 | Pass |
 | RQ-18 | Runs without Python installed | — | step 6 (no Python on `PATH`) | Pass; clean system owner-reported (G5) |
 | RQ-19 | Privacy-safe diagnostics with operation, stage, version | `test_diagnostics_contain_codes_but_no_personal_data` | — | Pass |
@@ -337,7 +340,7 @@ discarded first rc4 build has none either, so "four times slower" cannot be conf
 | RQ-21 | Keyboard: dropdowns operable, focus visible and in view, text-size shortcuts; recovery actions reachable by Tab | GUI scenarios (4) | — | Handler level pass; real keyboard owner-reported (G6) |
 | RQ-22 | Layout at 100/125/150% and minimum size; text wraps to the window (D-31) | GUI `window_opens_inside_the_work_area`, `recovery_window_fits_at_minimum_size`, `main_window_text_wraps_at_minimum_size` | installed at real 125%; `scaling/` (12 captures: round and recovery, three scalings, two text sizes) | 125% pass; 100/150% emulated pass; real 100% owner-reported; real 150% not tested (G7) |
 | RQ-27 | A letter key guesses that letter, and a used key does nothing | GUI `letter_keys_guess_on_click` | demo; smoke uses the typing route | Pass |
-| RQ-28 | A guess redraws the round without rebuilding the screen (D-32) | — | `performance/guess-to-redraw.txt`: 32–41 ms median, 48–102 samples per run | Pass for guesses that continue a round; the round-ending guess still rebuilds |
+| RQ-28 | A guess redraws the round without rebuilding the screen (D-32) | — | `performance/guess-to-redraw.txt`: 34–48 ms median, 48–102 samples per run | Pass for guesses that continue a round; the round-ending guess still rebuilds |
 | RQ-29 | Feedback lines are the 40 originals, word for word (T-31, DEC-07) | `test_the_original_feedback_lines_are_back_word_for_word` | `installed-smoke/practice.png` | Pass |
 | RQ-30 | Word lists: 1,544 words, four languages, five levels, three clues, no repeats (T-30) | `test_every_language_has_all_five_levels_and_the_counts_add_up`, `scripts/check_curated_content.py` | step 3 | Pass for structure; accuracy is not checked here |
 | RQ-31 | A level session stays in its language and level; Review stays inside it | `test_a_level_session_stays_in_its_language_and_level`, `test_review_at_a_level_only_uses_words_practised_at_that_level` | step 6 (German list) | Pass |
@@ -432,7 +435,7 @@ before.
 - A person typing accented letters.
 - A profile with a long history in the word lists: the performance dataset's history is on the
   old travel cards.
-- rc9 running on the owner's real data, which it has not yet opened.
-- Any manual check repeated on rc9: they were reported on rc8.
+- 1.0.0 running on the owner's real data, which it has not yet opened.
+- Any manual check repeated on rc9 or 1.0.0: they were reported on rc8.
 - Whether the licence page meets the Microsoft terms in Python's licence (RK-7).
 - Code signing (the installer is unsigned).

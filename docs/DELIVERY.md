@@ -36,9 +36,10 @@ engineering), **Deferred** (accepted for a later release).
 | `52844d1`, `1dd7102` | rc7 documents, evidence and media, tested three times; rc7 source archive (tag `v1.0.0rc7` on `1dd7102`). No application change |
 | `f66aa51` | 1.0.0rc8 release candidate (installer `f4b158b3…119288` built from this commit): MIT for the word lists and icon, licence page in setup |
 | `e2f34e5`, `90a2a3a` | rc8 documents, evidence and media, tested three times; rc8 source archive (tag `v1.0.0rc8` on `90a2a3a`), first pushed to GitHub. No application change |
-| `0d2b821` | **1.0.0rc9 release candidate** (installer `495c646d…ede1f` built from this commit): window centring and the owner's gate decisions |
-| `479ce34` | rc9 documents, evidence and media; the final tree, tested three times |
-| later commits | documents and evidence only; rc9 source archive (tag `v1.0.0rc9`). No application change (check with `git diff 0d2b821 -- src desktop_app.py packaging`) |
+| `0d2b821` | 1.0.0rc9 release candidate (installer `495c646d…ede1f` built from this commit): window centring and the owner's gate decisions |
+| `479ce34`, `60143f4` | rc9 documents, evidence and media, tested three times; rc9 source archive (tag `v1.0.0rc9` on `60143f4`). No application change |
+| `5f89265` | **1.0.0 release** (installer `1707bd4a…fa1e` built from this commit): the version and the release-candidate wording only |
+| later commits | documents and evidence only; 1.0.0 source archive (tag `v1.0.0`). No application change (check with `git diff 5f89265 -- src desktop_app.py packaging`) |
 
 ## Defect and task register
 
@@ -177,6 +178,7 @@ owner's confirmation before they are quoted as the owner's reasoning.
 | DEC-35 | Remove the two lines the owner marked and the "language qualification" line, fix D-34 to D-36, and build rc7 | The owner tested rc6, questioned the first two lines and answered "Yes, start rc7". Claude Code recommended keeping the not-reviewed warning in Practice setup and Help, and removing the third line; both were in the proposal the owner accepted. Installer licence terms were not part of it (DEC-14 stays open) | **Owner, 2026-11-01** | Decided |
 | DEC-36 | Remove G9 (word review) and G10 (learner sessions) as release checks, and take their documents out of the repository | The owner: the words are "checked but can't be named. So, remove it out of doc as a check", and learner sessions: "No need to include this in repo". Claude Code pointed out that G9 had been the owner's own rule for all four languages (DEC-23). The repository therefore holds no evidence of accuracy or learning, and makes no claim to either. It stopped saying the words are unreviewed, and does not say they were reviewed | **Owner, 2026-11-01** | Decided |
 | DEC-37 | Accept G5, G6 and G8 as reported on rc8 without detailed records; narrow G7 to real 100% by the owner, real 125% automated and 150% emulated, with real 150% a stated limitation; accept the rc6 and rc7 changes as G11's fixes | The owner's statements, and their answers to two follow-up questions ("Only 100% was tested", "rc8"). rc9 changes one window calculation and some wording; these checks were not repeated on it | **Owner, 2026-11-01** | Decided |
+| DEC-38 | Release 1.0.0 | The owner answered "Approve 1.0.0" after Claude Code listed what it carries: manual checks reported on rc8 and not repeated, real 150% untested, no record of word accuracy with the German fragment `Quanten-` still in the lists, RK-7 open, and the installer unsigned | **Owner, 2026-11-01** | Decided |
 
 ## How AI assistance was used and verified
 
@@ -372,3 +374,11 @@ separate data folder, with the owner's data checked unchanged and rc9 left insta
 desktop shortcut.
 
 Dependencies: the owner's final approval, then a rebuild as 1.0.0.
+
+### M17 — 1.0.0
+
+The owner approved the release (DEC-38). The version and the release-candidate wording changed and
+nothing else, and the full sequence ran again on that exact artifact: clean-clone checks, performance
+against rc9, GitHub's Linux and Windows jobs, a build in a fresh clone, installer validation from rc9,
+the licence page, start-up, scaling and the demo. The owner's data was checked unchanged and 1.0.0 was
+left installed with their desktop shortcut.

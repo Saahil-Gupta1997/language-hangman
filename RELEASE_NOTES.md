@@ -1,4 +1,47 @@
-# 1.0.0rc9 — Desktop release candidate 9 (2026-11-01)
+# 1.0.0 — Desktop release (2026-11-01)
+
+The first full release of Language Hangman, an offline Windows app for people who want to practise
+new words: 1,544 words in English, Spanish, Italian and German at five levels.
+
+- **Installer:** `LanguageHangman-1.0.0-Setup.exe`, SHA256 `1707bd4a8a3c4f9d3baf2a216b97cdbd5e1acc43caadbea72f816a4ba7fcfa1e`, built from `5f89265`.
+  **Unsigned**: Windows SmartScreen will show "unknown publisher".
+- **Upgrading:** run the new installer; profiles, progress and paused rounds are kept (checked
+  from rc9 on the build machine).
+
+## New since 1.0.0rc9
+
+The version and its wording only: the release-candidate label is gone from the app, installer and
+demo. No other application change.
+
+## Known limitations
+
+- Automated checks cover the words' structure, not their accuracy.
+- Words have clues but no example, pronunciation or usage note, and none were invented. Their
+  clues are in English, so they suit someone who reads English.
+- Accents are not practised, because a plain letter fills them in.
+- The restored lines mock the learner and use idioms that a learner of English may not follow.
+- Windows screen readers generally cannot read CustomTkinter's controls, and the letter keys
+  are drawn rather than separate controls; typing a letter remains the keyboard route.
+- The database is not encrypted; local passwords protect in-app access only. No email
+  password reset. Backups contain every profile's password hash: keep them private.
+- One app instance per Windows account; guest practice is deleted on sign-out or close.
+- The installer is unsigned. Whether its licence page fully meets the Microsoft terms in
+  Python's licence has not had a legal review.
+- On the build machine, the guess that ends a round takes 0.4–0.7 s and start-up about 1.1 s.
+- Real 150% display scaling has not been tested; it is emulated only.
+- No cloud sync, automatic updates, multiplayer, machine learning or placement test.
+
+## Verification
+
+Automated suite on the final tree: see [docs/VERIFICATION.md](docs/VERIFICATION.md). On the build
+commit `5f89265`: 216 passed, 0 skipped, in a clean clone, with lint, content and release checks clean,
+and GitHub Actions passed on Linux and Windows, including the smoke journey on Windows. On the build
+machine (Windows 11 at 125%): upgrade from rc9 with data created by rc9, the 17-step journey in the
+installed app without Python, beta import, recovery at both text sizes, restore, uninstall, and the
+installed licence and notices. The owner reports a clean install on a separate system, keyboard-only
+use, real 100% scaling and recovery by hand on rc8; no detailed record is kept.
+
+## 1.0.0rc9 — Desktop release candidate 9 (2026-11-01)
 
 A tested release candidate, **not** the final 1.0 until the owner gives final approval. It
 supersedes rc8 for every purpose.

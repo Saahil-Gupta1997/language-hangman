@@ -1,0 +1,24 @@
+installed exe sha256: ac6440292f3c03abbd2dfa17f5351b0fbb34f78769d7879157767d43e7dd1806
+command: LanguageHangman.exe --smoke-test <output folder>
+environment: PATH=%SystemRoot%\system32;%SystemRoot% only; no PYTHON* or VIRTUAL_ENV;
+LANGUAGE_HANGMAN_DATA_DIR set to the validation folder, so the smoke cannot reach the owner's
+exit code: 0; duration: 26 s
+passed: True; version: 1.0.0; checks passed: 17
+validation data untouched: True
+ - registration
+ - review refused for a new profile; all words offered
+ - clue after wrong guess; session resumes
+ - three rounds recorded in reports
+ - review uses only practised words, each once
+ - lost round and ended session reported correctly
+ - profile export contains progress and no credentials
+ - profile deletion keeps other profiles intact
+ - backup and restore
+ - text size change after dropdown screens
+ - German list plays on A-Z; an empty session is not counted
+ - guest practice and sign out
+ - round resumes after the app process is ended mid-round
+ - learning card and next round resume after the process ends between rounds
+ - damaged database detected at start-up
+ - backup restored over damaged database; damaged bytes quarantined
+ - sign in and progress after recovery

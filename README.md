@@ -5,14 +5,13 @@ Spanish, Italian and German at five levels. It is built with Python, CustomTkint
 It is rule-based software built with AI assistance: it contains no machine learning, chatbot or
 network service, and it needs no account or internet connection.
 
-**Status: 1.0.0rc9, a tested release candidate. It is not the final 1.0 until the owner gives
-final approval.**
+**Status: 1.0.0, released on the owner's approval on 2026-11-01.**
 
-| Verified by automated and scripted checks | Reported by the owner on rc8, without a detailed record |
+| Verified by automated and scripted checks | Reported by the owner on 1.0.0rc8, without a detailed record |
 | --- | --- |
-| 216 automated tests, lint, content and release checks on `479ce34`, three times (installer built from `0d2b821`, same application code) | Clean install on a separate system (G5) |
+| 216 automated tests, lint, content and release checks on `5f89265` | Clean install on a separate system (G5) |
 | GitHub Actions on Linux and Windows, including the smoke journey on Windows | Keyboard-only use (G6) |
-| Installer built from `0d2b821`; licence page shown; install, upgrade from rc8 with its own data, beta import, recovery, uninstall | Display at real 100% (G7) |
+| Installer built from `5f89265`; licence page shown; install, upgrade from rc9 with its own data, beta import, recovery, uninstall | Display at real 100% (G7) |
 | 17-step scripted journey in the installed app, without Python on `PATH` | Recovery by hand (G8) |
 | Third-party notices installed and checked against every shipped file | |
 | Window layout and the game board measured at the minimum size (real 125%, emulated 100% and 150%) | |
@@ -24,14 +23,14 @@ earlier versions installed. Gates, evidence and the go/no-go record are in
 
 ## Demo
 
-[2½-minute captioned recording](docs/media/language-hangman-1.0.0rc9-demo.mp4): a new
+[2½-minute captioned recording](docs/media/language-hangman-1.0.0-demo.mp4): a new
 profile, Review my words refused for a new learner, play that runs until you end it, the card
 after each word, reports, Review my words, resuming after closing, a plain letter revealing an
 accent, text size, settings and recovery from a damaged data file. It is a scripted run of
-revision `0d2b821` from source, driven through the app's own controls and slowed so that
+revision `5f89265` from source, driven through the app's own controls and slowed so that
 captions can be read; only the app window is captured.
 
-Screenshots from the installed rc9 build:
+Screenshots from the installed 1.0.0 build:
 
 | Practice round | Review my words | Recovery window |
 | --- | --- | --- |
@@ -61,13 +60,13 @@ Screenshots from the installed rc9 build:
 
 ## Install
 
-1. Download `LanguageHangman-1.0.0rc9-Setup.exe` from the release package and check it:
+1. Download `LanguageHangman-1.0.0-Setup.exe` from the release package and check it:
 
    ```powershell
-   Get-FileHash .\LanguageHangman-1.0.0rc9-Setup.exe -Algorithm SHA256
+   Get-FileHash .\LanguageHangman-1.0.0-Setup.exe -Algorithm SHA256
    ```
 
-   Expected: `495c646d9e6e394921ef393b70e1cfb97340fdde5516e718360f979104aede1f`.
+   Expected: `1707bd4a8a3c4f9d3baf2a216b97cdbd5e1acc43caadbea72f816a4ba7fcfa1e`.
 2. Run it. **The installer is not code-signed**, so Windows SmartScreen shows "Windows
    protected your PC" and "Unknown publisher". Choose *More info › Run anyway* only if the
    checksum matched. Setup then shows the licence, which you need to accept. It installs for the
@@ -99,13 +98,14 @@ sessions are kept; any database upgrade runs on a copy after a pre-upgrade backu
 ## Performance (build machine)
 
 On an AMD Ryzen 7 6800H laptop with an NVMe SSD, on a fresh profile, a typical guess takes
-**32–41 ms** from submission to redrawn screen across three word lists (three runs of each, with
-48–102 samples a run; rc8 measured 32–41 ms in the same session). The guess that ends a round
-takes 463–564 ms at the 95th percentile (rc8: 443–553 ms). In one 200-round session, the last 20
+**34–48 ms** from submission to redrawn screen across three word lists (three runs of each, with
+48–102 samples a run; rc9 measured 34–52 ms in the same session). The guess that ends a round
+takes 516–726 ms at the 95th percentile (rc9: 535–691 ms). In one 200-round session, the last 20
 rounds were no slower than the first 20. With one profile holding 5,000+ completed rounds (5.54
-MB of data), reports aggregate in 60 ms, a full backup takes 130 ms, and moving between Home,
-Reports and Practice setup takes 356–566 ms. The installed program shows its window in 1.14–1.20
-s, and in 2.24 s the first time it loads the words into a data file. Details and method:
+MB of data), reports aggregate in 81 ms, a full backup takes 167 ms, and moving between Home,
+Reports and Practice setup takes 554–851 ms, in a session when the machine ran slower than usual.
+The installed program shows its window in 0.93–1.15 s, and in 2.28 s the first time it loads the
+words into a data file. Details and method:
 [docs/VERIFICATION.md](docs/VERIFICATION.md#performance-build-machine).
 
 ## Known limitations
@@ -133,7 +133,7 @@ s, and in 2.24 s the first time it loads the words into a data file. Details and
 
 ## How it was built
 
-The beta and rc1 were written with AI coding assistance. The rc2 to rc9 work (defect fixes,
+The beta and rc1 were written with AI coding assistance. The rc2 to 1.0.0 work (defect fixes,
 the interface redesign, the word lists, tests, packaging, validation and these documents) was
 carried out by Claude Code at the owner's direction; an independent review of rc2 found the
 restore defect fixed in rc3. Every fix was reproduced first and checked afterwards, and results

@@ -1,0 +1,15 @@
+candidate installer (built from 5f89265) sha256: 1707bd4a8a3c4f9d3baf2a216b97cdbd5e1acc43caadbea72f816a4ba7fcfa1e
+size: 14786721 bytes
+learner data files before upgrade: 1; app.db sha256: e33718b9cfab9a0c7d7721cf5f7d32d5fc90fa706591324b458b89b92c1b6d59
+installed exe before (rc9): b094cc3c660389f11add37ff1270eb4b35943dabe4d74dcbf4fd4d256c8b727f
+upgrade installer exit: 0
+learner data files after upgrade: 1; app.db sha256: e33718b9cfab9a0c7d7721cf5f7d32d5fc90fa706591324b458b89b92c1b6d59
+every learner data file unchanged by the installer: True
+installed exe after: ac6440292f3c03abbd2dfa17f5351b0fbb34f78769d7879157767d43e7dd1806
+installed exe identical to the 1.0.0 build: True
+uninstall entries: 1 -> version 1.0.0
+LICENSE.txt beside the program: True; notices: True; licence texts: 12
+word lists installed: ['english.json', 'german.json', 'italian.json', 'spanish.json']
+travel cards gone from the program folder: True
+built files missing from the program folder: []
+program files that are not in the build: ['LICENSE.txt', 'unins000.dat', 'unins000.exe']

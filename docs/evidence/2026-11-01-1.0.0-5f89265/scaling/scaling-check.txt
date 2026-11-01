@@ -1,0 +1,13 @@
+real display scaling 125%; 0.8 and 1.2 emulate lower and higher settings
+recovery window, 100-emulated, Standard text, minimum size: text fits
+main window round, Home, Settings and Help, 100-emulated, Standard: text fits
+recovery window, 100-emulated, Large text, minimum size: text fits
+main window round, Home, Settings and Help, 100-emulated, Large: text fits
+recovery window, 125-real, Standard text, minimum size: text fits
+main window round, Home, Settings and Help, 125-real, Standard: text fits
+recovery window, 125-real, Large text, minimum size: text fits
+main window round, Home, Settings and Help, 125-real, Large: text fits
+recovery window, 150-emulated, Standard text, minimum size: text fits
+main window round, Home, Settings and Help, 150-emulated, Standard: text fits
+recovery window, 150-emulated, Large text, minimum size: text fits
+main window round, Home, Settings and Help, 150-emulated, Large: text fits

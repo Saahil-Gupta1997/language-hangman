@@ -1,0 +1,2 @@
+5f892655248aadf8b6aad6bf6c6da753ce5c652a
+read from the build clone, and printed by the build script: see line 11 of build.log

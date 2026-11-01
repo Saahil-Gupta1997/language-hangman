@@ -1,0 +1,5 @@
+is_clean: True
+artifact_count: 0
+artifacts: []
+relative_artifacts: []
+release-check exit=0

@@ -1,0 +1,13 @@
+installed 1.0.0 app, normal launch on the upgraded rc9 data:
+window title: 'Language Hangman · 1.0.0'; visible after 2.35 s
+captured 1343x997; app window: True
+closed normally, exit code 0
+
+sign-in and data checked with 1.0.0's code (5f89265, same commit as the installer):
+code version 1.0.0
+previous-release credentials accepted: True
+wrong password rejected: True
+second profile present: True
+progress: {'rounds': 2, 'wins': 1, 'losses': 1, 'sessions': 0}
+paused round resumes: True (round 3 of 3)
+after finishing the resumed round: {'rounds': 3, 'wins': 2, 'losses': 1}
