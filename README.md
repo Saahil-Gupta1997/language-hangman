@@ -9,7 +9,7 @@ learning, chatbot or network service, and it needs no account or internet connec
 
 | Verified by automated and scripted checks on the build machine (Windows 11, 125%) | Still pending: needs people or the owner |
 | --- | --- |
-| 175 automated tests, lint, content and release checks on FINAL_REVISION (installer built from `d543579`, same application code) | Installing on a clean Windows account without Python (G5) |
+| 175 automated tests, lint, content and release checks on `7c425fd` (installer built from `d543579`, same application code) | Installing on a clean Windows account without Python (G5) |
 | Installer built from that commit; install, upgrade from rc3 with its own data, beta import, recovery, uninstall | Keyboard-only use by a person; real 100% and 150% display scaling (G6–G8) |
 | 16-step scripted journey in the installed app, without Python on `PATH` | Review of all 30 teaching cards by a qualified reviewer (G9) |
 | Third-party notices installed and checked against every shipped file | Five learner sessions (G10) |

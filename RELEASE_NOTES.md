@@ -40,7 +40,7 @@ some owner decisions are still open (see [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md
 
 ## Verification
 
-Automated suite on the final tree (FINAL_REVISION): FINAL_RESULT, three runs in a clean
+Automated suite on the final tree (`7c425fd`): 175 passed, 0 skipped, ×3, three runs in a clean
 clone. On the build commit `d543579` the clean run was 174 passed, 1 failed; that test was
 then changed, and the installer's inputs were not. Lint, content and release checks clean. On the build machine (Windows 11 at 125%): upgrade from rc3 with
 data created by rc3, the 16-step journey in the installed app without Python, beta import,

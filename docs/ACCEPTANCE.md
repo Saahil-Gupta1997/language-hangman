@@ -10,7 +10,7 @@ filled in from automated output.
 | # | Gate | Blocking | Status | Owner | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | G1 | P0 defects fixed with regression tests: D-01, D-02, D-03 (rc2) and D-30 (rc3) | Yes | **Met** | Engineering | VERIFICATION.md RQ-01..RQ-11 |
-| G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the final tree** (FINAL_RESULT, FINAL_REVISION; the build commit's clean run was 174 passed, 1 failed, see VERIFICATION.md) | Engineering | evidence/…/checks |
+| G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the final tree** (175 passed, 0 skipped, ×3, `7c425fd`; the build commit's clean run was 174 passed, 1 failed, see VERIFICATION.md) | Engineering | evidence/…/checks |
 | G3 | Installer built from the candidate commit in a clean checkout; SHA256 recorded | Yes | **Met** | Engineering | evidence/…/build-output |
 | G4 | Install, upgrade from the previous release, beta import, recovery, uninstall on Windows | Yes | **Met on the build machine** (not a clean machine) | Engineering | VERIFICATION.md installer steps 1–10 |
 | G16 | Performance measured on the candidate: the game's hot path no slower than the previous release | Yes | **Met** (guess to redrawn screen 39 ms, against 285 ms in rc3) | Engineering | VERIFICATION.md performance |

@@ -22,7 +22,7 @@ engineering), **Deferred** (accepted for a later release).
 | `944fe27` | rc3 documentation and evidence; rc3 source archive (tag `v1.0.0rc3`) |
 | `849d1e1`, `8019a84`, `d543579` | rc4: UI redesign (T-29), MIT licence and validation tooling, board performance (D-32) |
 | `d543579` | **1.0.0rc4 release candidate** (installer `abb0cf94…ebcd3c` built from this commit) |
-| `f5ac6a2`, `21cee81`, `06fc02c`, FINAL_REVISION | tests, documents and release tooling only; nothing the installer bundles |
+| `f5ac6a2`, `21cee81`, `06fc02c`, `7c425fd` | tests, documents and release tooling only; nothing the installer bundles |
 | later commits | documentation and evidence only; no application change (check with `git diff fd3b25a -- src desktop_app.py packaging scripts tests`) |
 
 ## Defect and task register

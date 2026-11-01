@@ -50,7 +50,7 @@ capture only the application's own window.
 | `fd3b25a` rc3 | 174 passed | 0 | clean | PASS, 24 dispositioned | passed (16), source and installed | 1 warning (Starlette, legacy tests only) |
 | `d543579` rc4 build commit | **174 passed, 1 failed** in the clean clone | 0 | clean | PASS, 24 dispositioned | passed (16), source and installed | `focused_control_scrolls_into_view` failed; see below. 175 had passed on the uncommitted working tree |
 | `f5ac6a2`..`21cee81` | 175 passed on the extracted `21cee81` archive | 0 | clean | PASS | not re-run | the failing scenario now waits for the layout to settle |
-| **FINAL_REVISION rc4 final tree** | **FINAL_RESULT** | **0** | clean | PASS, 24 dispositioned | installer code unchanged since `d543579` | three consecutive runs in a clean clone |
+| **`7c425fd` rc4 final tree** | **175 passed, 0 skipped, ×3** | **0** | clean | PASS, 24 dispositioned | installer code unchanged since `d543579` | three consecutive runs in a clean clone |
 
 **The failure on the build commit.** `focused_control_scrolls_into_view` failed once in the
 clean clone of `d543579`. It is a test scenario, and it failed on a position measured
