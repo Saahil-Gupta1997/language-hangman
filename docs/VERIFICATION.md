@@ -61,6 +61,16 @@ to after it, and rc5 was left installed with their desktop shortcut restored.
 | `f5ac6a2`..`21cee81` | 175 passed on the extracted `21cee81` archive | 0 | clean | PASS | not re-run | the failing scenario now waits for the layout to settle |
 | `7c425fd` rc4 final tree | 175 passed, 0 skipped, ×3 | 0 | clean | PASS, 24 dispositioned | installer code unchanged since `d543579` | three consecutive runs in a clean clone |
 | **`f2bb6b9` rc5 build commit** | **194 passed** in the clean clone; first run 193 passed, 1 failed (below) | **0** | clean | PASS, 24 dispositioned; 1,538 level-list words structurally valid | passed (17), source and installed | 19 new tests. Five new GUI scenarios were written but not yet in the runner's list (I-11) |
+| **`1c2eb39` rc5 final tree** | **199 passed, 0 skipped, ×3**; an earlier set of three was 199, 199, then 198 passed, 1 failed (below) | **0** | clean | PASS, 24 dispositioned; 1,538 level-list words structurally valid | passed (17) from source; installer code unchanged since `f2bb6b9` | three consecutive runs in a clean clone, each exit 0 |
+
+**The failure on the final tree.** In the first set of three runs on `1c2eb39`, run 3 failed
+`main_window_text_wraps_at_minimum_size` with "application has been destroyed". The window
+had gone before the test finished: it was not a layout failure. In that scenario only the
+app's close handler can destroy the window, and the test had not reached its own cleanup, so
+something probably closed the window from outside; test windows open on the owner's desktop
+while they use the computer. That is the likely explanation, not a proven one, because it
+was not reproduced. The scenario then passed 10 of 10 on its own and a second set of three
+full runs passed (I-12). The failing output stays in `checks-final-first-set/`.
 
 **Five GUI scenarios missed the build-commit run.** The new scenarios existed at `f2bb6b9`,
 but `tests/test_desktop_gui.py` lists scenarios by name and they were not added, so the 194

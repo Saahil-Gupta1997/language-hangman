@@ -1,0 +1,6 @@
+PASS: 30 unique words, 10 per situation, complete fields and contextual examples.
+Editorial heuristic warnings: 24, all dispositioned (7 revised, 17 accepted).
+Independent educator review remains pending.
+PASS: 1538 level-list words in 4 languages: no repeats, three clues each, every letter on the keyboard.
+The level lists have not been reviewed; their accuracy is not checked here.
+content exit=0

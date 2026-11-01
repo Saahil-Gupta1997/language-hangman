@@ -100,6 +100,7 @@ engineering), **Deferred** (accepted for a later release).
 | I-9 | Issue | An audit of the rc4 record on 2026-11-01 found: the D-32 row and M11 gave 41 ms (D-32 also p95 640 ms), not `performance.txt`'s 39 ms and 606 ms; VERIFICATION.md's open and backup rows and the README's backup figure did not match the same file; "13 licence texts" was 12 texts plus the notices file (rc3's "12" was 11 plus it); rc3's 285 ms and 329 ms and the first rc4 build's 1.13 s have no raw record; `build.log` does not name the commit | Engineering | Figures and counts corrected and the unrecorded figures marked. rc3 and rc4 measured again in one session on 2026-11-01: rc3 273–349 ms median, 330–407 ms p95; rc4 44–56 ms, 763–789 ms, so rc4's recorded 39 ms and 606 ms were not reproduced. The rc5 build's commit is recorded beside its log in `revision.txt`, and `build_desktop.ps1` now prints it. Closes when the next build's log names its commit | Open |
 | I-10 | Issue | The first clean-clone test run of `f2bb6b9` was 193 passed, 1 failed: the validation script had pointed `TEMP` at the long scratch folder, so a test's `git init` failed on Windows' path limit ("cannot stat"). Rerun on the same commit with the system temp folder: 194 passed | Engineering | Cause shown by the rerun; the first run's output is kept in `checks-first-run/` | Closed |
 | I-11 | Issue | Five new GUI scenarios were written for rc5 but never added to the list in `tests/test_desktop_gui.py`, so the build commit's 194 passed without them, and a draft of VERIFICATION.md said they had run. Found by adding up the test counts (175 + 19 left no room for them), after the installer was built and validated | Engineering | Added to the list; all five passed on the same application code; included in the final-tree runs. The content of the installer did not need to change | Closed |
+| I-12 | Issue | One of six final-tree runs on `1c2eb39` failed `main_window_text_wraps_at_minimum_size` with "application has been destroyed". Only the close handler can destroy that window and the test had not reached its cleanup, so something probably closed it from outside while the owner was using the computer. Likely, not proven: it was not reproduced | Engineering | Scenario passed 10 of 10 alone; a second set of three full runs passed; the failing output is kept in `checks-final-first-set/`. Reopen if it recurs on a machine nobody is using | Closed |
 | DP-4 | Dependency | Clean Windows machine or account without Python | Owner | G5 run | Open |
 
 ## Decision log
@@ -150,7 +151,7 @@ owner's confirmation before they are quoted as the owner's reasoning.
   exercised by installing, upgrading, recovering and uninstalling it; screenshots were
   checked to contain only the application window. Hypotheses that turned out wrong
   (D-26's first two theories) were recorded and their code removed.
-- **Where the AI's own evidence was wrong.** Incidents I-1 to I-11 record them, including
+- **Where the AI's own evidence was wrong.** Incidents I-1 to I-12 record them, including
   cropped screenshots published with rc2 (I-4) and two rc2 claims that measurement later
   contradicted (I-5). An independent review found the D-30 rollback defect in AI-written
   code; fault-injection tests now cover it. In rc4 the AI's own redesign made the game four

@@ -11,7 +11,7 @@ the word lists yet, and the app says so.**
 
 | Verified by automated and scripted checks on the build machine (Windows 11, 125%) | Still pending: needs people or the owner |
 | --- | --- |
-| 194 automated tests, lint, content and release checks on `f2bb6b9`, the installer's commit; final-tree run to follow | Installing on a clean Windows account without Python (G5) |
+| 199 automated tests, lint, content and release checks on `1c2eb39` (installer built from `f2bb6b9`, same application code) | Installing on a clean Windows account without Python (G5) |
 | Installer built from `f2bb6b9`; install, upgrade from rc4 with its own data, beta import, recovery, uninstall | Keyboard-only use by a person; real 100% and 150% display scaling (G6–G8) |
 | 17-step scripted journey in the installed app, without Python on `PATH` | Review of every word by qualified reviewers, one per language (G9) |
 | Third-party notices installed and checked against every shipped file | Five learner sessions (G10) |
@@ -140,7 +140,7 @@ restore defect fixed in rc3. Every fix was reproduced first and checked afterwar
 are tied to commits. Mistakes in the AI's own work are recorded rather than hidden — including
 the rc4 redesign that slowed the game, which measurement caught before release, and five rc5
 test scenarios that were written but not run until a count exposed them (incidents I-1 to
-I-11). Educator, learner and manual checks are left for people to
+I-12). Educator, learner and manual checks are left for people to
 perform and record. See
 [How AI assistance was used and verified](docs/DELIVERY.md#how-ai-assistance-was-used-and-verified).
 

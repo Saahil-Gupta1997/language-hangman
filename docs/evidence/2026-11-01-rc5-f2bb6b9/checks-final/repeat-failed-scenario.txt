@@ -1,0 +1,10 @@
+repeat 1 exit=0 PASSED main_window_text_wraps_at_minimum_size
+repeat 2 exit=0 PASSED main_window_text_wraps_at_minimum_size
+repeat 3 exit=0 PASSED main_window_text_wraps_at_minimum_size
+repeat 4 exit=0 PASSED main_window_text_wraps_at_minimum_size
+repeat 5 exit=0 PASSED main_window_text_wraps_at_minimum_size
+repeat 6 exit=0 PASSED main_window_text_wraps_at_minimum_size
+repeat 7 exit=0 PASSED main_window_text_wraps_at_minimum_size
+repeat 8 exit=0 PASSED main_window_text_wraps_at_minimum_size
+repeat 9 exit=0 PASSED main_window_text_wraps_at_minimum_size
+repeat 10 exit=0 PASSED main_window_text_wraps_at_minimum_size

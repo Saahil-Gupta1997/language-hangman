@@ -45,8 +45,11 @@ sessions and some owner decisions are still open (see
 
 ## Verification
 
-Automated suite on the build commit `f2bb6b9`: 194 passed, 0 skipped; five more GUI scenarios
-ran afterwards (I-11). Lint, content and release checks clean.
+Automated suite on the final tree (`1c2eb39`): 199 passed, 0 skipped, ×3, in a clean clone. An
+earlier set of three had one failure when a test window was destroyed mid-test; the cause is
+likely outside the app, not proven (I-12). On the build commit `f2bb6b9` the suite was 194
+passed, with five GUI scenarios not yet wired in (I-11). Lint, content and release checks
+clean.
 On the build machine (Windows 11 at 125%): upgrade from rc4 with data created by rc4, the
 17-step journey in the installed app without Python, beta import, recovery at both text sizes,
 restore, uninstall, and the installed licence and notices. Not yet: a clean machine, real

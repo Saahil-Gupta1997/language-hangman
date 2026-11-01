@@ -10,7 +10,7 @@ filled in from automated output.
 | # | Gate | Blocking | Status | Owner | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | G1 | P0 defects fixed with regression tests: D-01, D-02, D-03 (rc2) and D-30 (rc3) | Yes | **Met** | Engineering | VERIFICATION.md RQ-01..RQ-11 |
-| G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the build commit** (194 passed, 0 skipped, `f2bb6b9`; a first run failed 1 test on the harness's own temp path, and 5 new GUI scenarios ran afterwards; see VERIFICATION.md). Final-tree run to follow | Engineering | evidence/…/checks, checks-final |
+| G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the final tree** (199 passed, 0 skipped, ×3, `1c2eb39`). An earlier set of three had one failure, and the build commit's run left out 5 new GUI scenarios; both are explained in VERIFICATION.md | Engineering | evidence/…/checks, checks-final |
 | G3 | Installer built from the candidate commit in a clean checkout; SHA256 recorded | Yes | **Met** | Engineering | evidence/…/build-output |
 | G4 | Install, upgrade from the previous release, beta import, recovery, uninstall on Windows | Yes | **Met on the build machine** (not a clean machine) | Engineering | VERIFICATION.md installer steps 1–10 |
 | G16 | Performance measured on the candidate: the game's hot path no slower than the previous release | Yes | **Met** against rc4, measured in one session on 2026-11-01: guess to redrawn screen, travel cards, median 40–42 ms against 28–51 ms and 95th percentile 555–589 ms against 559–583 ms. Against rc3 the round-ending guess stays about twice as slow, as in rc4 | Engineering | VERIFICATION.md performance |
@@ -124,7 +124,7 @@ are still there.
 | Third-party notices | `packaging/third-party/`; installed next to the program | 15 components, 12 licence texts and the notices file |
 | Source archive | release package | see `SHA256SUMS.txt` in the release package |
 | Build log | `docs/evidence/2026-11-01-rc5-f2bb6b9/build-output/` | `revision.txt` names the commit; the log itself does not (I-9) |
-| Automated results | `docs/evidence/2026-11-01-rc5-f2bb6b9/checks/` | build commit: 194 passed; the first run's failure kept in `checks-first-run/`; final tree in `checks-final/` |
+| Automated results | `docs/evidence/2026-11-01-rc5-f2bb6b9/checks/` | build commit: 194 passed; the first run's failure kept in `checks-first-run/`; final tree in `checks-final/`, with its earlier failed set in `checks-final-first-set/` |
 | Word conversion | `scripts/build_level_words.py`, `docs/evidence/2026-11-01-rc5-f2bb6b9/level-list-conversion.txt` | 1,538 words kept, 62 rows left out |
 | Defect reproductions (D-29, D-30, D-31, T-28) | `docs/evidence/2026-09-19-rc3-fd3b25a/defects/` | rc2 code vs `fd3b25a` |
 | Installer validation | `docs/evidence/2026-11-01-rc5-f2bb6b9/installer-validation/` | steps 01–10, Inno Setup logs, screenshots |
