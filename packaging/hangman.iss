@@ -1,6 +1,6 @@
 ; The build script passes /DMyAppVersion from src/__init__.py; this default must match it.
 #ifndef MyAppVersion
-  #define MyAppVersion "1.0.0rc6"
+  #define MyAppVersion "1.0.0rc7"
 #endif
 [Setup]
 AppId={{D16E40D9-2223-4FBE-A30C-B2A17B3D4506}
@@ -20,6 +20,10 @@ SolidCompression=yes
 WizardStyle=modern
 CloseApplications=yes
 RestartApplications=no
+[InstallDelete]
+; Clear the program before copying, so a file a new build dropped cannot stay behind (D-34).
+; Learner data is outside {app}.
+Type: filesandordirs; Name: "{app}\_internal"
 [Files]
 Source: "..\dist\LanguageHangman\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\LICENSE"; DestDir: "{app}"; DestName: "LICENSE.txt"; Flags: ignoreversion

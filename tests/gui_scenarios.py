@@ -415,6 +415,20 @@ def board_stays_put_whatever_the_feedback_says(data):
         app.close_application()
 
 
+def clues_leave_the_card_border_alone(data):
+    """D-35: the clue lines sit inside the card, so its border stays unbroken."""
+    app = signed_in_app(data)
+    try:
+        app.show_practice()
+        app.start_session()
+        app.update()
+        clues, panel = app.board_clues, app.board_clues.master
+        assert clues.winfo_x() > 0
+        assert clues.winfo_x() + clues.winfo_width() < panel.winfo_width()
+    finally:
+        app.close_application()
+
+
 def long_phrases_fit_the_board_at_minimum_size(data):
     """The longest words wrap at spaces and stay inside the canvas at every size."""
     from src.desktop.application import MINIMUM_WINDOW
@@ -453,7 +467,7 @@ def level_word_card_shows_its_clues(data):
         assert word in shown
         assert "Synonyms" in shown and "Association" in shown
         assert "Example" not in shown and not any(t.startswith("Say it like") for t in shown)
-        assert any("not been reviewed" in text for text in shown)
+        assert not any("not been reviewed" in text for text in shown)
         title = next(t for t in shown if t.startswith("German"))
         assert title == "German · Beginner · Easy"
     finally:
@@ -509,6 +523,7 @@ SCENARIOS = {
         removed_screens_and_settings_stay_removed,
         plain_keys_reveal_accented_letters,
         board_stays_put_whatever_the_feedback_says,
+        clues_leave_the_card_border_alone,
         long_phrases_fit_the_board_at_minimum_size,
         level_word_card_shows_its_clues,
         endless_play_runs_until_end_session,

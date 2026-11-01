@@ -6,6 +6,7 @@ later rounds, against either a fresh curated database or one imported from legac
 
 import random
 import sqlite3
+from pathlib import Path
 
 import pytest
 
@@ -281,13 +282,25 @@ def test_imported_database_practice_uses_word_lists_only(imported):
     assert legacy_queue() == legacy_before
 
 
-def test_why_this_word_describes_the_desktop_rule_not_a_category():
-    from src.desktop.practice_view import PracticeView
+def test_shipped_text_names_nothing_that_was_removed():
+    """D-36: removing a feature must also remove what the screens say about it."""
+    root = Path(__file__).resolve().parents[1]
+    removed = (
+        "teaching card",
+        "travel card",
+        "word cards",
+        "why this word",
+        "language qualification",
+    )
+    for path in (root / "src" / "desktop").glob("*.py"):
+        text = path.read_text(encoding="utf-8").lower()
+        assert not [phrase for phrase in removed if phrase in text], path.name
 
-    session = {"situation": GENERAL_SITUATION, "language": "spanish"}
-    review = PracticeView.selection_explanation({**session, "practice_mode": "review"})
-    standard = PracticeView.selection_explanation({**session, "practice_mode": "standard"})
-    assert "at this level" in review and "due words come first" in review
-    assert "one of the Spanish words at this level" in standard
-    for text in (review, standard):
-        assert "focus on" not in text.lower()
+
+def test_upgrades_clear_the_program_before_copying():
+    """D-34: without this, a file a new build dropped stays in the program folder."""
+    script = (Path(__file__).resolve().parents[1] / "packaging" / "hangman.iss").read_text(
+        encoding="utf-8"
+    )
+    section = script.split("[InstallDelete]")[1].split("[Files]")[0]
+    assert 'Type: filesandordirs; Name: "{app}\\_internal"' in section

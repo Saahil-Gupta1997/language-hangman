@@ -241,7 +241,7 @@ class PracticeView:
         self.button(entry_row, "Submit guess", self.submit_guess, side="left", variant="primary")
         self.bind("<Return>", lambda event: self.submit_guess())
         self.board_status = self.status_card(right, state)
-        self.board_clues = self.clue_card(right, state, session)
+        self.board_clues = self.clue_card(right, state)
         self.board_round_key = state.round_key
         self.board_clue_count = len(set(get_revealed_hints(state).values()))
         self.guess_entry.focus_set()
@@ -258,23 +258,16 @@ class PracticeView:
         label.configure(text_color=colour)
         return label
 
-    def clue_card(self, parent, state, session):
+    def clue_card(self, parent, state):
         panel = card(parent)
         panel.pack(fill="x")
-        self.clue_session = session
         ctk.CTkLabel(
             panel, text="Clues", anchor="w", font=ui_font(13, bold=True), text_color=MUTED
-        ).pack(fill="x", padx=2 * SPACE, pady=(SPACE + 4, 0))
+        ).pack(fill="x", padx=(2 * SPACE + 2, 2 * SPACE), pady=(SPACE + 4, 0))
+        # Inset by the border's width: a full-width frame paints over the card's edge (D-35).
         clues = ctk.CTkFrame(panel, fg_color="transparent")
-        clues.pack(fill="x")
+        clues.pack(fill="x", padx=2, pady=(0, SPACE))
         self.fill_clues(clues, state)
-        self.text(
-            f"Why this word: {self.selection_explanation(session)}",
-            parent=panel,
-            muted=True,
-            size=13,
-            pady=(SPACE, SPACE + 4),
-        )
         return clues
 
     def fill_clues(self, parent, state):
@@ -307,35 +300,6 @@ class PracticeView:
                 bold=True,
             )
             self.button(self.body, "Finish session", self.end_session, variant="primary", width=220)
-        self.text(
-            "This result contributes to game progress, not a language qualification.",
-            muted=True,
-            size=13,
-        )
-
-    @staticmethod
-    def selection_explanation(session):
-        """Describe the desktop selection rule; the legacy engine's reason text is not used."""
-        if session["situation"] == GENERAL_SITUATION:
-            if session["practice_mode"] == "review":
-                return (
-                    "you have practised it before at this level and it is in your review "
-                    "queue (due words come first)."
-                )
-            return (
-                f"one of the {session['language'].title()} words at this level; words you "
-                "have not played recently are chosen first when possible."
-            )
-        situation = str(session["situation"]).replace("_", " ").title()
-        if session["practice_mode"] == "review":
-            return (
-                f"you have practised it before in {situation} and it is in your review "
-                "queue (due words come first)."
-            )
-        return (
-            f"one of the 10 {situation} words; words you have not played recently are "
-            "chosen first when possible."
-        )
 
     def guess_letter(self, letter):
         """Clicking a letter key takes the same route as typing it."""
@@ -402,5 +366,4 @@ class PracticeView:
                 row, text=label, anchor="w", width=96, font=ui_font(13, bold=True), text_color=MUTED
             ).pack(side="left", anchor="n", pady=2)
             self.text(value, parent=row, size=15, pady=2)
-        self.text(NOT_REVIEWED, parent=panel, muted=True, size=13, pady=(2, 2))
-        ctk.CTkLabel(panel, text="", height=2).pack()
+        ctk.CTkLabel(panel, text="", height=2).pack(pady=(0, 3))  # clear of the border (D-35)

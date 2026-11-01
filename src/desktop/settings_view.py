@@ -201,6 +201,6 @@ class SettingsView:
         )
         self.text(
             "Release candidate: a clean-computer installation, manual keyboard and display "
-            "checks, an independent review of the teaching cards and learner sessions are "
+            "checks, an independent review of the word lists and learner sessions are "
             "still required before a final 1.0 release."
         )
