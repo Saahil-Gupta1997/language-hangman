@@ -75,6 +75,7 @@ shortcut. rc9 has not yet been started on their real data.
 | `e2f34e5` rc8 final tree | 215 passed, 0 skipped, ×3 | 0 | clean | PASS, 1,544 words structurally valid | passed (17) from source; installer code unchanged since `f66aa51` | three consecutive runs in a clean clone, each exit 0 (`checks-final/` in rc8's folder) |
 | `90a2a3a` rc8 on GitHub | Linux passed; Windows **214 passed, 1 failed** | 0 | clean | PASS | Windows skipped | first run ever; found D-38 (`github-actions.txt`) |
 | **`0d2b821` rc9 build commit** | **216 passed** in the clean clone; GitHub Linux and Windows jobs passed | **0** | clean | PASS, 1,544 words structurally valid | passed (17), source, installed and on GitHub's Windows machine | one GUI scenario added; it and the extended text sweep fail on rc8's code |
+| **`479ce34` rc9 final tree** | **216 passed, 0 skipped, ×3** | **0** | clean | PASS, 1,544 words structurally valid | passed (17) from source; installer code unchanged since `0d2b821` | three consecutive runs in a clean clone, each exit 0 (`checks-final/`). Run 2 took 12 minutes against about 4; Windows logged about 5 minutes of standby during it, which explains part of that |
 
 **GitHub's first Windows run.** On `90a2a3a`, `window_opens_inside_the_work_area` failed on GitHub's
 1024×720 screen, with the window's right edge at 1032. This machine could not show it: at 125% it is

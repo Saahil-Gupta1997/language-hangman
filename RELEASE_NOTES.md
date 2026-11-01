@@ -35,8 +35,8 @@ supersedes rc8 for every purpose.
 
 ## Verification
 
-Automated suite on the build commit `0d2b821`: 216 passed, 0 skipped, in a clean clone. Lint, content
-and release checks clean. GitHub Actions passed on Linux and Windows, including the smoke journey on
+Automated suite on the final tree (`479ce34`): 216 passed, 0 skipped, ×3, in a clean clone. On the
+build commit `0d2b821`: 216 passed, 0 skipped. Lint, content and release checks clean. GitHub Actions passed on Linux and Windows, including the smoke journey on
 Windows. On the build machine (Windows 11 at 125%): upgrade from rc8 with data created by rc8, the
 17-step journey in the installed app without Python, beta import, recovery at both text sizes,
 restore, uninstall, and the installed licence and notices. The owner reports a clean install on a

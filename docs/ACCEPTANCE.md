@@ -10,7 +10,7 @@ Automated tests and AI-run checks never substitute for a manual check.
 | # | Gate | Blocking | Status | Owner | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | G1 | P0 defects fixed with regression tests: D-01, D-02, D-03 (rc2) and D-30 (rc3) | Yes | **Met** | Engineering | VERIFICATION.md RQ-01..RQ-11 |
-| G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the build commit** (216 passed, 0 skipped, `0d2b821`) | Engineering | evidence/…/checks |
+| G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the final tree** (216 passed, 0 skipped, ×3, `479ce34`) and on the build commit (216 passed, `0d2b821`) | Engineering | evidence/…/checks, checks-final |
 | G3 | Installer built from the candidate commit in a clean checkout; SHA256 recorded | Yes | **Met** | Engineering | evidence/…/build-output |
 | G4 | Install, upgrade from the previous release, beta import, recovery, uninstall on Windows | Yes | **Met on the build machine** (not a clean machine) | Engineering | VERIFICATION.md installer steps 1–10 |
 | G16 | Performance measured on the candidate: the game's hot path no slower than the previous release | Yes | **Met** against rc8, measured in one session on 2026-11-01, three word lists, three runs each: guess to redrawn screen, median 32–41 ms against 32–41 ms, 95th percentile 463–564 ms against 443–553 ms, longest guess 624 ms against 611 ms. Level. Against rc3 the round-ending guess is slower, as in rc4 to rc8 | Engineering | VERIFICATION.md performance |
@@ -126,7 +126,7 @@ are still there.
 | Third-party notices | `packaging/third-party/`; installed next to the program | 15 components, 12 licence texts and the notices file |
 | Source archive | release package | see `SHA256SUMS.txt` in the release package |
 | Build log | `docs/evidence/2026-11-01-rc9-0d2b821/build-output/` | line 11 of `build.log` names the commit; `revision.txt` repeats it |
-| Automated results | `docs/evidence/2026-11-01-rc9-0d2b821/checks/`, `github-actions.txt` | build commit: 216 passed; GitHub Actions runs |
+| Automated results | `docs/evidence/2026-11-01-rc9-0d2b821/checks/`, `github-actions.txt` | build commit: 216 passed; final tree in `checks-final/`, 216 passed ×3; GitHub Actions runs |
 | Word conversion | `scripts/build_level_words.py`, `docs/evidence/2026-11-01-rc6-e0aa9c0/level-list-conversion.txt` | 1,544 words kept, 56 repeated rows left out; rc9 changed only the files' notes |
 | Defect reproductions (D-29, D-30, D-31, T-28) | `docs/evidence/2026-09-19-rc3-fd3b25a/defects/` | rc2 code vs `fd3b25a` |
 | Defect reproduction (D-33) | `docs/evidence/2026-11-01-rc6-e0aa9c0/d33-board-moves.txt`, `d33-columns-diagnosis.txt` | `2bfbd61` vs `e0aa9c0`; why the columns became equal |

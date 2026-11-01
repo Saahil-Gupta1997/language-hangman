@@ -10,7 +10,7 @@ final approval.**
 
 | Verified by automated and scripted checks | Reported by the owner on rc8, without a detailed record |
 | --- | --- |
-| 216 automated tests, lint, content and release checks on `0d2b821` | Clean install on a separate system (G5) |
+| 216 automated tests, lint, content and release checks on `479ce34`, three times (installer built from `0d2b821`, same application code) | Clean install on a separate system (G5) |
 | GitHub Actions on Linux and Windows, including the smoke journey on Windows | Keyboard-only use (G6) |
 | Installer built from `0d2b821`; licence page shown; install, upgrade from rc8 with its own data, beta import, recovery, uninstall | Display at real 100% (G7) |
 | 17-step scripted journey in the installed app, without Python on `PATH` | Recovery by hand (G8) |

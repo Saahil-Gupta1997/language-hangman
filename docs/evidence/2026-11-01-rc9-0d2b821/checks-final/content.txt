@@ -1,0 +1,3 @@
+PASS: 1544 words in 4 languages: no repeats, three clues each, every letter on the A-Z keys.
+This checks their structure; their accuracy is not checked here.
+content exit=0

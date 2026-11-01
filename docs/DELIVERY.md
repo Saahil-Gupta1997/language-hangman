@@ -37,7 +37,8 @@ engineering), **Deferred** (accepted for a later release).
 | `f66aa51` | 1.0.0rc8 release candidate (installer `f4b158b3…119288` built from this commit): MIT for the word lists and icon, licence page in setup |
 | `e2f34e5`, `90a2a3a` | rc8 documents, evidence and media, tested three times; rc8 source archive (tag `v1.0.0rc8` on `90a2a3a`), first pushed to GitHub. No application change |
 | `0d2b821` | **1.0.0rc9 release candidate** (installer `495c646d…ede1f` built from this commit): window centring and the owner's gate decisions |
-| later commits | documents and evidence only; no application change (check with `git diff 0d2b821 -- src desktop_app.py packaging`) |
+| `479ce34` | rc9 documents, evidence and media; the final tree, tested three times |
+| later commits | documents and evidence only; rc9 source archive (tag `v1.0.0rc9`). No application change (check with `git diff 0d2b821 -- src desktop_app.py packaging`) |
 
 ## Defect and task register
 
