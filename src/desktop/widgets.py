@@ -283,7 +283,7 @@ def card(parent, fg_color=SURFACE, border=True):
     )
 
 
-def responsive_split(parent, threshold=900, weights=(3, 2)):
+def responsive_split(parent, threshold=900, weights=(1, 1)):
     """Two panes side by side in a wide window, stacked in a narrow one.
 
     Returns (container, left, right). The window's supported minimum is 800 logical pixels,
