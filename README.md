@@ -1,25 +1,55 @@
 # Language Hangman Desktop
 
-An offline Windows app for practising vocabulary through Hangman: 1,544 words in English,
-Spanish, Italian and German at five levels. It is built with Python, CustomTkinter and SQLite.
-It is rule-based software built with AI assistance: it contains no machine learning, chatbot or
-network service, and it needs no account or internet connection.
+## Project Manager Case Study — Delivering Language Hangman 1.0
 
-**Status: 1.0.0, released on the owner's approval on 2026-11-01.**
+**Role:** Product Owner & AI-Assisted Delivery Lead  
+**Product:** Offline Windows vocabulary-learning application  
+**Release:** v1.0.0 — November 1, 2026  
+**Technology:** Python, CustomTkinter, SQLite, GitHub Actions  
+**Delivery approach:** Iterative development using AI coding assistance with documented decisions, defect management, testing and release acceptance.
 
-| Verified by automated and scripted checks | Reported by the owner on 1.0.0rc8, without a detailed record |
-| --- | --- |
-| 216 automated tests, lint, content and release checks on `12afdd8`, three times (installer built from `5f89265`, same application code) | Clean install on a separate system (G5) |
-| GitHub Actions on Linux and Windows, including the smoke journey on Windows | Keyboard-only use (G6) |
-| Installer built from `5f89265`; licence page shown; install, upgrade from rc9 with its own data, beta import, recovery, uninstall | Display at real 100% (G7) |
-| 17-step scripted journey in the installed app, without Python on `PATH` | Recovery by hand (G8) |
-| Third-party notices installed and checked against every shipped file | |
-| Window layout and the game board measured at the minimum size (real 125%, emulated 100% and 150%) | |
+### The challenge
 
-Automated GUI checks call the app's own handlers and Tk's focus order; they are not a person
-using a keyboard. The installer checks ran on the build machine, which has had Python and
-earlier versions installed. Gates, evidence and the go/no-go record are in
-[docs/ACCEPTANCE.md](docs/ACCEPTANCE.md).
+Turn an existing vocabulary-game prototype into a distributable Windows application with reliable gameplay, persistent learner progress, data recovery and a usable desktop interface.
+
+The goal was to deliver a stable, self-contained application without requiring users to create an online account or depend on a cloud service.
+
+### My responsibilities
+
+As product owner, I directed the application's evolution, reviewed functionality, prioritized changes, decided which features to retain or remove, evaluated identified risks and approved the final release.
+
+Implementation, automated testing and substantial technical documentation were performed with AI coding assistance, particularly Claude Code. My role centered on requirements, product decisions, review and release ownership rather than personally writing the application code.
+
+### Key decisions and delivery challenges
+
+| Area | Decision or action | Delivery significance |
+|---|---|---|
+| Scope | Consolidated vocabulary practice into four languages and five levels, removing unnecessary screens and options | Simplified the user experience |
+| Architecture | Delivered an offline, rule-based desktop application rather than an ML-dependent service | Predictable behavior and no ongoing AI inference costs |
+| Performance | A UI redesign introduced a major response-time regression; the issue was measured and the interface revised | Demonstrated why performance checks must precede release |
+| Reliability | Addressed backup, recovery, database corruption and rollback defects | Reduced the risk of losing learner progress |
+| Release governance | Used defect priorities, RAID tracking, acceptance gates, versioned evidence and go/no-go decisions | Established a documented basis for release approval |
+
+### Delivery results
+
+- **1,544 vocabulary words** across English, Spanish, Italian and German.
+- **216 automated tests**, with recorded successful runs on the final application code.
+- **17-step scripted desktop journey** and GitHub Actions checks on Windows and Linux.
+- **34–48 ms typical guess-to-redraw times** in the recorded build-machine benchmarks.
+- Windows installer with backup, restore, recovery and upgrade-preservation checks.
+- Version 1.0.0 approved with documented limitations and release evidence.
+
+### Limitations and lessons
+
+Technical verification does not establish educational effectiveness. The repository does not contain independent evidence that the vocabulary content is accurate or that learners improve through use. Some manual checks were owner-reported from an earlier release candidate rather than repeated on the final build.
+
+The project reinforced three delivery principles: **measure the impact of changes, challenge AI-generated implementation and evidence, and make release risks visible before approval.**
+
+### Supporting evidence
+
+[Delivery decisions and RAID log](docs/DELIVERY.md) · [Test and verification results](docs/VERIFICATION.md) · [Release acceptance](docs/ACCEPTANCE.md) · [Architecture](docs/ARCHITECTURE.md) · [2½-minute product demo](docs/media/language-hangman-1.0.0-demo.mp4)
+
+---
 
 ## Demo
 
