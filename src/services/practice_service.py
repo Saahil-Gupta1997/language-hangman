@@ -11,6 +11,8 @@ from src.models.game_round import GameRound
 from src.models.learning_session import LearningSession
 from src.services.game_service import GameService
 from src.services.hint_service import sync_auto_revealed_hints
+from src.utils.constants import ENDLESS_ROUNDS
+from src.utils.helpers import utc_now_iso
 
 
 class PracticeService:
@@ -100,10 +102,15 @@ class PracticeService:
                 if next_round:
                     next_round.active_seconds = 0.0
                 elif session.completed_rounds < session.planned_rounds:
+                    planned = (
+                        ""
+                        if session.planned_rounds >= ENDLESS_ROUNDS
+                        else f" of {session.planned_rounds}"
+                    )
                     payload["notice"] = (
-                        f"This session ended after {session.completed_rounds} of "
-                        f"{session.planned_rounds} rounds because no more eligible words "
-                        "remain for it. Completed rounds are saved."
+                        f"This session ended after {session.completed_rounds}{planned} "
+                        "rounds because no more eligible words remain for it. "
+                        "Completed rounds are saved."
                     )
                 payload["next_round"] = asdict(next_round) if next_round else None
             payload["round"] = asdict(game_round)
@@ -141,6 +148,31 @@ class PracticeService:
                         (payload["round"].get("active_seconds") or 0) + now - self._last_tick
                     )
                     self._write(connection, user_id, payload)
+        self._last_tick = None
+
+    def end(self, user_id):
+        """Stop now: finished words stay saved and the unfinished word is dropped.
+
+        The session counts as completed if at least one word was finished.
+        """
+        with transaction(self.db_path) as connection:
+            row = connection.execute(
+                "SELECT payload FROM active_practice WHERE user_id=?", (user_id,)
+            ).fetchone()
+            if row:
+                session = json.loads(row[0])["session"]
+                finished = session["completed_rounds"] > 0
+                connection.execute(
+                    "UPDATE learning_sessions SET status=?, completed_at=? "
+                    "WHERE id=? AND user_id=? AND status='active'",
+                    (
+                        "completed" if finished else "abandoned",
+                        utc_now_iso() if finished else None,
+                        session["session_id"],
+                        user_id,
+                    ),
+                )
+            connection.execute("DELETE FROM active_practice WHERE user_id=?", (user_id,))
         self._last_tick = None
 
     def discard(self, user_id):

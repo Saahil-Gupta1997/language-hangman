@@ -36,8 +36,7 @@ WORD_LEVELS = ("beginner", "novice", "intermediate", "advanced", "expert")
 PRACTICE_LANGUAGES = ("english", "spanish", "italian", "german")
 GENERAL_SITUATION = "general"
 BOARD_LETTERS = "abcdefghijklmnopqrstuvwxyz"
-# Only the letters the level lists use: a key that can never be right would be a trap.
-EXTRA_LETTERS = {"spanish": "áéíñóú", "italian": "à", "german": "äöüß"}
+ENDLESS_ROUNDS = 1_000_000  # planned rounds for a session that runs until the learner stops
 WORD_CATEGORIES = ("noun", "verb", "adjective", "adverb")
 DEFAULT_PREFERRED_CATEGORIES = WORD_CATEGORIES
 SITUATIONS = (

@@ -5,9 +5,8 @@
 Run once to create src/desktop/content/levels/; the JSON files are then the source of truth.
 The sheet is read with the standard library, so the app needs no Excel dependency.
 
-Every row is kept as written apart from three checked changes, all reported here: a word that
-repeats within a language keeps only its lowest level, an English word that is already a
-travel card is left out (its row would overwrite the card), and capitals are normalised, which
+Every row is kept as written apart from two checked changes, both reported here: a word that
+repeats within a language keeps only its lowest level, and capitals are normalised, which
 keeps German nouns and German phrases as written. Nothing here checks accuracy: a qualified
 reviewer has not seen this content (ACCEPTANCE.md G9).
 """
@@ -75,7 +74,7 @@ def spelled(word, language, category):
     return word[0].lower() + word[1:]
 
 
-def convert(rows, language, reserved):
+def convert(rows, language):
     """Return the kept word entries and a count of what was left out."""
     candidates = []
     for number, cells in rows[1:]:
@@ -87,9 +86,6 @@ def convert(rows, language, reserved):
     kept, seen, left_out = [], set(), Counter()
     for _, number, word, category, level, cells in sorted(candidates, key=lambda row: row[:2]):
         key = word.casefold()
-        if key in reserved:
-            left_out["already a travel card"] += 1
-            continue
         if key in seen:
             left_out["repeat of a word at the same or a lower level"] += 1
             continue
@@ -125,14 +121,11 @@ def convert(rows, language, reserved):
 
 def main(sheet_path):
     sheets = read_rows(sheet_path)
-    cards = json.loads((OUTPUT.parent / "english.json").read_text(encoding="utf-8"))["words"]
-    travel = {card["word"].casefold() for card in cards}
     OUTPUT.mkdir(exist_ok=True)
     total = 0
     for sheet in SHEETS:
         language = sheet.lower()
-        reserved = travel if language == "english" else set()
-        words, left_out = convert(sheets[sheet], language, reserved)
+        words, left_out = convert(sheets[sheet], language)
         description = (
             f"{sheet} words at five levels, converted from the owner's words.xlsx. "
             "Clues are in English. Not yet reviewed."

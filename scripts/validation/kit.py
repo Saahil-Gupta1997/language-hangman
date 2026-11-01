@@ -175,15 +175,14 @@ It is not code-signed: Windows SmartScreen will say "unknown publisher".
                             Gates G5-G8: clean install on a Windows account without
                             Python, keyboard only, real 100/125/150% display scaling,
                             and recovery through the installed app.
-2-content-review-worksheet  For a qualified English teacher; roughly 2 hours (estimate).
-                            Gate G9: one row per teaching card, plus the intended-learner
-                            profile to confirm or correct.
+2-content-review-worksheet  For every reviewer. Gate G9: what to check on each word, plus
+                            the intended-learner profile to confirm or correct.
 3-learner-sessions          For a facilitator; roughly 30-45 minutes per learner
                             (estimate), five learners. Gate G10: consent, tasks, what to
-                            record, and the record table. Sessions use the English travel
-                            cards unless the owner decides otherwise.
+                            record, and the record table. Sessions use the English Beginner
+                            list unless the owner decides otherwise.
 4-level-list-review-*.csv   One sheet per language for a qualified reviewer of that
-                            language. Gate G9: 1,538 words in all; open in Excel and fill
+                            language. Gate G9: 1,544 words in all; open in Excel and fill
                             in the blank columns. Nobody has reviewed these words yet.
 
 Please return the completed record tables (a photo or scan is fine) with the tester's or

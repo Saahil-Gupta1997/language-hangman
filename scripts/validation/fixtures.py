@@ -21,6 +21,7 @@ from src.services.auth_service import AuthService
 from src.services.curated_content import seed_curated
 from src.services.practice_service import PracticeService
 from src.utils.config import DATABASE_PATH
+from src.utils.constants import GENERAL_SITUATION
 
 SETTINGS = {
     "language": "english",
@@ -28,7 +29,7 @@ SETTINGS = {
     "difficulties": ["beginner"],
     "rounds": 3,
     "game_mode": "easy",
-    "situation": "restaurant",
+    "situation": GENERAL_SITUATION,
     "practice_mode": "standard",
     "review_policy": "prefer_review",
     "show_hint_immediately": False,
@@ -93,7 +94,7 @@ def performance_data(folder, profiles=5, rounds=5000, played=150):
     auth = AuthService(database)
     heavy = auth.register_user("heavy", "heavy-pass-2026", target_language="english")
     service = PracticeService(database, curated=True)
-    settings = dict(SETTINGS, rounds=10, situation="hotel")
+    settings = dict(SETTINGS, rounds=10)
 
     def play(user, count):
         done = 0

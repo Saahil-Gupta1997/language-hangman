@@ -45,10 +45,10 @@ def practice_dropdowns_change_from_the_keyboard(data):
     try:
         app.show_practice()
         for menu, first, second in (
-            (app.situation, "Restaurant", "Airport"),
+            (app.language, "English", "Spanish"),
+            (app.level, "Beginner", "Novice"),
             (app.mode, "Easy", "Hard"),
-            (app.rounds, "3", "5"),
-            (app.focus, "Standard", "Review"),
+            (app.focus, "All words", "Review my words"),
         ):
             assert str(menu._canvas.cget("takefocus")) == "1", "dropdown must take Tab focus"
             assert menu.get() == first
@@ -307,70 +307,89 @@ def letter_keys_guess_on_click(data):
         app.close_application()
 
 
-def visible_situation(app):
-    app.update()
-    return bool(app.situation.master.winfo_ismapped())
-
-
-def word_set_choices_follow_the_language(data):
-    """Only English has travel cards, and Situation only applies to them."""
+def removed_screens_and_settings_stay_removed(data):
+    """Word cards, travel cards and the rounds question are gone from the app."""
     app = signed_in_app(data)
     try:
+        labels = [
+            widget.cget("text")
+            for widget in every_widget(app.navigation)
+            if isinstance(widget, ctk.CTkButton)
+        ]
+        assert "Word cards" not in labels and "Practice" in labels, labels
         app.show_practice()
-        assert app.level.get() == "Travel cards" and visible_situation(app)
-        press(app.level, "<Down>")
-        assert app.level.get() == "Beginner" and not visible_situation(app)
-        press(app.level, "<Up>")
-        assert app.level.get() == "Travel cards" and visible_situation(app)
-        press(app.language, "<Down>")
-        assert app.language.get() == "Spanish"
-        assert app.level.get() == "Beginner", "Spanish has no travel cards"
-        assert "Travel cards" not in app.level.cget("values") and not visible_situation(app)
-        assert "not been reviewed" in app.setup_note.cget("text")
-        press(app.level, "<Down>")
-        assert app.level.get() == "Novice"
-        press(app.language, "<Up>")
-        assert app.language.get() == "English" and app.level.get() == "Novice"
-        assert "Travel cards" in app.level.cget("values")
+        app.update()
+        assert not hasattr(app, "show_words")
+        assert not hasattr(app, "rounds") and not hasattr(app, "situation")
+        assert app.level.cget("values") == [
+            "Beginner",
+            "Novice",
+            "Intermediate",
+            "Advanced",
+            "Expert",
+        ]
+        shown = [w.cget("text") for w in every_widget(app.body) if isinstance(w, ctk.CTkLabel)]
+        assert any("not been reviewed" in text for text in shown)
+        assert not any("Travel" in text or "Standard" in text for text in shown), shown
     finally:
         app.close_application()
 
 
-def start_level_round(app, language, level, word):
-    """Start a level session, then put ``word`` on the board so the test can name its letters."""
+def set_round_word(app, word):
+    """Put ``word`` in the saved round, so a test can name the letters it guesses."""
+    from src.db.transaction import transaction
+
+    with transaction(app.practice.db_path) as connection:
+        payload = app.practice._read(connection, app.user["id"])
+        payload["round"]["word"] = word
+        app.practice._write(connection, app.user["id"], payload)
     app.show_practice()
-    app.language.set(language)
-    app.language_changed(language)
-    app.level.set(level)
-    app.word_set_changed(level)
-    app.start_session()
+    app.update()
+
+
+def start_level_round(app, language, level, word):
+    """Start a session on ``word`` and return the round as the board draws it."""
     from src.models.game_round import GameRound
 
-    # Draw this word on the real board; the session itself keeps the word it chose.
-    state = GameRound(**{**app.payload["round"], "word": word})
-    app.board.redraw(state)
+    app.show_practice()
+    app.language.set(language)
+    app.level.set(level)
+    app.start_session()
+    set_round_word(app, word)
+    return GameRound(**app.payload["round"])
+
+
+def click_key(app, letter):
+    board = app.board
+    _, _, (left, top, right, bottom) = board._keys[letter]
+    factor = board.scaling()
+    board.event_generate(
+        "<Button-1>",
+        x=round((left + right) / 2 * factor),
+        y=round((top + bottom) / 2 * factor),
+        when="now",
+    )
     app.update()
-    return state
 
 
-def accent_keys_are_on_the_board_for_each_language(data):
+def plain_keys_reveal_accented_letters(data):
+    """The board is plain A-Z, and a plain letter fills in every accented form of it."""
+    from src.models.game_round import GameRound
+
     app = signed_in_app(data)
     try:
-        for language, extras in (("Spanish", "áéíñóú"), ("Italian", "à"), ("German", "äöüß")):
-            app.show_practice()
-            app.language.set(language)
-            app.language_changed(language)
-            app.start_session()
-            app.update()
-            assert set(extras) <= set(app.board._keys), language
-            assert len(app.board._keys) == 26 + len(extras)
-            labels = [
-                app.board.itemcget(item, "text")
-                for item in app.board.find_all()
-                if app.board.type(item) == "text"
-            ]
-            app.practice.discard(app.user["id"])
-        assert "ß" in labels and "SS" not in labels, "ß must be drawn as itself"
+        start_level_round(app, "Spanish", "Beginner", "niño")
+        assert sorted(app.board._keys) == list("abcdefghijklmnopqrstuvwxyz")
+        click_key(app, "n")
+        state = GameRound(**app.payload["round"])
+        assert state.masked_letters == ["n", "_", "ñ", "_"], state.masked_letters
+        assert app.board._keys["n"][1], "the key should be marked used"
+        app.practice.discard(app.user["id"])
+
+        start_level_round(app, "German", "Beginner", "Straße")
+        click_key(app, "s")
+        state = GameRound(**app.payload["round"])
+        assert state.masked_letters == ["S", "_", "_", "_", "ß", "_"], state.masked_letters
     finally:
         app.close_application()
 
@@ -403,7 +422,6 @@ def level_word_card_shows_its_clues(data):
     try:
         app.show_practice()
         app.language.set("German")
-        app.language_changed("German")
         app.start_session()
         word = app.payload["round"]["word"]
         for letter in sorted({c.lower() for c in word if c.isalpha()}):
@@ -421,23 +439,36 @@ def level_word_card_shows_its_clues(data):
         app.close_application()
 
 
-def word_cards_page_lists_a_level_without_a_card_per_word(data):
+def endless_play_runs_until_end_session(data):
+    """More rounds than the old longest session, then End session goes straight to Reports."""
+    from src.services.desktop_storage import progress_report
+
     app = signed_in_app(data)
     try:
-        app.show_words()
+        app.show_practice()
+        app.start_session()
+        for number in range(1, 13):
+            app.update()
+            shown = [w.cget("text") for w in every_widget(app.body) if isinstance(w, ctk.CTkLabel)]
+            assert f"Round {number}" in shown, shown
+            for letter in sorted(set(app.payload["round"]["word"])):
+                app.guess_letter(letter)
+            assert app.payload["next_round"], f"round {number} should lead to another"
+            if number < 12:
+                app.advance()
+        widgets = list(every_widget(app.body))
+        assert not any(isinstance(widget, ctk.CTkProgressBar) for widget in widgets)
+        ending = [
+            widget
+            for widget in widgets
+            if isinstance(widget, ctk.CTkButton) and widget.cget("text") == "End session"
+        ]
+        assert len(ending) == 1
+        ending[0].invoke()
         app.update()
-        assert app.cards_level.get() == "Travel cards"
-        travel = sum(1 for _ in every_widget(app.cards_panel))
-        press(app.cards_language, "<Down>")  # Spanish, Beginner
-        app.update()
-        boxes = [w for w in every_widget(app.cards_panel) if isinstance(w, ctk.CTkTextbox)]
-        assert len(boxes) == 1 and sum(1 for _ in every_widget(app.cards_panel)) < travel
-        text = boxes[0].get("1.0", "end")
-        assert text.count("Meaning:") == 80 and text.count("Association:") == 80
-        press(app.cards_level, "<Down>")  # Novice
-        app.update()
-        boxes = [w for w in every_widget(app.cards_panel) if isinstance(w, ctk.CTkTextbox)]
-        assert boxes[0].get("1.0", "end").count("Meaning:") == 76
+        assert app.page == "Reports" and app.practice.load(app.user["id"]) is None
+        report = progress_report(app.db_path, app.user["id"])
+        assert (report["rounds"], report["sessions"]) == (12, 1), report
     finally:
         app.close_application()
 
@@ -454,11 +485,11 @@ SCENARIOS = {
         recovery_window_fits_at_minimum_size,
         main_window_text_wraps_at_minimum_size,
         letter_keys_guess_on_click,
-        word_set_choices_follow_the_language,
-        accent_keys_are_on_the_board_for_each_language,
+        removed_screens_and_settings_stay_removed,
+        plain_keys_reveal_accented_letters,
         long_phrases_fit_the_board_at_minimum_size,
         level_word_card_shows_its_clues,
-        word_cards_page_lists_a_level_without_a_card_per_word,
+        endless_play_runs_until_end_session,
     )
 }
 

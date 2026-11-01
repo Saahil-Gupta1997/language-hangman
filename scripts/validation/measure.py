@@ -2,6 +2,7 @@
 
     python -m scripts.validation.measure performance <dataset folder>
     python -m scripts.validation.measure round [<language> <level>]
+    python -m scripts.validation.measure long [<rounds>]
     python -m scripts.validation.measure scaling <output folder>
 
 Performance figures are single-machine observations, not guarantees: every line reports its
@@ -26,6 +27,7 @@ from src import __version__
 from src.services.auth_service import AuthService
 from src.services.desktop_storage import backup_database, open_live_database, progress_report
 from src.services.practice_service import PracticeService
+from src.utils.constants import GENERAL_SITUATION
 
 SETTINGS = {
     "language": "english",
@@ -33,7 +35,7 @@ SETTINGS = {
     "difficulties": ["beginner"],
     "rounds": 10,
     "game_mode": "easy",
-    "situation": "hotel",
+    "situation": GENERAL_SITUATION,
     "practice_mode": "standard",
     "review_policy": "prefer_review",
     "show_hint_immediately": False,
@@ -110,15 +112,6 @@ def performance(dataset):
         report("screen: Home", timed(render(app.show_home), 5))
         report("screen: Reports (full history table)", timed(render(app.show_reports), 5))
         report("screen: Practice setup", timed(render(app.show_practice), 5))
-        report("screen: Word cards (travel)", timed(render(app.show_words), 5))
-
-        def level_list():
-            app.show_words()
-            app.cards_language.set("Italian")
-            app.cards_language_changed("Italian")
-            app.update()
-
-        report("screen: Word cards (one level list)", timed(level_list, 5))
     finally:
         app.close_application()
     shutil.rmtree(work, ignore_errors=True)
@@ -127,7 +120,8 @@ def performance(dataset):
 def round_redraw(language=None, level=None, rounds=12):
     """Time a guess from submission to redrawn screen, on a fresh profile.
 
-    Travel cards by default; name a language and level to time a level list instead.
+    English Beginner by default. It also runs on older candidates, which have the extra
+    set-up controls, so the same tool can compare them.
     """
     from src.desktop.application import HangmanDesktop
 
@@ -144,10 +138,13 @@ def round_redraw(language=None, level=None, rounds=12):
         if not app.payload:
             if language:
                 app.language.set(language)
-                app.language_changed(language)
+                if hasattr(app, "language_changed"):
+                    app.language_changed(language)
                 app.level.set(level)
-                app.word_set_changed(level)
-            app.rounds.set("10")
+                if hasattr(app, "word_set_changed"):
+                    app.word_set_changed(level)
+            if hasattr(app, "rounds"):
+                app.rounds.set("10")
             app.start_session()
         for letter in sorted({c.lower() for c in app.payload["round"]["word"] if c.isalpha()}):
             if app.payload["round"]["saved"]:
@@ -163,8 +160,44 @@ def round_redraw(language=None, level=None, rounds=12):
         else:
             app.practice.discard(app.user["id"])
     app.close_application()
-    words = f"{language} {level}" if language else "travel cards"
+    words = f"{language} {level}" if language else "default set"
     report(f"guess to redrawn screen, {words}", samples)
+
+
+def long_session(rounds=200):
+    """Compare guesses early and late in one endless session, which grows as it runs."""
+    from src.desktop.application import HangmanDesktop
+
+    rounds = int(rounds)
+    data = Path(tempfile.mkdtemp(prefix="hangman-long-"))
+    app = HangmanDesktop(data / "app.db", data)
+    app.show_login(register=True)
+    app.username_entry.insert(0, "timer")
+    app.password_entry.insert(0, "timer-pass-2026")
+    app.confirm_entry.insert(0, "timer-pass-2026")
+    app.authenticate(register=True)
+    app.show_practice()
+    app.start_session()
+    continuing, ending = [[], []], [[], []]
+    for number in range(rounds):
+        late = number >= rounds - 20
+        for letter in sorted({c.lower() for c in app.payload["round"]["word"] if c.isalpha()}):
+            start = time.perf_counter()
+            app.guess_entry.delete(0, "end")
+            app.guess_entry.insert(0, letter)
+            app.submit_guess()
+            app.update()
+            elapsed = (time.perf_counter() - start) * 1000
+            (ending if app.payload["round"]["saved"] else continuing)[late].append(elapsed)
+        app.advance()
+        app.update()
+    size = len(app.practice.load(app.user["id"])["session"]["round_reviews"])
+    app.close_application()
+    print(f"{rounds} rounds played; review records kept in the saved session: {size}")
+    report("guess, round continues, first 20 rounds", continuing[0])
+    report("guess, round continues, last 20 rounds", continuing[1])
+    report("guess that ends a round, first 20 rounds", ending[0])
+    report("guess that ends a round, last 20 rounds", ending[1])
 
 
 def settle(window, factor, size):
@@ -234,6 +267,11 @@ def scaling(output, real_percent=125):
 
 
 if __name__ == "__main__":
-    {"performance": performance, "round": round_redraw, "scaling": scaling}[sys.argv[1]](
-        *sys.argv[2:]
-    )
+    {
+        "performance": performance,
+        "round": round_redraw,
+        "long": long_session,
+        "scaling": scaling,
+    }[
+        sys.argv[1]
+    ](*sys.argv[2:])

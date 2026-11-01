@@ -144,16 +144,18 @@ class SettingsView:
         self.heading("Help and about", f"Language Hangman {__version__}")
         self.text(
             "1. Create a local profile or try temporary guest practice.\n"
-            "2. Choose a language and word set, game difficulty and session length.\n"
+            "2. Choose a language, a level and a game difficulty.\n"
             "3. Enter a single letter; press Enter to submit. Repeated guesses cost no lives.\n"
             "4. Read the learning card after each round.\n"
-            "5. Close at any time. Profile sessions resume with saved guesses and clues."
+            "5. Keep going for as long as you like, then choose End session. Profile "
+            "sessions resume with saved guesses and clues if you close the app."
         )
         self.text(
-            "Practice focus: Standard chooses from the words in the set you picked. Review "
-            "only uses words you have already completed in that set and that are still "
-            "in your review queue, due words first, each once per session. A new profile has "
-            "no review words yet, so the app offers Standard practice instead."
+            "Practice focus: All words keeps choosing from your level until you end the "
+            "session, and repeats words, oldest first, once you have played them all. "
+            "Review my words only uses words you have already completed at that level and "
+            "that are still in your review queue, due words first, each once. A new profile "
+            "has no review words yet, so the app offers All words instead."
         )
         self.text(
             "Keyboard: Tab and Shift+Tab move between controls; the current control has an "
@@ -162,11 +164,10 @@ class SettingsView:
             "returns home. Ctrl + (or Ctrl =) makes text larger; Ctrl - makes it standard."
         )
         self.text(
-            "Words: 30 English travel cards across Restaurant, Airport and Hotel, and word "
-            "lists in English, Spanish, Italian and German at five levels. Level lists have "
+            "Words: lists in English, Spanish, Italian and German at five levels. They have "
             "not been reviewed by a teacher yet. Easy and Hard describe the game, and levels "
-            "describe the word lists: neither measures your proficiency. Letters with accents "
-            "must be guessed exactly, so the board adds the keys each language needs."
+            "describe the word lists: neither measures your proficiency. Accented letters "
+            "count as the plain letter, so A reveals Á, N reveals Ñ and S reveals ß."
         )
         self.text(
             "Privacy: no account server, telemetry or cloud sync. Local passwords protect "

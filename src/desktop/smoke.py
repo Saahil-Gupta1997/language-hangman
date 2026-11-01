@@ -20,6 +20,7 @@ from customtkinter.windows.widgets.scaling import ScalingTracker
 
 from src import __version__
 from src.desktop.application import HangmanDesktop
+from src.desktop.practice_view import REVIEW_WORDS
 from src.desktop.recovery import RecoveryWindow
 from src.services.auth_service import AuthService
 from src.services.desktop_storage import (
@@ -95,7 +96,7 @@ def _play_rounds(app, count):
         assert app.payload["round"]["saved"]
         if index < count - 1:
             app.advance()
-    app.finish_session()
+    app.end_session()
     return played
 
 
@@ -108,13 +109,13 @@ def _profile_journey(data, output, checks, shots):
         checks.append("registration")
 
         app.show_practice()
-        app.focus.set("Review")
+        app.focus.set(REVIEW_WORDS)
         app.start_session()
         assert app.practice.load(app.user["id"]) is None
         _screenshot(app, output, "review-unavailable.png", shots)
-        _on_screen_button(app, "Start Standard practice").invoke()
+        _on_screen_button(app, "Play all").invoke()
         assert app.payload["session"]["practice_mode"] == "standard"
-        checks.append("review refused for a new profile; standard offered")
+        checks.append("review refused for a new profile; all words offered")
 
         _guess(app, [next(c for c in "zqxjkvwy" if c not in app.payload["round"]["word"])])
         wrong = app.payload["round"]["wrong_letters"][0]
@@ -131,30 +132,26 @@ def _profile_journey(data, output, checks, shots):
         checks.append("three rounds recorded in reports")
 
         app.show_practice()
-        app.focus.set("Review")
-        app.rounds.set("10")
+        app.focus.set(REVIEW_WORDS)
         app.start_session()
         assert app.payload["session"]["planned_rounds"] == 3
-        assert "Only 3 review word(s)" in app.payload["notice"]
-        _screenshot(app, output, "review-shortened.png", shots)
+        _screenshot(app, output, "review.png", shots)
         assert sorted(_play_rounds(app, 3)) == sorted(practised)
-        checks.append("review uses only practised words and explains the shorter session")
+        checks.append("review uses only practised words, each once")
 
         app.show_practice()
-        app.situation.set("Hotel")
         app.mode.set("Hard")
         app.start_session()
         word = app.payload["round"]["word"]
         _guess(app, [c for c in "abcdefghijklmnopqrstuvwxyz" if c not in word][:5])
         assert app.payload["round"]["result"] == "lost"
-        with _auto_confirm():
-            app.discard_session()
+        app.end_session()  # a finished word makes this a completed session
         report = progress_report(app.db_path, app.user["id"])
         assert (report["rounds"], report["wins"], report["losses"]) == (7, 6, 1)
-        assert report["sessions"] == 2  # the abandoned session is not counted as completed
+        assert report["sessions"] == 3
         app.show_reports()
         _screenshot(app, output, "reports.png", shots)
-        checks.append("lost round and abandoned session reported correctly")
+        checks.append("lost round and ended session reported correctly")
 
         export = data / "profile-export.json"
         app.show_settings()
@@ -180,7 +177,6 @@ def _profile_journey(data, output, checks, shots):
         backup = backup_database(app.db_path, data / "backup.sqlite")
         restore_database(app.db_path, backup)
         checks.append("backup and restore")
-        app.show_words()
         app.show_settings()
         app.set_scale("Large")
         assert ScalingTracker.widget_scaling == 1.15
@@ -188,15 +184,14 @@ def _profile_journey(data, output, checks, shots):
         checks.append("text size change after dropdown screens")
         app.show_practice()
         app.language.set("German")
-        app.language_changed("German")
         app.start_session()
         app.update()
         assert app.payload["round"]["language"] == "german"
         assert app.payload["session"]["difficulty_filter"] == ["beginner"]
-        assert set("äöüß") <= set(app.board._keys)
-        with _auto_confirm():
-            app.discard_session()
-        checks.append("German level list starts with its own letter keys")
+        assert len(app.board._keys) == 26
+        app.end_session()  # nothing finished, so this one is not counted
+        assert progress_report(app.db_path, app.user["id"])["sessions"] == 3
+        checks.append("German list plays on A-Z; an empty session is not counted")
         app.show_help()
         app.logout()
         app.start_guest()
@@ -217,7 +212,7 @@ def crash_child(data_dir, stage):
     _sign_in(app)
     app.show_practice()
     if stage == "mid_round":
-        app.situation.set("Airport")
+        app.level.set("Novice")
         app.start_session()
         _guess(app, [next(c for c in "zqxjkvwy" if c not in app.payload["round"]["word"])])
     else:  # between_rounds: finish the resumed round and leave its learning card open
@@ -255,8 +250,7 @@ def _crash_journey(data, checks):
         assert app.payload["round"]["saved"] and app.payload["next_round"]
         app.advance()
         assert not app.payload["round"]["saved"]
-        with _auto_confirm():
-            app.discard_session()
+        app.end_session()
         checks.append("learning card and next round resume after the process ends between rounds")
     finally:
         app.close_application()

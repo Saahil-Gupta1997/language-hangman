@@ -37,7 +37,7 @@ def practice_settings():
         "difficulties": ["beginner"],
         "rounds": 3,
         "game_mode": "easy",
-        "situation": "hotel",
+        "situation": "general",
         "practice_mode": "standard",
         "review_policy": "prefer_review",
         "show_hint_immediately": False,
@@ -352,5 +352,5 @@ def test_diagnostics_contain_codes_but_no_personal_data(saved_state, tmp_path):
     payload = json.loads(text)
     assert payload["database"].startswith("unavailable")
     assert payload["recent_events"] == events
-    for secret in ("keeper", "password123", str(tmp_path), "hotel"):
+    for secret in ("keeper", "password123", str(tmp_path), "beginner"):
         assert secret not in text

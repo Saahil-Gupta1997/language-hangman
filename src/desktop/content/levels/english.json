@@ -778,6 +778,31 @@
       "tags": []
     },
     {
+      "word_id": "levels_english_0033",
+      "word": "slowly",
+      "language": "english",
+      "category": "adverb",
+      "difficulty": "beginner",
+      "meaning": "At a slow speed.",
+      "translation": "At a slow speed.",
+      "hint": "At a slow speed.",
+      "meaning_hint": "At a slow speed.",
+      "example_sentence": "",
+      "sentence_translation": "",
+      "pronunciation_text": "",
+      "usage_note": "",
+      "synonym": "Gradually, Leisurely, Unhurriedly",
+      "synonym_hint": "Gradually, Leisurely, Unhurriedly",
+      "association": "Frequently happens during a relaxing walk.",
+      "association_hint": "Frequently happens during a relaxing walk.",
+      "situations": [
+        "general"
+      ],
+      "source": "desktop-levels",
+      "notes": "words.xlsx, English sheet, row 33. Not yet reviewed.",
+      "tags": []
+    },
+    {
       "word_id": "levels_english_0034",
       "word": "carefully",
       "language": "english",
@@ -1153,6 +1178,31 @@
       "tags": []
     },
     {
+      "word_id": "levels_english_0209",
+      "word": "early",
+      "language": "english",
+      "category": "adverb",
+      "difficulty": "beginner",
+      "meaning": "Before the usual time.",
+      "translation": "Before the usual time.",
+      "hint": "Before the usual time.",
+      "meaning_hint": "Before the usual time.",
+      "example_sentence": "",
+      "sentence_translation": "",
+      "pronunciation_text": "",
+      "usage_note": "",
+      "synonym": "Promptly, Prematurely, Punctually",
+      "synonym_hint": "Promptly, Prematurely, Punctually",
+      "association": "Frequently arrives before the expected time.",
+      "association_hint": "Frequently arrives before the expected time.",
+      "situations": [
+        "general"
+      ],
+      "source": "desktop-levels",
+      "notes": "words.xlsx, English sheet, row 209. Not yet reviewed.",
+      "tags": []
+    },
+    {
       "word_id": "levels_english_0210",
       "word": "late",
       "language": "english",
@@ -1325,6 +1375,31 @@
       ],
       "source": "desktop-levels",
       "notes": "words.xlsx, English sheet, row 323. Not yet reviewed.",
+      "tags": []
+    },
+    {
+      "word_id": "levels_english_0324",
+      "word": "water",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "beginner",
+      "meaning": "A transparent liquid essential for life.",
+      "translation": "A transparent liquid essential for life.",
+      "hint": "A transparent liquid essential for life.",
+      "meaning_hint": "A transparent liquid essential for life.",
+      "example_sentence": "",
+      "sentence_translation": "",
+      "pronunciation_text": "",
+      "usage_note": "",
+      "synonym": "H2O, Liquid, Aqua",
+      "synonym_hint": "H2O, Liquid, Aqua",
+      "association": "Often poured into a glass or bottle.",
+      "association_hint": "Often poured into a glass or bottle.",
+      "situations": [
+        "general"
+      ],
+      "source": "desktop-levels",
+      "notes": "words.xlsx, English sheet, row 324. Not yet reviewed.",
       "tags": []
     },
     {
@@ -1728,6 +1803,31 @@
       "tags": []
     },
     {
+      "word_id": "levels_english_0341",
+      "word": "clean",
+      "language": "english",
+      "category": "adjective",
+      "difficulty": "beginner",
+      "meaning": "Free from dirt or impurities.",
+      "translation": "Free from dirt or impurities.",
+      "hint": "Free from dirt or impurities.",
+      "meaning_hint": "Free from dirt or impurities.",
+      "example_sentence": "",
+      "sentence_translation": "",
+      "pronunciation_text": "",
+      "usage_note": "",
+      "synonym": "Pure, Spotless, Pristine",
+      "synonym_hint": "Pure, Spotless, Pristine",
+      "association": "Often free from dirt or mess.",
+      "association_hint": "Often free from dirt or mess.",
+      "situations": [
+        "general"
+      ],
+      "source": "desktop-levels",
+      "notes": "words.xlsx, English sheet, row 341. Not yet reviewed.",
+      "tags": []
+    },
+    {
       "word_id": "levels_english_0342",
       "word": "anywhere",
       "language": "english",
@@ -2100,6 +2200,31 @@
       ],
       "source": "desktop-levels",
       "notes": "words.xlsx, English sheet, row 49. Not yet reviewed.",
+      "tags": []
+    },
+    {
+      "word_id": "levels_english_0050",
+      "word": "room",
+      "language": "english",
+      "category": "noun",
+      "difficulty": "novice",
+      "meaning": "A part of a building enclosed by walls, floor, and ceiling.",
+      "translation": "A part of a building enclosed by walls, floor, and ceiling.",
+      "hint": "A part of a building enclosed by walls, floor, and ceiling.",
+      "meaning_hint": "A part of a building enclosed by walls, floor, and ceiling.",
+      "example_sentence": "",
+      "sentence_translation": "",
+      "pronunciation_text": "",
+      "usage_note": "",
+      "synonym": "Chamber, Space, Compartment",
+      "synonym_hint": "Chamber, Space, Compartment",
+      "association": "Can be decorated with posters or paintings.",
+      "association_hint": "Can be decorated with posters or paintings.",
+      "situations": [
+        "general"
+      ],
+      "source": "desktop-levels",
+      "notes": "words.xlsx, English sheet, row 50. Not yet reviewed.",
       "tags": []
     },
     {
@@ -3125,6 +3250,31 @@
       ],
       "source": "desktop-levels",
       "notes": "words.xlsx, English sheet, row 220. Not yet reviewed.",
+      "tags": []
+    },
+    {
+      "word_id": "levels_english_0221",
+      "word": "quiet",
+      "language": "english",
+      "category": "adjective",
+      "difficulty": "novice",
+      "meaning": "Making little or no noise.",
+      "translation": "Making little or no noise.",
+      "hint": "Making little or no noise.",
+      "meaning_hint": "Making little or no noise.",
+      "example_sentence": "",
+      "sentence_translation": "",
+      "pronunciation_text": "",
+      "usage_note": "",
+      "synonym": "Silent, Calm, Peaceful",
+      "synonym_hint": "Silent, Calm, Peaceful",
+      "association": "Frequently found in libraries or during meditation.",
+      "association_hint": "Frequently found in libraries or during meditation.",
+      "situations": [
+        "general"
+      ],
+      "source": "desktop-levels",
+      "notes": "words.xlsx, English sheet, row 221. Not yet reviewed.",
       "tags": []
     },
     {

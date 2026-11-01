@@ -1,5 +1,5 @@
 """Language Hangman application package."""
 
-__version__ = "1.0.0rc5"  # single source; VERSION and the installer follow it
+__version__ = "1.0.0rc6"  # single source; VERSION and the installer follow it
 version = __version__
-__release_name__ = "Desktop Release Candidate 5"
+__release_name__ = "Desktop Release Candidate 6"

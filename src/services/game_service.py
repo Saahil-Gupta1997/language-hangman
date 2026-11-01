@@ -18,7 +18,7 @@ from src.db.repository import (
     WordProgressRepository,
 )
 from src.db.transaction import transaction
-from src.models.game_round import GameRound
+from src.models.game_round import GameRound, base_letter
 from src.models.learning_session import LearningSession
 from src.services.adaptation_service import AdaptationService
 from src.services.smart_practice_service import SmartPracticeService
@@ -26,6 +26,7 @@ from src.services.word_service import WordService
 from src.utils.constants import (
     DEFAULT_PREFERRED_CATEGORIES,
     DIFFICULT_REVIEW_ACCURACY_THRESHOLD,
+    ENDLESS_ROUNDS,
     FAMILIARITY_STATES,
     GAME_MODE_SETTINGS,
     GAME_MODES,
@@ -384,7 +385,11 @@ class GameService:
                 }
             matched_word_count = general_pool_count
 
-        if matched_word_count < normalized_settings["rounds"]:
+        endless = normalized_settings["rounds"] >= ENDLESS_ROUNDS
+        if endless and normalized_settings["review_policy"] == "review_only":
+            # Review plays each eligible word once, so its length is simply that count.
+            normalized_settings["rounds"] = matched_word_count
+        elif matched_word_count < normalized_settings["rounds"] and not endless:
             if normalized_settings["review_policy"] == "review_only":
                 warnings.append(
                     f"Only {matched_word_count} review word(s) are available for "
@@ -547,14 +552,21 @@ class GameService:
         }
 
         smart_reason = ""
-        candidate_pool = self._build_smart_candidate_pool(
-            learning_session=learning_session,
-            recommendation=recommendation,
-            candidate_word_ids=candidate_word_ids,
-            excluded_word_ids=excluded_word_ids,
-            strict_mode=strict_mode,
+        repeated_word = self._least_recent_word(learning_session)
+        candidate_pool = (
+            []
+            if repeated_word
+            else self._build_smart_candidate_pool(
+                learning_session=learning_session,
+                recommendation=recommendation,
+                candidate_word_ids=candidate_word_ids,
+                excluded_word_ids=excluded_word_ids,
+                strict_mode=strict_mode,
+            )
         )
-        if candidate_pool:
+        if repeated_word:
+            chosen_word = repeated_word
+        elif candidate_pool:
             chosen_word, smart_reason = self.smart_practice_service.choose_word(
                 user_id=int(user["id"]),
                 candidate_words=candidate_pool,
@@ -613,6 +625,28 @@ class GameService:
             game_mode=learning_session.game_mode,
             situation=learning_session.situation,
         )
+
+    def _least_recent_word(self, learning_session: LearningSession) -> dict[str, Any] | None:
+        """Once an endless session has used its whole set, return the oldest word played.
+
+        The scoring below would keep returning the same few high scorers, so a repeat
+        follows the order words were last played in: the session's list, oldest first.
+        """
+        if learning_session.planned_rounds < ENDLESS_ROUNDS:
+            return None
+        words = {
+            int(word["id"]): word
+            for word in self.word_service.get_words(
+                language=learning_session.language,
+                categories=learning_session.selected_categories,
+                difficulties=learning_session.difficulty_filter,
+                situation=learning_session.situation,
+            )
+        }
+        played = learning_session.practiced_word_ids
+        if set(words) - set(played):
+            return None
+        return next((words[word_id] for word_id in played if word_id in words), None)
 
     def build_round(
         self,
@@ -705,7 +739,7 @@ class GameService:
 
     def record_guess(self, round_state: GameRound, guess: str) -> dict[str, Any]:
         """Apply a single-letter guess and update the round state."""
-        letter = unicodedata.normalize("NFC", guess.strip().lower())
+        typed = unicodedata.normalize("NFC", guess.strip().lower())
 
         if round_state.is_complete:
             return {
@@ -715,7 +749,7 @@ class GameService:
                 "round_finished": True,
             }
 
-        if len(letter) != 1 or not letter.isalpha():
+        if len(typed) != 1 or not typed.isalpha():
             return {
                 "accepted": False,
                 "status": "warning",
@@ -723,7 +757,8 @@ class GameService:
                 "round_finished": False,
             }
 
-        if letter in round_state.guessed_letters:
+        letter = base_letter(typed)  # an accented letter counts as the plain one
+        if letter in round_state.known_letters:
             return {
                 "accepted": False,
                 "status": "warning",
@@ -738,7 +773,7 @@ class GameService:
                 CORRECT_LINES,
                 round_state.used_correct_feedback_lines,
             )
-            if round_state.unique_letters.issubset(set(round_state.guessed_letters)):
+            if round_state.unique_letters.issubset(round_state.known_letters):
                 round_state.result = "won"
                 round_state.completed_at = utc_now_iso()
                 return {
@@ -905,13 +940,17 @@ class GameService:
         learning_session.total_correct_letters += round_state.letters_correct
         learning_session.total_wrong_letters += round_state.letters_wrong
         learning_session.round_ids.append(session_id)
+        endless = learning_session.planned_rounds >= ENDLESS_ROUNDS
+        if endless and round_state.word_id in learning_session.practiced_word_ids:
+            learning_session.practiced_word_ids.remove(round_state.word_id)  # now the newest
         if round_state.word_id not in learning_session.practiced_word_ids:
             learning_session.practiced_word_ids.append(round_state.word_id)
         if round_state.word not in learning_session.words_practiced:
             learning_session.words_practiced.append(round_state.word)
         if round_state.category not in learning_session.categories_practiced:
             learning_session.categories_practiced.append(round_state.category)
-        learning_session.round_reviews.append(learning_review)
+        if not endless:  # only a session summary reads these, and they grow with every word
+            learning_session.round_reviews.append(learning_review)
 
         next_round = None
         session_summary = None

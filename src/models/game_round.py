@@ -2,11 +2,18 @@
 
 from __future__ import annotations
 
+import unicodedata
 from dataclasses import dataclass, field
 from uuid import uuid4
 
 from src.utils.constants import DEFAULT_MAX_ATTEMPTS
 from src.utils.helpers import utc_now_iso
+
+
+def base_letter(letter: str) -> str:
+    """Return the plain letter a character counts as: "á" is "a", and "ß" is "s"."""
+    plain = unicodedata.normalize("NFD", letter.lower())[0]
+    return "s" if plain == "ß" else plain
 
 
 @dataclass(slots=True)
@@ -59,12 +66,18 @@ class GameRound:
     @property
     def unique_letters(self) -> set[str]:
         """Return the distinct alphabetical letters that must be guessed."""
-        return {character.lower() for character in self.word if character.isalpha()}
+        return {base_letter(character) for character in self.word if character.isalpha()}
+
+    @property
+    def known_letters(self) -> set[str]:
+        """Return the plain letters guessed so far, whichever way they were typed."""
+        return {base_letter(letter) for letter in self.guessed_letters}
 
     @property
     def correct_letters(self) -> list[str]:
         """Return the correctly guessed letters in sorted order."""
-        return sorted(letter for letter in self.guessed_letters if letter in self.unique_letters)
+        unique = self.unique_letters
+        return sorted(letter for letter in self.guessed_letters if base_letter(letter) in unique)
 
     @property
     def attempts_used(self) -> int:
@@ -88,13 +101,13 @@ class GameRound:
 
     @property
     def masked_letters(self) -> list[str]:
-        """Return one entry per character: the character once known, otherwise "_"."""
+        """Return one entry per character: the character once known, otherwise "_".
+
+        A guessed letter reveals every form of it, so the tile keeps the real spelling.
+        """
+        known = self.known_letters
         return [
-            (
-                character
-                if not character.isalpha() or character.lower() in self.guessed_letters
-                else "_"
-            )
+            character if not character.isalpha() or base_letter(character) in known else "_"
             for character in self.word
         ]
 

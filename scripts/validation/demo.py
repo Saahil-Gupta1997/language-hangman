@@ -130,8 +130,8 @@ def record(output, revision):
             f"Language Hangman {__version__} (release candidate)",
             "Offline Windows desktop app for vocabulary practice "
             "(Python, CustomTkinter, SQLite).",
-            "Rule-based software built with AI assistance. 30 English travel cards, plus "
-            "word lists in four languages at five levels (not yet reviewed).",
+            "Rule-based software built with AI assistance. 1,544 words in four languages "
+            "at five levels (not yet reviewed).",
             f"Scripted run of revision {revision}; captures the app window only.",
         ],
         6,
@@ -145,17 +145,17 @@ def record(output, revision):
     app.authenticate(register=True)
     film.show(app, "Home: progress so far and how the game difficulty works", 4)
     app.show_practice()
-    film.show(app, "Practice setup: language, word set, difficulty, rounds and focus", 4)
-    app.focus.set("Review")
-    film.show(app, "A new learner chooses Review...", 2.5)
+    film.show(app, "Practice setup: language, level, game difficulty and focus", 4)
+    app.focus.set("Review my words")
+    film.show(app, "A new learner chooses Review my words...", 2.5)
     app.start_session()
-    film.show(app, "...but Review only uses words already practised, so Standard is offered", 5)
-    button(app, "Start Standard practice").invoke()
-    film.show(app, "Standard session: Restaurant, Easy (7 lives), 3 rounds", 4)
+    film.show(app, "...but it only uses words already played, so All words is offered", 5)
+    button(app, "Play all").invoke()
+    film.show(app, "English, Beginner, Easy (7 lives): it runs until you end it", 4)
     wrong = next(c for c in "zqxjkvwy" if c not in app.payload["round"]["word"])
     guess(app, wrong, "A wrong guess costs a life, draws the figure and reveals a clue", 4)
     win_round(app, "Guess a letter: type it, or click a letter key")
-    film.show(app, "After each round: meaning, example, pronunciation and a usage note", 6)
+    film.show(app, "After each round: the meaning, synonyms and an association", 6)
     app.advance()
     win_round(app, "Round 2", per_letter=0.3)
     film.show(app, "Round 2 won", 2)
@@ -166,32 +166,25 @@ def record(output, revision):
         if not app.payload["round"]["saved"]:
             guess(app, letter, "Round 3: running out of lives", 0.5)
     film.show(app, "A lost round is saved and scheduled for review", 4)
-    button(app, "Finish session").invoke()
+    button(app, "End session").invoke()
     film.show(app, "Reports: every metric states its denominator", 6)
     app.show_practice()
-    app.focus.set("Review")
-    app.rounds.set("5")
+    app.focus.set("Review my words")
     app.start_session()
-    film.show(app, "Review now uses only the practised words and says why it is shorter", 6)
+    film.show(app, "Review my words replays only the words already played, each once", 6)
     film.show(app, "Close the app at any point...", 2.5)
     app.close_application()
     app = HangmanDesktop(data / "app.db", data)
     sign_in(app, "Sign in again")
     app.show_practice()
     film.show(app, "...and the session resumes with its guesses and clues", 5)
-    app.show_words()
-    film.show(app, "Word cards: 30 travel cards with examples and usage notes", 4)
-    app.cards_language.set("Spanish")
-    app.cards_language_changed("Spanish")
-    film.show(app, "Word lists: four languages, five levels, three clues per word", 4)
-    app.show_practice()
     app.practice.discard(app.user["id"])  # the resumed session, so setup shows
     app.show_practice()
     app.language.set("German")
-    app.language_changed("German")
-    film.show(app, "Level lists have no situation, and say they are not yet reviewed", 4)
+    app.level.set("Novice")
+    film.show(app, "Four languages at five levels; no word has been reviewed yet", 4)
     app.start_session()
-    film.show(app, "German adds its own letter keys: Ä, Ö, Ü and ß", 4)
+    film.show(app, "Every language plays on A-Z: a plain letter reveals its accents", 4)
     app.practice.discard(app.user["id"])
     app.show_settings()
     app.set_scale("Large")

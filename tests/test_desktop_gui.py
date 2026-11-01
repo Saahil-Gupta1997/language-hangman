@@ -21,11 +21,11 @@ SCENARIOS = [
     "recovery_window_fits_at_minimum_size",
     "main_window_text_wraps_at_minimum_size",
     "letter_keys_guess_on_click",
-    "word_set_choices_follow_the_language",
-    "accent_keys_are_on_the_board_for_each_language",
+    "removed_screens_and_settings_stay_removed",
+    "plain_keys_reveal_accented_letters",
     "long_phrases_fit_the_board_at_minimum_size",
     "level_word_card_shows_its_clues",
-    "word_cards_page_lists_a_level_without_a_card_per_word",
+    "endless_play_runs_until_end_session",
 ]
 
 

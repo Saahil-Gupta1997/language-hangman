@@ -181,7 +181,6 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
                 ("Home", self.show_home, "Home"),
                 ("Practice", self.show_practice, "Practice"),
                 ("Reports", self.show_reports, "Reports"),
-                ("Word cards", self.show_words, "Words"),
                 ("Settings", self.show_settings, "Settings"),
                 ("Help", self.show_help, "Help"),
             ]

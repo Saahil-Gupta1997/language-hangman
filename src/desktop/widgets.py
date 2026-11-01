@@ -5,7 +5,8 @@ import sys
 import customtkinter as ctk
 from customtkinter.windows.widgets.scaling import ScalingTracker
 
-from src.utils.constants import BOARD_LETTERS, EXTRA_LETTERS
+from src.models.game_round import base_letter
+from src.utils.constants import BOARD_LETTERS
 
 BLUE = "#155E75"
 FOCUS_RING = "#F59E0B"
@@ -474,12 +475,11 @@ class GameBoard(ctk.CTkCanvas):
         return lives_y + pip
 
     def _letter_keys(self, state, available, top, factor, columns=9):
-        correct = {c for c in state.guessed_letters if c not in state.wrong_letters}
-        wrong = set(state.wrong_letters)
+        wrong = {base_letter(letter) for letter in state.wrong_letters}
+        correct = state.known_letters - wrong
         size = min(34, max(18, int(available / columns) - 4))
         left = max(0, (available - columns * (size + 4)) / 2)
-        letters = BOARD_LETTERS + EXTRA_LETTERS.get(state.language, "")
-        for index, letter in enumerate(letters):
+        for index, letter in enumerate(BOARD_LETTERS):
             x = left + (index % columns) * (size + 4)
             y = top + (index // columns) * (size + 4)
             used = letter in correct or letter in wrong
@@ -495,13 +495,12 @@ class GameBoard(ctk.CTkCanvas):
             )
             self.create_text(
                 *self._at((x + size / 2, y + size / 2), factor),
-                # "ß" has no single capital: its upper() is "SS", which is not this letter.
-                text=letter.upper() if len(letter.upper()) == 1 else letter,
+                text=letter.upper(),
                 fill=FAINT if letter in wrong else text_colour,
                 font=ui_font(max(9, round(size * 0.42)), bold=not used),
             )
             self._keys[letter] = (box, used, (x, y, x + size, y + size))
-        rows = (len(letters) + columns - 1) // columns
+        rows = (len(BOARD_LETTERS) + columns - 1) // columns
         return top + rows * (size + 4) + 6
 
     def _letter_at(self, event):

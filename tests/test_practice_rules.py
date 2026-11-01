@@ -1,4 +1,4 @@
-"""Review eligibility (D-01) and curated-only desktop practice (D-02).
+"""Review eligibility (D-01) and word-list-only desktop practice (D-02).
 
 Every test drives the real desktop PracticeService through whole sessions, including the
 later rounds, against either a fresh curated database or one imported from legacy data.
@@ -11,20 +11,21 @@ import pytest
 
 from src.db.database import init_db
 from src.services.auth_service import AuthService
-from src.services.curated_content import CURATED_SOURCE, CuratedWordService, seed_curated
+from src.services.curated_content import CuratedWordService, seed_curated
 from src.services.desktop_storage import progress_report, restore_database
 from src.services.game_service import GameService, NoReviewWordsError
 from src.services.practice_service import PracticeService
+from src.utils.constants import ENDLESS_ROUNDS, GENERAL_SITUATION, LEVEL_WORD_SOURCE, WORD_LEVELS
 from src.utils.helpers import shift_utc_iso, utc_now_iso
 
-SITUATIONS = ("restaurant", "airport", "hotel")
+LEVELS = ("beginner", "novice", "advanced")
 
 
-def practice_settings(situation="restaurant", review=False, rounds=3):
+def practice_settings(level="beginner", review=False, rounds=3, situation=GENERAL_SITUATION):
     return {
         "language": "english",
         "categories": ["noun", "verb", "adjective", "adverb"],
-        "difficulties": ["beginner"],
+        "difficulties": [level],
         "rounds": rounds,
         "game_mode": "easy",
         "situation": situation,
@@ -79,14 +80,16 @@ def desktop(tmp_path):
 def imported(tmp_path):
     """A legacy database with legacy history and review items, imported through Restore.
 
-    The seeded legacy session loses happy, quiet, simple, safely and apple in Restaurant.
-    "quiet" is also a curated word (Hotel); the other four exist only in the legacy bank.
+    The seeded legacy session loses words from the legacy bank in Restaurant. Some of them
+    are also word-list words, and the rest exist only in the legacy bank.
     """
     legacy_path = init_db(tmp_path / "old-app.db", seed_words=True)
     user = AuthService(legacy_path).register_user("legacy", "password123")
     game = GameService(legacy_path)  # legacy selection over the 324-word banks
     rng = random.Random(20260919)
-    start = game.start_custom_learning_session(user, practice_settings(rounds=5), rng=rng)
+    start = game.start_custom_learning_session(
+        user, practice_settings(rounds=5, situation="restaurant"), rng=rng
+    )
     session, current = start["learning_session"], start["first_round"]
     while current is not None:  # lose, so the legacy words enter the review queue
         for letter in "qxzjvkwyfb":
@@ -99,7 +102,7 @@ def imported(tmp_path):
         connection.execute("UPDATE review_queue SET review_due_at='2026-08-02T10:00:00+00:00'")
     for _ in range(2):  # later practice elsewhere moves them out of the recent-word window
         later = game.start_custom_learning_session(
-            user, practice_settings("office", rounds=5), rng=rng
+            user, practice_settings(rounds=5, situation="office"), rng=rng
         )
         later_session, current = later["learning_session"], later["first_round"]
         while current is not None:
@@ -119,10 +122,9 @@ def imported(tmp_path):
 def test_empty_candidate_list_means_no_eligible_words(desktop):
     path, _, _ = desktop
     words = CuratedWordService(path)
-    assert words.count_candidate_words("english", situation="restaurant") == 10
-    no_candidates = words.count_candidate_words(
-        "english", situation="restaurant", candidate_word_ids=[]
-    )
+    beginner = {"difficulties": ["beginner"], "situation": GENERAL_SITUATION}
+    assert words.count_candidate_words("english", **beginner) == 80
+    no_candidates = words.count_candidate_words("english", **beginner, candidate_word_ids=[])
     assert no_candidates == 0
     with pytest.raises(ValueError):
         words.select_word("english", "beginner", candidate_word_ids=[], strict_mode=True)
@@ -130,9 +132,9 @@ def test_empty_candidate_list_means_no_eligible_words(desktop):
 
 def test_fresh_profile_cannot_start_review(desktop):
     path, user, service = desktop
-    for situation in SITUATIONS:
+    for level in LEVELS:
         with pytest.raises(NoReviewWordsError, match="no review words"):
-            service.start(user, practice_settings(situation, review=True))
+            service.start(user, practice_settings(level, review=True))
     assert service.load(user["id"]) is None
     with sqlite3.connect(path) as connection:
         assert connection.execute("SELECT count(*) FROM learning_sessions").fetchone()[0] == 0
@@ -140,26 +142,35 @@ def test_fresh_profile_cannot_start_review(desktop):
 
 def test_standard_practice_still_works_for_fresh_profile(desktop):
     path, user, service = desktop
-    payload = service.start(user, practice_settings("airport", rounds=5))
+    payload = service.start(user, practice_settings("novice", rounds=5))
     played, _ = play_session(service, user, payload)
     assert len(played) == len(set(played)) == 5
     for word in words_by_id(path, played).values():
-        assert word["source"] == CURATED_SOURCE
-        assert "airport" in word["situations"]
+        assert word["source"] == LEVEL_WORD_SOURCE
     assert progress_report(path, user["id"])["sessions"] == 1
 
 
-def test_review_uses_only_practised_words_from_the_situation(desktop):
+def test_review_uses_only_practised_words_from_the_level(desktop):
     path, user, service = desktop
-    restaurant, _ = play_session(service, user, service.start(user, practice_settings()))
-    play_session(service, user, service.start(user, practice_settings("airport")))
+    beginner, _ = play_session(service, user, service.start(user, practice_settings()))
+    play_session(service, user, service.start(user, practice_settings("novice")))
 
-    payload = service.start(user, practice_settings("restaurant", review=True, rounds=10))
+    payload = service.start(user, practice_settings("beginner", review=True, rounds=10))
     assert payload["session"]["planned_rounds"] == 3
-    assert "Only 3 review word(s) are available for Restaurant" in payload["notice"]
+    assert "Only 3 review word(s) are available" in payload["notice"]
     reviewed, final = play_session(service, user, payload)
-    assert sorted(reviewed) == sorted(restaurant)  # each eligible word once, nothing else
+    assert sorted(reviewed) == sorted(beginner)  # each eligible word once, nothing else
     assert final["session"]["completed_rounds"] == 3
+    assert final["session"]["status"] == "completed"
+
+
+def test_review_from_the_app_plays_every_eligible_word_once_with_no_notice(desktop):
+    _, user, service = desktop
+    practised, _ = play_session(service, user, service.start(user, practice_settings()))
+    payload = service.start(user, practice_settings(review=True, rounds=ENDLESS_ROUNDS))
+    assert payload["session"]["planned_rounds"] == 3 and payload["notice"] is None
+    reviewed, final = play_session(service, user, payload)
+    assert sorted(reviewed) == sorted(practised)
     assert final["session"]["status"] == "completed"
 
 
@@ -209,25 +220,38 @@ def active_review_words(path, user):
         )
 
 
+def review_every_level(service, user):
+    """Run Review at every level and return the word ids it offered."""
+    reviewed = []
+    for level in WORD_LEVELS:
+        try:
+            payload = service.start(user, practice_settings(level, review=True, rounds=10))
+        except NoReviewWordsError:
+            continue
+        words, _ = play_session(service, user, payload)
+        reviewed += words
+    return reviewed
+
+
 def test_imported_legacy_review_items_are_not_offered(imported):
     path, user, service = imported
     active = active_review_words(path, user)
-    legacy_only = {word for word, source in active.items() if source != CURATED_SOURCE}
-    assert {"happy", "simple", "safely", "apple"} <= legacy_only  # active legacy-only items
-    with pytest.raises(NoReviewWordsError):
-        service.start(user, practice_settings("restaurant", review=True))
+    legacy_only = {word for word, source in active.items() if source != LEVEL_WORD_SOURCE}
+    assert legacy_only, active  # active items that exist only in the legacy bank
+    reviewed = review_every_level(service, user)
+    assert not {w["word"] for w in words_by_id(path, reviewed).values()} & legacy_only
 
 
 def test_word_shared_with_legacy_bank_counts_as_practised(imported):
     path, user, service = imported
-    assert active_review_words(path, user)["quiet"] == CURATED_SOURCE
-    payload = service.start(user, practice_settings("hotel", review=True, rounds=5))
-    assert "Only 1 review word(s) are available for Hotel" in payload["notice"]
-    reviewed, _ = play_session(service, user, payload)
-    assert [word["word"] for word in words_by_id(path, reviewed).values()] == ["quiet"]
+    active = active_review_words(path, user)
+    shared = {word for word, source in active.items() if source == LEVEL_WORD_SOURCE}
+    assert shared, active  # a legacy row that matches a word-list word takes its content
+    reviewed = review_every_level(service, user)
+    assert {w["word"] for w in words_by_id(path, reviewed).values()} == shared
 
 
-def test_imported_database_practice_uses_curated_words_only(imported):
+def test_imported_database_practice_uses_word_lists_only(imported):
     path, user, service = imported
     history_before = progress_report(path, user["id"])["rounds"]
 
@@ -236,30 +260,21 @@ def test_imported_database_practice_uses_curated_words_only(imported):
             return connection.execute(
                 "SELECT r.* FROM review_queue r JOIN words w ON w.id=r.word_id "
                 "WHERE r.user_id=? AND w.source != ? ORDER BY r.id",
-                (user["id"], CURATED_SOURCE),
+                (user["id"], LEVEL_WORD_SOURCE),
             ).fetchall()
 
     legacy_before = legacy_queue()
     played = []
-    for situation in SITUATIONS:
-        words, _ = play_session(service, user, service.start(user, practice_settings(situation)))
+    for level in LEVELS:
+        words, _ = play_session(service, user, service.start(user, practice_settings(level)))
         played += words
-    reviewed, _ = play_session(
-        service, user, service.start(user, practice_settings("hotel", review=True, rounds=10))
-    )
-    hotel_words = {word_id for word_id in played[-3:]}
-    quiet = {i for i, w in words_by_id(path, reviewed).items() if w["word"] == "quiet"}
-    assert set(reviewed) <= hotel_words | quiet
-    played += reviewed
-    assert {word["source"] for word in words_by_id(path, played).values()} == {CURATED_SOURCE}
+    played += review_every_level(service, user)
+    assert {word["source"] for word in words_by_id(path, played).values()} == {LEVEL_WORD_SOURCE}
 
     words = CuratedWordService(path)
-    for situation in SITUATIONS:
-        assert words.count_candidate_words("english", situation=situation) == 10
-    assert {word["difficulty"] for word in words.travel_cards()} == {"beginner"}
     legacy_ids = [row[2] for row in legacy_before]
     fallback = words.select_word("english", "beginner", candidate_word_ids=legacy_ids)
-    assert fallback["source"] in CuratedWordService.sources
+    assert fallback["source"] == LEVEL_WORD_SOURCE
 
     # Legacy history and review items are kept, unchanged, for reporting.
     assert progress_report(path, user["id"])["rounds"] == history_before + len(played)
@@ -269,11 +284,10 @@ def test_imported_database_practice_uses_curated_words_only(imported):
 def test_why_this_word_describes_the_desktop_rule_not_a_category():
     from src.desktop.practice_view import PracticeView
 
-    review = PracticeView.selection_explanation({"situation": "hotel", "practice_mode": "review"})
-    standard = PracticeView.selection_explanation(
-        {"situation": "restaurant", "practice_mode": "standard"}
-    )
-    assert "practised it before in Hotel" in review and "due words come first" in review
-    assert "one of the 10 Restaurant words" in standard
+    session = {"situation": GENERAL_SITUATION, "language": "spanish"}
+    review = PracticeView.selection_explanation({**session, "practice_mode": "review"})
+    standard = PracticeView.selection_explanation({**session, "practice_mode": "standard"})
+    assert "at this level" in review and "due words come first" in review
+    assert "one of the Spanish words at this level" in standard
     for text in (review, standard):
         assert "focus on" not in text.lower()

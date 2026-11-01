@@ -23,6 +23,7 @@ from src.services.desktop_storage import (
 )
 from src.services.game_service import GameService
 from src.services.practice_service import PracticeService
+from src.utils.constants import GENERAL_SITUATION
 
 
 @pytest.fixture
@@ -34,13 +35,13 @@ def account(tmp_path):
     return path, user
 
 
-def settings(situation="restaurant", mode="easy"):
+def settings(level="beginner", mode="easy"):
     return dict(
         language="english",
         categories=["noun", "verb", "adjective", "adverb"],
-        difficulties=["beginner"],
+        difficulties=[level],
         rounds=3,
-        situation=situation,
+        situation=GENERAL_SITUATION,
         game_mode=mode,
         practice_mode="standard",
         review_policy="prefer_review",
@@ -109,7 +110,8 @@ def test_failed_final_guess_rolls_back_everything(account, monkeypatch, stage):
 def test_failed_finalize_preserves_caller_objects(account, monkeypatch):
     path, user = account
     game = GameService(path)
-    session, state = game.start_learning_session(user)
+    started = game.start_custom_learning_session(user, settings())
+    session, state = started["learning_session"], started["first_round"]
     for letter in sorted(state.unique_letters):
         game.record_guess(state, letter)
     before = asdict(state), asdict(session)
@@ -138,13 +140,13 @@ def test_guesses_and_hints_resume(account):
     assert restored["round"]["active_seconds"] >= 0
 
 
-@pytest.mark.parametrize("situation", ["restaurant", "airport", "hotel"])
+@pytest.mark.parametrize("level", ["beginner", "novice", "expert"])
 @pytest.mark.parametrize("mode", ["easy", "hard"])
 @pytest.mark.parametrize("round_count", [3, 5, 10])
-def test_supported_journey_and_reports(account, situation, mode, round_count):
+def test_supported_journey_and_reports(account, level, mode, round_count):
     path, user = account
     service = PracticeService(path, curated=True)
-    config = settings(situation, mode)
+    config = settings(level, mode)
     config["rounds"] = round_count
     state = service.start(user, config)
     for index in range(round_count):
@@ -294,8 +296,8 @@ def test_legacy_content_is_excluded_from_new_practice(account):
     seed_curated(path)
     service = CuratedWordService(path)
     words = service.get_words("english")
-    assert {word["source"] for word in words} == {"desktop-core", "desktop-levels"}
-    assert len(service.travel_cards()) == 30
+    assert {word["source"] for word in words} == {"desktop-levels"}
+    assert len(words) == 400
     assert service.get_words("french") == []  # a legacy language with no desktop pack
 
 
@@ -313,7 +315,8 @@ def test_unicode_composed_letter_is_accepted():
     )
     result = GameService().record_guess(state, "e\u0301")
     assert result["accepted"]
-    assert state.correct_letters == ["é"]
+    assert state.correct_letters == ["e"]
+    assert state.masked_letters[3] == "é"  # the tile keeps the real spelling
 
 
 def test_desktop_single_instance_lock(tmp_path):

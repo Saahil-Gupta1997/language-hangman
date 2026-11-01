@@ -1,6 +1,6 @@
 ; The build script passes /DMyAppVersion from src/__init__.py; this default must match it.
 #ifndef MyAppVersion
-  #define MyAppVersion "1.0.0rc5"
+  #define MyAppVersion "1.0.0rc6"
 #endif
 [Setup]
 AppId={{D16E40D9-2223-4FBE-A30C-B2A17B3D4506}

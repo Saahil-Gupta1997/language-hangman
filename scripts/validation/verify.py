@@ -59,18 +59,18 @@ def beta_import(name="beta-learner", password="beta-pass-2026"):
         AuthService(database).authenticate_user(PROFILE, PASSWORD) is None,
     )
     service = PracticeService(database, curated=True)
-    for situation in ("hotel", "airport", "restaurant"):
+    for level in ("beginner", "novice"):
         settings = dict(
             SETTINGS,
             rounds=5,
-            situation=situation,
+            difficulties=[level],
             practice_mode="review",
             review_policy="review_only",
         )
         try:
             payload = service.start(user, settings)
         except NoReviewWordsError:
-            print(f"review in {situation}: refused (no eligible review words)")
+            print(f"review at {level}: refused (no eligible review words)")
             continue
         words = []
         while True:
@@ -81,7 +81,7 @@ def beta_import(name="beta-learner", password="beta-pass-2026"):
                 service.discard(user["id"])
                 break
             payload = service.next_round(user["id"])
-        print(f"review in {situation}: {words}")
+        print(f"review at {level}: {words}")
 
 
 def restore_newest(damaged_copy):
