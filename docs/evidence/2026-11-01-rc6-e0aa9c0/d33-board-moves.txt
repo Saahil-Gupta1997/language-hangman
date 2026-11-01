@@ -1,0 +1,11 @@
+revision 2bfbd61 (2bfbd61)
+board width 471  A key left edge 64  lines of 73-73 characters (1 lines)
+board width 476  A key left edge 67  lines of 71-71 characters (1 lines)
+board width 478  A key left edge 68  lines of 63-95 characters (11 lines)
+board width 529  A key left edge 94  lines of 26-62 characters (27 lines)
+distinct board widths: 4
+
+revision e0aa9c0 (e0aa9c0)
+board width 579  A key left edge 118  lines of 26-95 characters (40 lines)
+distinct board widths: 1
+

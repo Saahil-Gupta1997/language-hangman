@@ -58,30 +58,39 @@ learning card. Optional keys added later (such as `notice`) keep older snapshots
 
 ## Practice rules
 
-- **Two desktop packs only.** `CuratedWordService` sets `sources` to `desktop-core` (the 30
-  travel cards) and `desktop-levels` (the level lists), applied where rows are fetched for
-  listing, counting, strict selection and every fallback. Legacy words, results and review
-  items stay in the database for history and reports.
-- **Level lists reuse the engine.** Their words carry the situation `general`, so a level
-  session is a language, a difficulty and that situation, and the existing selection, Review
-  and reporting rules apply unchanged. They have five levels of their own (`WORD_LEVELS`), and
+- **One word pack.** `CuratedWordService` sets `sources` to `desktop-levels`, applied where
+  rows are fetched for listing, counting, strict selection and every fallback. Legacy words,
+  the travel cards removed in rc6, and their results and review items stay in existing
+  databases for history and reports, but are never offered.
+- **The word lists reuse the engine.** Their words carry the situation `general`, so a session
+  is a language, a difficulty and that situation, and the existing selection, Review and
+  reporting rules apply unchanged. They have five levels of their own (`WORD_LEVELS`), and
   only `source = desktop-levels` rows may use them or leave out teaching notes.
-- **Letters.** A letter with an accent is its own letter: `n` does not reveal `ñ`. The board
-  adds only the extra letters each list uses (`EXTRA_LETTERS`), which the content check proves
-  is enough. Spaces and hyphens are shown from the start and never guessed. German nouns keep
-  their capitals; guesses are compared in lower case.
+- **Letters.** `base_letter` reduces a character to the plain letter it counts as, so `n`
+  reveals `ñ` and `s` reveals `ß`. Guesses are stored in that form, tiles keep the real
+  spelling, and rounds paused in rc5 with accented guesses are folded when read. The board
+  is plain A–Z, which the content check proves is enough. Spaces and hyphens are shown from
+  the start and never guessed, and German nouns keep their capitals.
+- **Session length.** All words plays until End session: `planned_rounds` is the sentinel
+  `ENDLESS_ROUNDS`, which is never reached. Review my words plays each eligible word once, and
+  sessions paused in rc5 keep the length they started with. An endless session stores no
+  per-round review, which only a session summary reads and which would grow on every guess.
+- **Repeats.** The scorer alone would keep returning the same few words, so once an endless
+  session has played its whole set, `_least_recent_word` takes over: `practiced_word_ids` is
+  kept oldest first, and the oldest word comes next.
+- **Ending.** `PracticeService.end` drops the unfinished word. The session counts as completed
+  if at least one word was finished, and as abandoned otherwise.
 - **Candidate lists.** `None` means no restriction; an empty list means no eligible words.
 - **Review eligibility.** A word is eligible when the learner has an active review-queue
-  item for it (created when a round with it is completed) and it is a pack word in the
-  chosen situation or level. Due items come first, then items not yet due; each word appears
-  once per session. With none, `NoReviewWordsError` is raised and the app offers Standard
-  practice. A shorter session, or one that runs out mid-way, says why.
+  item for it (created when a round with it is completed) and it is a pack word at the
+  chosen language and level. Due items come first, then items not yet due; each word appears
+  once per session, so the session is as long as the words that match. With none,
+  `NoReviewWordsError` is raised and the app offers All words. A session that runs out
+  mid-way says why.
 - **Words shared with the legacy bank.** Pack words can match a legacy row on word, language,
   category and difficulty (bread, slowly, early, quiet and clean did for the travel cards).
   When content is seeded, such a row takes the pack's content, so earlier practice of that
   word counts as practised.
-- **Words shared between packs.** The six English words already on travel cards were left out
-  of the level lists, because a matching row would have overwritten the card.
 
 ## Start-up, upgrade and recovery
 
@@ -151,9 +160,6 @@ redraws the board in place; a guess that ends a round rebuilds the screen. Canva
 not exposed as separate controls, and the keys are not in the Tab order: the guess box and
 Submit button are the keyboard route. Long words and phrases wrap onto further lines of tiles,
 breaking at spaces where they can.
-
-The Word cards page shows a level list in one text box rather than a card per word: building
-about 80 cards from CustomTkinter labels would take seconds, for the same reason as D-32.
 
 ## Boundaries
 

@@ -1,0 +1,13 @@
+installed rc6 app, normal launch on the upgraded rc5 data:
+window title: 'Language Hangman · 1.0.0rc6'; visible after 2.36 s
+captured 1343x997; app window: True
+closed normally, exit code 0
+
+sign-in and data checked with rc6's code (e0aa9c0, same commit as the installer):
+code version 1.0.0rc6
+previous-release credentials accepted: True
+wrong password rejected: True
+second profile present: True
+progress: {'rounds': 2, 'wins': 1, 'losses': 1, 'sessions': 0}
+paused round resumes: True (round 3 of 3)
+after finishing the resumed round: {'rounds': 3, 'wins': 2, 'losses': 1}

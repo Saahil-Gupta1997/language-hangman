@@ -1,0 +1,6 @@
+final install of rc6 exit: 0 | entries: ['1.0.0rc6'] | exe True
+owner's real data unchanged, checked again after start-up timing, scaling and the demo: True (4 files)
+desktop shortcut present: True
+installed exe is the rc6 build: True
+note: 03-upgrade.txt says the travel cards file stayed in the program folder after the upgrade from rc5. That is defect D-34: the installer removes nothing that a new build dropped. Only one file differs (rc5's 983 built files against rc6's 982): _internal/src/desktop/content/english.json. rc6 does not read it, the installed smoke passed with it present, and uninstall.log shows it deleted. The final install followed that uninstall, so this machine does not have it.
+note: 986 files in 04-installed-notices.txt is the upgraded copy; a fresh rc6 install has 985.

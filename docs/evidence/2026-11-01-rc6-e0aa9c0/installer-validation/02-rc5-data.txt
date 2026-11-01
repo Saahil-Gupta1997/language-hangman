@@ -1,0 +1,3 @@
+learner data created by rc5's own code (f2bb6b9, the revision the rc5 installer used)
+f2bb6b9
+created with 1.0.0rc5: schema 1 | profiles 2 | rounds 2 | saved sessions 1 | 1.17 MB | paused wrong letter z

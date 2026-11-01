@@ -52,6 +52,7 @@ python -m scripts.validation.verify restore-newest <copy of the damaged file>
 python -m scripts.validation.measure performance <dataset folder>
 python -m scripts.validation.measure round                # guess to redrawn screen
 python -m scripts.validation.measure round Spanish Expert # the same, in a word list
+python -m scripts.validation.measure long 200             # early and late in one long session
 python -m scripts.validation.measure scaling <output folder>
 python -m scripts.validation.evidence collect <staging> docs/evidence/<date>-<version>-<revision>
 python -m scripts.validation.kit <release package>/acceptance-kit <installer sha256>

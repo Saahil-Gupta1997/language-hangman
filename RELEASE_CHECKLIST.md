@@ -21,7 +21,9 @@
    previous release and let it create data; upgrade; `third_party_notices.py check
    <install folder> --installed`; normal launch; `LanguageHangman.exe --smoke-test <folder>`
    without Python on `PATH`; beta import; damaged-data recovery; uninstall with data
-   preserved. Capture screenshots with a DPI-aware process (incident I-4).
+   preserved. Capture screenshots with a DPI-aware process (incident I-4). Compare the
+   upgraded program folder with the build: until D-34 is fixed, a file the new build
+   dropped stays behind.
 6. Run the manual checks and record them (docs/ACCEPTANCE.md M1–M4).
 7. Content and learner gates: CONTENT_REVIEW.md and USER_ACCEPTANCE.md completed by people.
 8. Owner decisions recorded: licence (DEC-08) and installer terms (DEC-14) before publishing.

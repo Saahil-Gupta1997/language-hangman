@@ -25,8 +25,12 @@ engineering), **Deferred** (accepted for a later release).
 | `f5ac6a2`, `21cee81`, `06fc02c`, `7c425fd` | tests, documents and release tooling only; nothing the installer bundles |
 | `801cdf4` | rc4 documentation and evidence; rc4 source archive (tag `v1.0.0rc4`) |
 | `9c9ffbb`, `d85c109` | the owner's rc4 decisions, record corrections and the rc3/rc4 re-measure (I-9); documents and evidence only |
-| `f2bb6b9` | **1.0.0rc5 release candidate** (installer `a94a9269…d47531` built from this commit): original feedback lines and level word lists |
-| later commits | documents, evidence, test wiring (I-11) and the build script's logging; no application change (check with `git diff f2bb6b9 -- src desktop_app.py packaging`) |
+| `f2bb6b9` | 1.0.0rc5 release candidate (installer `a94a9269…d47531` built from this commit): original feedback lines and level word lists |
+| `1c2eb39`, `b81220d`, `8240fcf` | rc5 documents, evidence, test wiring (I-11) and the build script's logging; rc5 source archive (tag `v1.0.0rc5` on `b81220d`); the owner's all-four-languages decision. No application change |
+| `2bfbd61` | rc6's first candidate: one word set, plain-letter guessing, endless play. Failed a GUI scenario in its clean clone (D-33); not built |
+| `d7cac11` | rc6's second candidate: the letter keys stay still (D-33) and the measuring tool is corrected (I-13). A typical guess measured slower; not built |
+| `e0aa9c0` | **1.0.0rc6 release candidate** (installer `32f4b0f0…f6ff7` built from this commit): equal columns |
+| later commits | documents and evidence only; no application change (check with `git diff e0aa9c0 -- src desktop_app.py packaging`) |
 
 ## Defect and task register
 
@@ -39,7 +43,7 @@ engineering), **Deferred** (accepted for a later release).
 | D-02 | P0 | Legacy vocabulary reachable from desktop practice | Verified | `d2e696f`; RQ-05/06; installer step 7 (rc3) |
 | D-03 | P0 | Corrupt live database blocked start-up and restore | Verified (manual UI pass pending, G8) | `525c377`; RQ-07..11; installer steps 8–9 (rc3) |
 | T-04 | P0 | Build and validate the Windows release | Verified on the build machine for rc3; clean machine and manual checks (G5–G8) pending owner | VERIFICATION.md installer steps 1–10 |
-| T-05 | P0 | Content and learner acceptance | Pending owner (24/24 warnings dispositioned; review kit and session kit ready) | CONTENT_REVIEW.md, USER_ACCEPTANCE.md |
+| T-05 | P0 | Content and learner acceptance | Pending owner (review kit and session kit ready) | CONTENT_REVIEW.md, USER_ACCEPTANCE.md |
 | T-06 | P1 | Privacy-safe failure diagnostics | Fixed | RQ-19 |
 | D-07 | P1 | Automatic backup failure stopped start-up (`FileExistsError`) | Fixed | RQ-20 |
 | T-08 | P1 | Performance baseline | Done; supported history needs owner agreement (DEC-10) | performance.txt |
@@ -49,7 +53,7 @@ engineering), **Deferred** (accepted for a later release).
 | D-12 | P2 | "Why this word" showed wrong legacy reason text | Fixed | GUI and unit tests |
 | T-13 | P2 | GUI not exercised in PR CI | Fixed in workflow; not yet run on GitHub (no remote) | `.github/workflows/ci.yml` |
 | T-14 | P2 | Line endings varied with checkout settings | Fixed | `.gitattributes` |
-| D-15 | P3 | Easy mode shows two distinct clues (synonym field is empty by design) | Accepted: no screen promises three clues; README states two | — |
+| D-15 | P3 | Easy mode shows two distinct clues (synonym field is empty by design) | Moot since rc6: the cards are gone and every word has three clues | DEC-27 |
 | T-16 | P3 | Black configured but not enforced (15 files differ) | Deferred; all new and changed code is formatted | — |
 | D-17 | P2 | Feedback lines mocked the learner or relied on idioms | **Reversed by the owner in rc5** (DEC-07): the original lines are back, deliberately | `25aebde`, `f2bb6b9` |
 | D-18 | P1 | Screenshot helper copied a screen region (could record other programs) | Fixed | `src/desktop/capture.py`; occlusion test |
@@ -69,20 +73,29 @@ engineering), **Deferred** (accepted for a later release).
 | D-32 | P1 | The redesigned round screen rebuilt about 160 CustomTkinter widgets after every guess: 1.13 s median from guess to redrawn screen, against 285 ms in rc3 (neither figure has a raw record; rc3 measured again at 273–349 ms, I-9) | **Fixed**: the board updates in place while a round continues, and is drawn on one canvas instead of about 55 widgets. 39 ms median, p95 606 ms (the guess that completes a round and changes the screen); measured again the same day at 44–56 ms and 763–789 ms (I-9) | `d543579`; rc4 `performance.txt` |
 | T-30 | P1 | Restore the older app's word database: four languages, five levels, three clues per word (owner request, 2026-11-01, DEC-22) | **Done, content unreviewed**: 1,538 words as a separate pack; Language and Words in Practice setup; accent keys; phrases; level learning card; word lists; "not yet reviewed" labels. Accuracy is a G9 matter | `f2bb6b9`; `tests/test_level_words.py`; rc5 `level-list-conversion.txt` |
 | T-31 | P2 | Restore the 40 original feedback lines word for word (owner request, 2026-11-01, DEC-07) | **Done** | `f2bb6b9`; `tests/test_level_words.py` |
+| T-32 | P1 | Accents count as the normal letter: `a` fills in `á`, `s` fills in `ß`, and the board is plain A–Z in every language (owner, 2026-11-01, DEC-28) | **Done**. Reverses rc5's rule | `2bfbd61`; RQ-33 |
+| T-33 | P2 | Remove Word cards altogether (owner, 2026-11-01, DEC-29) | **Done** | `2bfbd61`; RQ-38 |
+| T-34 | P1 | All words runs until the learner stops, with no rounds question; End session ends at once; ended sessions count if a word was finished (owner, 2026-11-01, DEC-30, DEC-32) | **Done** | `2bfbd61`; RQ-36, RQ-37 |
+| T-35 | P1 | Remove the 30 travel cards, leaving one set of words: 1,544 words, with the six held back for the cards returned (owner, 2026-11-01, DEC-27) | **Done, content unreviewed** | `2bfbd61`; RQ-30, RQ-38; rc6 `level-list-conversion.txt` |
+| T-36 | P3 | Standard becomes All words, and Review becomes Review my words (owner, 2026-11-01, DEC-31) | **Done** | `2bfbd61` |
+| D-33 | P1 | The round screen's two columns took their width partly from their content, so a long feedback line narrowed the board: four widths (471–529 px) across the 40 lines, with the A key moving 30 px, about a whole key, so a click could guess a different letter. In rc5 too, since the long lines came back there | **Fixed**: columns of fixed, equal width, one board width across all 40 lines, and a GUI scenario that tries every line. The 3:2 split tried first wrapped more lines and slowed a typical guess, so the columns became equal | `d7cac11`, `e0aa9c0`; rc6 `d33-board-moves.txt`, `d33-columns-diagnosis.txt` |
+| D-34 | P3 | An upgrade keeps files the new build dropped, because `packaging/hangman.iss` has no `[InstallDelete]` section: after an upgrade from rc5, `_internal\src\desktop\content\english.json` (the travel cards, 31,446 bytes) stays in the program folder | **Open**, for the next build. rc6 does not read the file (its only `*.json` scan is inside `levels/`), the installed smoke passed with it present, uninstalling removes it, and a fresh install does not have it. A packaging fix needs a new candidate, which this alone did not justify (Claude Code's call; the owner can overrule it) | rc6 `installer-validation/03-upgrade.txt`, `11-after-validation.txt` |
+| D-35 | P3 | In the Clues card, the first clue line's white background covers the card's thin border at both edges | **Open**, cosmetic, for the next build. Seen in rc5 and rc6 | `installed-smoke/practice.png` in both folders |
+| D-36 | P3 | The Help page's last line still says "an independent review of the teaching cards", which rc6 removed: it should say the word lists. Claude Code updated the Help text for rc6 and missed this line. Found by a text sweep after the installer was validated. The same sweep found old wording ("situation", "Standard session") in `game_service.py`, but traced each case: the desktop app cannot show those messages | **Open**, for the next build. A change to `src` needs a new candidate, and that would replace the owner's installed copy again, so it is the owner's call | `src/desktop/settings_view.py:204` at `e0aa9c0` |
 | D-31 | P1 | Fixed text-wrap widths clipped the recovery instructions below the default window width, and body text by 10 px at the minimum size with Large text; the recovery window ignored the saved text size | **Verified** (automated at real 125% and emulated 100%/150%; installed build at real 125%); real 100%/150% and keyboard pending (G6, G7) | `942c780`; rc3 `defects/D-31…`, `scaling/` |
 
 ## RAID log
 
 | ID | Type | Description | Owner | Closure condition | Status |
 | --- | --- | --- | --- | --- | --- |
-| RK-1 | Risk | Content errors reach learners (AI-assisted writing, no educator yet). Larger since rc5: 1,538 unreviewed words in four languages, with a repeat rate that shows the sheet was not cleaned (56 rows) and at least one fragment (German `Quanten-`). The app labels the lists "not yet reviewed" | Owner | G9 review done, corrections applied and retested | Open |
-| RK-8 | Risk | Reviewing 1,568 words in four languages needs several reviewers and far longer than the 2 hours estimated for the 30 cards, so G9 may hold up 1.0. The owner decided that all four languages must pass before 1.0 (DEC-23), so 1.0 waits for all four reviews | Owner | Reviewers appointed for all four languages and their reviews finished | Open |
+| RK-1 | Risk | Content errors reach learners (AI-assisted writing, no educator yet). Larger since rc5: 1,544 unreviewed words in four languages, with a repeat rate that shows the sheet was not cleaned (56 rows) and at least one fragment (German `Quanten-`). The app says the words have not been reviewed | Owner | G9 review done, corrections applied and retested | Open |
+| RK-8 | Risk | Reviewing 1,544 words in four languages needs several reviewers and far longer than the 2 hours estimated for the 30 cards, so G9 may hold up 1.0. The owner decided that all four languages must pass before 1.0 (DEC-23), so 1.0 waits for all four reviews | Owner | Reviewers appointed for all four languages and their reviews finished | Open |
 | RK-9 | Risk | The restored lines mock the learner and use idioms, chosen deliberately by the owner. G10 learners read simple English and may be confused or put off | Owner | G10 observed; the owner reviews what learners say | Open |
 | RK-2 | Risk | Keyboard/screen-reader users blocked: CustomTkinter draws controls on canvases that Windows screen readers generally cannot read | Owner | G6 passed; screen-reader limitation stated in README | Open (limitation documented) |
 | RK-3 | Risk | SmartScreen "unknown publisher" warning deters installers | Owner | Signing certificate or documented expectation | Accepted: documented |
 | RK-4 | Risk | Real 100%/150% scaling differs from emulation | Owner | G7 passed | Open |
 | RK-5 | Risk | CustomTkinter 5.2.2 internals patched (dropdown leak, timers) break on upgrade | Engineering | Workarounds skip themselves if internals move; re-test on any upgrade | Mitigated |
-| A-1 | Assumption | Intended learner reads simple English (about CEFR A2): a proposed profile, not validated | Owner | DEC-15 confirmed; reviewer agrees the cards suit it (G9) | Pending owner |
+| A-1 | Assumption | Intended learner reads simple English (about CEFR A2): a proposed profile, not validated | Owner | DEC-15 confirmed; reviewers agree the words suit it (G9) | Pending owner |
 | A-2 | Assumption | One learner per Windows account; a few profiles per computer | Owner | DEC-10 agreed | Pending owner |
 | I-1 | Issue | Validated installer `fd93a4d3…` deleted by a clean-up step before archiving | Engineering | Rebuilt from the same commit and all installer checks re-run (`2fc27de7…`); artifacts now copied out immediately after building | Closed |
 | I-2 | Issue | Commit `05eef7a` made after a test run whose failure a pipeline masked | Engineering | Cause (D-26) fixed; test runs now check pytest's exit code | Closed |
@@ -93,14 +106,16 @@ engineering), **Deferred** (accepted for a later release).
 | RK-6 | Risk | Distributing without third-party notices breaches bundled licences | Owner + engineering | T-28 closed | Closed (rc3) |
 | I-4 | Issue | rc2 installed-app screenshots were cropped to 80%: the capture helper was not DPI aware (the published `docs/media/recovery.png` looked clipped) | Engineering | DPI-aware helper; rc3 captures complete; rc2 folder annotated | Closed |
 | I-5 | Issue | Two rc2 statements were inaccurate: "no control clipped horizontally" (10 px clipping existed at minimum size with Large text) and "every operation under one second" (start-up with the day's first backup took 1.26 s) | Engineering | Measured check added (D-31); performance restated with figures | Closed |
-| RK-7 | Risk | Python's licence asks distributors of the Microsoft Distributable Code (VCRUNTIME140.dll) to have end users agree to terms at least as protective as Microsoft's; the installer ships LICENSE.txt and the notices but shows no terms during setup. rc4 stays that way by the owner's choice (2026-11-01, DEC-14). The licence wording names external end users, so outside testers may already count | Owner | DEC-14 decided | Open |
+| RK-7 | Risk | Python's licence asks distributors of the Microsoft Distributable Code (VCRUNTIME140.dll) to have end users agree to terms at least as protective as Microsoft's; the installer ships LICENSE.txt and the notices but shows no terms during setup. rc4 stayed that way by the owner's choice (2026-11-01, DEC-14), and rc5 and rc6 are the same. The licence wording names external end users, so outside testers may already count | Owner | DEC-14 decided | Open |
 | I-6 | Issue | The validation tooling lived only in a temporary folder and was cleaned after six weeks, with the beta database and the performance dataset: the release could not be revalidated without rewriting it | Engineering | Rewritten into `scripts/validation/` with a README, including the beta database builder and the guess-to-redraw measurement, which first stayed in scratch (I-8). The installer steps themselves are still run by hand from the README | Closed |
 | I-8 | Issue | The first rc4 record was wrong: it claimed 175 passed on `d543579` (the clean run was 174 passed, 1 failed), named archive commit `06fc02c` for checks run on `21cee81`, said two scratch-only tools were in the repository, left placeholders in this log, and left rc3 details in current documents. The handover repeated the first of these and an unsupported remark that the rc2 and rc3 demos shared a flaw | Engineering | Record audited against the runs; final tree tested three times in a clean clone; remark withdrawn | Closed |
 | I-7 | Issue | The UI redesign was measured only after the rc4 installer had been built and validated, so the artifact had to be discarded and rebuilt | Engineering | Performance measured before packaging in future candidates (RELEASE_CHECKLIST step 2) | Closed |
-| I-9 | Issue | An audit of the rc4 record on 2026-11-01 found: the D-32 row and M11 gave 41 ms (D-32 also p95 640 ms), not `performance.txt`'s 39 ms and 606 ms; VERIFICATION.md's open and backup rows and the README's backup figure did not match the same file; "13 licence texts" was 12 texts plus the notices file (rc3's "12" was 11 plus it); rc3's 285 ms and 329 ms and the first rc4 build's 1.13 s have no raw record; `build.log` does not name the commit | Engineering | Figures and counts corrected and the unrecorded figures marked. rc3 and rc4 measured again in one session on 2026-11-01: rc3 273–349 ms median, 330–407 ms p95; rc4 44–56 ms, 763–789 ms, so rc4's recorded 39 ms and 606 ms were not reproduced. The rc5 build's commit is recorded beside its log in `revision.txt`, and `build_desktop.ps1` now prints it. Closes when the next build's log names its commit | Open |
+| I-9 | Issue | An audit of the rc4 record on 2026-11-01 found: the D-32 row and M11 gave 41 ms (D-32 also p95 640 ms), not `performance.txt`'s 39 ms and 606 ms; VERIFICATION.md's open and backup rows and the README's backup figure did not match the same file; "13 licence texts" was 12 texts plus the notices file (rc3's "12" was 11 plus it); rc3's 285 ms and 329 ms and the first rc4 build's 1.13 s have no raw record; `build.log` does not name the commit | Engineering | Figures and counts corrected and the unrecorded figures marked. rc3 and rc4 measured again in one session on 2026-11-01: rc3 273–349 ms median, 330–407 ms p95; rc4 44–56 ms, 763–789 ms, so rc4's recorded 39 ms and 606 ms were not reproduced. The rc5 build's commit is recorded beside its log in `revision.txt`, and `build_desktop.ps1` now prints it. rc6's `build.log` names `e0aa9c0` on line 11 | Closed |
 | I-10 | Issue | The first clean-clone test run of `f2bb6b9` was 193 passed, 1 failed: the validation script had pointed `TEMP` at the long scratch folder, so a test's `git init` failed on Windows' path limit ("cannot stat"). Rerun on the same commit with the system temp folder: 194 passed | Engineering | Cause shown by the rerun; the first run's output is kept in `checks-first-run/` | Closed |
 | I-11 | Issue | Five new GUI scenarios were written for rc5 but never added to the list in `tests/test_desktop_gui.py`, so the build commit's 194 passed without them, and a draft of VERIFICATION.md said they had run. Found by adding up the test counts (175 + 19 left no room for them), after the installer was built and validated | Engineering | Added to the list; all five passed on the same application code; included in the final-tree runs. The content of the installer did not need to change | Closed |
 | I-12 | Issue | One of six final-tree runs on `1c2eb39` failed `main_window_text_wraps_at_minimum_size` with "application has been destroyed". Only the close handler can destroy that window and the test had not reached its cleanup, so something probably closed it from outside while the owner was using the computer. Likely, not proven: it was not reproduced | Engineering | Scenario passed 10 of 10 alone; a second set of three full runs passed; the failing output is kept in `checks-final-first-set/`. Reopen if it recurs on a machine nobody is using | Closed |
+| I-13 | Issue | The measuring tool misled in three ways on rc6's first candidate: `performance` did not seed the words, the "first 20 rounds" group held every round but the last 20, and a round's first guess included drawing its new screen | Engineering | Fixed in `d7cac11`. Every rc5 and rc6 figure in VERIFICATION.md's performance section comes from the corrected tool, run in one session. Older records used the old tool, so they compare only with themselves | Closed |
+| I-14 | Issue | The first rc6 commit held two file deletions instead of its 35 changed files: `git add` stopped at a path already removed, and the commit went ahead without it | Engineering | Seen from the commit's file count and amended into `2bfbd61` before anything ran on it; 35 files checked | Closed |
 | DP-4 | Dependency | Clean Windows machine or account without Python | Owner | G5 run | Open |
 
 ## Decision log
@@ -114,9 +129,9 @@ owner's confirmation before they are quoted as the owner's reasoning.
 | DEC-01 | Native desktop app instead of the browser prototype | Offline, single-user, no server or cookies to secure; one install for learners | Retrospective (rc1 README and code) | Owner to confirm |
 | DEC-02 | SQLite with transactions per learner action | Local, file-based, atomic, easy to back up and restore | Retrospective | Owner to confirm |
 | DEC-03 | Explainable rules, no machine learning | Predictable, testable behaviour for a small corpus | Retrospective | Owner to confirm |
-| DEC-04 | 30 curated English words; other languages dropped | rc1 excluded the older corpus; an earlier review had found 42 misspelled French/Spanish words there. Quality over breadth (inferred) | Retrospective | **Superseded by DEC-22** for the app's scope; the 30 cards stay |
+| DEC-04 | 30 curated English words; other languages dropped | rc1 excluded the older corpus; an earlier review had found 42 misspelled French/Spanish words there. Quality over breadth (inferred) | Retrospective | **Superseded by DEC-22 and DEC-27**: other languages returned in rc5, and the cards went in rc6 |
 | DEC-05 | Keep legacy browser code and banks for history and regression tests only | Imported progress still reports; the desktop reuses the game engine | Retrospective | Owner to confirm |
-| DEC-06 | Review = all active review items for curated words in the situation, due first, once per session | Keeps Review usable on the day of practice (due-only would wait a day); matches rc1's fallback but as one consistent rule | Claude Code (this delivery) | **Owner to confirm** |
+| DEC-06 | Review = all active review items for words at the chosen language and level, due first, once per session | Keeps Review usable on the day of practice (due-only would wait a day); matches rc1's fallback but as one consistent rule. Until rc6 the rule was by situation or level; rc6 has only levels, and plays every eligible word once with no notice | Claude Code (this delivery) | **Owner to confirm** |
 | DEC-07 | Feedback tone. rc2 replaced the mocking lines with plain encouraging English (Claude Code's change: sarcasm and idioms may confuse and offend). In rc5 the owner chose "Original sarcastic lines", so the 40 originals are back word for word | The owner was told these reverse D-17 and insult the learner; the rationale for the choice is theirs and is not recorded here | **Owner, 2026-11-01** | Decided; see RK-9 |
 | DEC-08 | Licence: **MIT for this project's software**; the teaching content and the icon stay unlicensed until their authorship is confirmed | Rationale written by Claude Code, not stated by the owner. The owner said "MIT for the code"; the LICENSE scope note also names tests and documentation, and the copyright name comes from the Git author. Asked to confirm, the owner answered "Keep rc4 as is" (2026-11-01), so LICENSE stays unchanged for rc4. rc5 names the level lists as excluded, like the cards, and changes nothing else. Raised and not resolved: `docs/CONTENT_REVIEW.md` repeats most of the card text, so "documentation" overlaps the exclusion; `frontend/` and `assets/audio/` are not named; the year was not confirmed | **Owner, 2026-11-01** | Decided; scope and copyright line kept; content licence open |
 | DEC-09 | Version the new candidate as 1.0.0rc2 | It differs from the rc1 build; still a release candidate until gates close | Claude Code | Done |
@@ -124,8 +139,8 @@ owner's confirmation before they are quoted as the owner's reasoning.
 | DEC-11 | Minimum window 800×600 logical pixels | Fits 1080p at 150% scaling | Claude Code | Done |
 | DEC-12 | GUI tests run one per process | Removes a test-harness-only Tcl interaction (D-26) | Claude Code | Done |
 | DEC-13 | Build locally from a clean checkout; GitHub workflows prepared but not yet run | No remote repository available | Claude Code | Done |
-| DEC-14 | Whether the installer shows licence terms to end users (see RK-7), and which | Depends on the project licence (DEC-08). The owner answered "Keep rc4 as is" (2026-11-01), so rc4's setup shows no terms; rc5 did not raise it again and is the same | Owner, for rc4; carried into rc5 unchanged | **Owner decision still needed before public distribution** |
-| DEC-15 | Intended learner: reads short, simple English (about CEFR A2), preparing for travel | A proposed profile for reviewing content and recruiting learners; not a certification that the content is A2 | Proposal (CONTENT_REVIEW.md) | **Owner to confirm; reviewer to test** |
+| DEC-14 | Whether the installer shows licence terms to end users (see RK-7), and which | Depends on the project licence (DEC-08). The owner answered "Keep rc4 as is" (2026-11-01), so rc4's setup shows no terms; rc5 and rc6 did not raise it again and are the same | Owner, for rc4; carried into rc5 and rc6 unchanged | **Owner decision still needed before public distribution** |
+| DEC-15 | Intended learner: reads short, simple English (about CEFR A2), preparing for travel | A proposed profile for reviewing content and recruiting learners; not a certification that the content is A2. "Preparing for travel" stopped fitting when the cards went (DEC-27), which is one more reason for the owner to decide this | Proposal (CONTENT_REVIEW.md) | **Owner to confirm; reviewer to test** |
 | DEC-16 | Version the corrected candidate 1.0.0rc3 | Code changed after rc2 (D-30, D-31, D-29, T-28); still a candidate until gates close | Claude Code | Done |
 | DEC-17 | Generate notices from the build environment and check coverage at build time | Keeps the notices true to what ships; a new file or version fails the build | Claude Code | Done |
 | DEC-18 | Redesign the UI within CustomTkinter rather than moving to native widgets or Qt | Claude Code's reasoning when offering the options, not the owner's: days rather than weeks, no packaging or licence change; the alternative (ttk) would also have fixed the screen-reader gap and remains open | **Owner, 2026-11-01** | Done |
@@ -133,10 +148,17 @@ owner's confirmation before they are quoted as the owner's reasoning.
 | DEC-21 | Whether learners see a hanging figure | Claude Code added the drawing in the redesign without raising it. It may sit badly with the plain, encouraging tone in DEC-07; a neutral progress graphic is a small change. The owner answered "Keep rc4 as is" (2026-11-01), so the figure stays, and rc5 keeps it. Changing it after G9 or G10 would mean rerunning the affected checks | Claude Code (added); **owner, 2026-11-01** (kept) | Decided |
 | DEC-20 | Keep the validation tooling in the repository | A release that cannot be revalidated by someone else is not finished (I-6) | Claude Code | Done |
 | DEC-22 | Bring back the older app's word database in English, Spanish, Italian and German. This lifts the owner's earlier "no extra languages" rule | The owner chose "English & other language words" after being told the cost: an rc5, reviewers per language, words the keys could not enter. Who wrote `words.xlsx` is not recorded | **Owner, 2026-11-01** | Decided; **owner to say who wrote the sheet** |
-| DEC-23 | G9 covers every word that ships, with one reviewer per language, and **all four languages must pass before 1.0**. Level lists say "not yet reviewed" until then. G10 uses the English travel cards unless the owner says otherwise | Proposed by Claude Code in the rc5 plan; the owner answered "Start rc5" to that plan, which listed these as defaults. Asked "Must all four languages pass review before 1.0?", the owner answered "Yes, all four" | **Owner, 2026-11-01** (G9); G10 is a default | G9 decided; **G10's language still a default the owner can change** |
+| DEC-23 | G9 covers every word that ships, with one reviewer per language, and **all four languages must pass before 1.0**. Level lists say "not yet reviewed" until then. G10 uses the English travel cards unless the owner says otherwise. The cards went in rc6, so Claude Code moved that default to the English Beginner list | Proposed by Claude Code in the rc5 plan; the owner answered "Start rc5" to that plan, which listed these as defaults. Asked "Must all four languages pass review before 1.0?", the owner answered "Yes, all four" | **Owner, 2026-11-01** (G9); G10 is a default | G9 decided; **G10's language still a default the owner can change** |
 | DEC-24 | The placement test and adaptive word choice stay out | The owner chose "Not now". They need levels to choose between, which rc5 now has, so this can be revisited | **Owner, 2026-11-01** | Decided for now |
-| DEC-25 | No clue changes: the 30 cards keep two clues, and there is no first-letter button | The owner answered "No preference", so nothing was added ("do not add features unless I ask"). Level words have three clues because their rows do | Claude Code, following the owner's rule | Open to the owner |
-| DEC-26 | How the sheet became a pack: keep each repeated word at its lowest level, leave out the six English words already on cards, keep German nouns' and phrases' capitals, invent no teaching notes, add only the accent keys the lists use | Each keeps the content as written or protects something that already works; a level-list row with a card's word, type and level would overwrite the card | Claude Code, listed in the rc5 plan | Done |
+| DEC-25 | No clue changes: the 30 cards keep two clues, and there is no first-letter button | The owner answered "No preference", so nothing was added ("do not add features unless I ask"). Level words have three clues because their rows do. Since rc6 every word has three, because the cards are gone | Claude Code, following the owner's rule | Open to the owner |
+| DEC-26 | How the sheet became a pack: keep each repeated word at its lowest level, leave out the six English words already on cards, keep German nouns' and phrases' capitals, invent no teaching notes, add only the accent keys the lists use | Each keeps the content as written or protects something that already works; a level-list row with a card's word, type and level would overwrite the card | Claude Code, listed in the rc5 plan | Done; **changed by rc6**: the six words are back (DEC-27) and the accent keys are gone (DEC-28) |
+| DEC-27 | Remove the 30 travel cards, so one set of words remains and Practice setup has no situation or word-set choice | The owner offered two routes, removing the cards or converting all words to their situation-and-pronunciation format, and answered "Remove and start rc6". Their rationale is not recorded | **Owner, 2026-11-01** | Decided |
+| DEC-28 | Accents count as the normal letter | The owner asked "Shouldn't accented be same as the normal word?" and put this in the rc6 plan. It reverses rc5's rule, and it means the game no longer tests where accents go | **Owner, 2026-11-01** | Decided |
+| DEC-29 | Remove Word cards altogether | The owner asked why it was a separate tab when people would just look a word up, and changed the plan from a smaller edit to full removal | **Owner, 2026-11-01** | Decided |
+| DEC-30 | All words runs until the learner stops, with no rounds question, and End session ends straight away with no confirmation | The owner asked why there was a rounds question when the game should keep going until told to end | **Owner, 2026-11-01** | Decided |
+| DEC-31 | "Standard" becomes All words, and "Review" becomes Review my words | The owner set these names in the rc6 plan | **Owner, 2026-11-01** | Decided |
+| DEC-32 | An ended session counts as completed in Reports if at least one word was finished; with none finished it is not counted | The owner set this in the rc6 plan | **Owner, 2026-11-01** | Decided |
+| DEC-33 | Details settled while building rc6: once every word has been played they repeat, oldest first; `ß` counts as `s`; a session paused on a travel card finishes its word, then says it has ended; old card rows stay in existing databases, so their results stay in Reports; an endless session keeps no list of words to replay | Each follows from DEC-27, DEC-28 or DEC-30, or keeps old data working | Claude Code, the first in the rc6 plan | Done; the owner can change any of them |
 
 ## How AI assistance was used and verified
 
@@ -151,12 +173,13 @@ owner's confirmation before they are quoted as the owner's reasoning.
   exercised by installing, upgrading, recovering and uninstalling it; screenshots were
   checked to contain only the application window. Hypotheses that turned out wrong
   (D-26's first two theories) were recorded and their code removed.
-- **Where the AI's own evidence was wrong.** Incidents I-1 to I-12 record them, including
+- **Where the AI's own evidence was wrong.** Incidents I-1 to I-14 record them, including
   cropped screenshots published with rc2 (I-4) and two rc2 claims that measurement later
   contradicted (I-5). An independent review found the D-30 rollback defect in AI-written
   code; fault-injection tests now cover it. In rc4 the AI's own redesign made the game four
   times slower, which measurement caught before release and a second build fixed (D-32,
-  I-7).
+  I-7). rc5's restored lines moved the letter keys, and rc5's checks missed it: a GUI scenario
+  caught it only in rc6's clean clone, when different random lines happened to appear (D-33).
 - **What the AI must not do.** Fill in educator, learner or manual-test results; mark a gate
   passed without evidence. Those records remain empty until people complete them.
 - **Owner review.** All code, content and decisions above are subject to the owner's review;
@@ -262,3 +285,27 @@ which widens G9 (DEC-23, RK-1, RK-8).
 
 Dependencies: the human gates, reviewers per language, the clean machine, DEC-14, who wrote
 the word sheet, and a GitHub repository.
+
+### M13 — rc6: one set of words, plain letters and play until you stop
+
+The owner questioned five things in rc5, then edited the plan: accents count as the normal
+letter, Word cards and the travel cards go, play runs until you stop, the labels change, and an
+ended session counts if a word was finished (DEC-27 to DEC-32). The app now has one set of
+words, 1,544 of them.
+
+The first candidate, `2bfbd61`, failed `letter_keys_guess_on_click` in its clean clone. The failure
+was real: a long feedback line moved the letter keys, and it had been in rc5 too (D-33). Fixing
+the column proportions at 3:2 in `d7cac11` passed every check but made a typical guess slower
+(56–71 ms against rc5's 35–48 ms in that session), because more lines wrapped. Equal columns in
+`e0aa9c0` brought it level with rc5. The same work found the measuring tool misleading in three
+ways (I-13).
+
+Built from `e0aa9c0` after measuring, and validated on the build machine in a separate data
+folder, with the owner's agreement to replace their installed rc5; their data was checked
+unchanged and rc6 was left installed with their desktop shortcut. Validation found that an
+upgrade keeps a file the new build dropped (D-34), and checking the screenshots and text
+afterwards found a cosmetic flaw (D-35) and a stale Help line (D-36). All three are P3 and
+left for the next build. The words remain unreviewed.
+
+Dependencies: the human gates, reviewers per language, the clean machine, DEC-14, DEC-15, who
+wrote the word sheet, and a GitHub repository.

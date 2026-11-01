@@ -1,0 +1,12 @@
+Why d7cac11 (columns 3:2) measured slower than rc5: guess to redrawn screen, Spanish Beginner, on d7cac11's code.
+long = the 40 real feedback lines; short = test lines that never wrap; 1:1 = equal columns, which e0aa9c0 then adopted.
+Run with scratch script diagnose_wrap.py on 2026-11-01, after rc6's validation, so compare these rows with each other only.
+long 3:2 | guess to redrawn screen, Spanish Beginner n=59 median 54.8 ms p95 441.0 ms max 455.0 ms
+short 3:2 | guess to redrawn screen, Spanish Beginner n=59 median 26.7 ms p95 441.3 ms max 463.6 ms
+long 1:1 | guess to redrawn screen, Spanish Beginner n=59 median 27.3 ms p95 442.1 ms max 449.0 ms
+long 3:2 | guess to redrawn screen, Spanish Beginner n=59 median 52.4 ms p95 436.8 ms max 448.7 ms
+short 3:2 | guess to redrawn screen, Spanish Beginner n=59 median 25.8 ms p95 439.4 ms max 459.7 ms
+long 1:1 | guess to redrawn screen, Spanish Beginner n=59 median 28.2 ms p95 437.8 ms max 458.5 ms
+long 3:2 | guess to redrawn screen, Spanish Beginner n=59 median 53.9 ms p95 438.7 ms max 453.1 ms
+short 3:2 | guess to redrawn screen, Spanish Beginner n=59 median 27.6 ms p95 437.0 ms max 456.7 ms
+long 1:1 | guess to redrawn screen, Spanish Beginner n=59 median 29.8 ms p95 422.5 ms max 461.7 ms

@@ -1,0 +1,7 @@
+Measured 2026-11-01 on the build machine, in normal use by the owner: AMD Ryzen 7 6800H (8C/16T), 15.2 GB RAM, NVMe SSD, Windows 11 Home 26200 at 125% scaling.
+Interpreter for all runs: the build environment (Python 3.12.1, CustomTkinter 5.2.2, Pillow 12.3.0). Tool: scripts/validation/measure.py as at e0aa9c0, the same copy run against clean clones of f2bb6b9 (rc5) and e0aa9c0 (rc6).
+Guess to redrawn screen: a fresh profile in a temporary folder, 12 rounds, each word's letters in order, so every sample is a correct guess. Revisions alternated. cpu-load-before is one reading before each run, not load during it. Each round's screen is drawn before its first guess is timed.
+long-session.txt: one All words session of 200 rounds, on rc6 only: rc5 has no endless session.
+performance.txt: 5 profiles, one with 5,000+ completed rounds, 5.57 MB (the rc5 dataset, copied, with the rc6 words seeded). performance-rc5-same-session.txt: the same tool on rc5, on the same day. screen: rows include drawing.
+startup.txt: the installed EXE, 5 launches on a fresh copy of that dataset; the first launch also loads the words and makes the day's automatic backup.
+first-candidate-2bfbd61 and second-candidate-d7cac11: the same measurements on the two commits before the build commit, kept because they are why the columns became equal.

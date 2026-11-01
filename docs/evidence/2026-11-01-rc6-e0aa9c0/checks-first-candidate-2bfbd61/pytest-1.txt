@@ -1,0 +1,39 @@
+........................................................................ [ 34%]
+....F................................................................... [ 68%]
+...................................................................      [100%]
+================================== FAILURES ===================================
+________________ test_gui_scenario[letter_keys_guess_on_click] ________________
+
+scenario = 'letter_keys_guess_on_click'
+tmp_path = WindowsPath('<TEMP>')
+
+    @pytest.mark.parametrize("scenario", SCENARIOS)
+    def test_gui_scenario(scenario, tmp_path):
+        require_display()
+        completed = subprocess.run(
+            [sys.executable, str(RUNNER), scenario, str(tmp_path)],
+            capture_output=True,
+            text=True,
+            timeout=180,
+            check=False,
+        )
+>       assert completed.returncode == 0, completed.stdout + completed.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<TEMP>", line 500, in <module>
+E             SCENARIOS[name](data_dir)
+E           File "<TEMP>", line 305, in letter_keys_guess_on_click
+E             assert app.payload["round"]["guessed_letters"] == before, "a used key fired again"
+E         AssertionError: a used key fired again
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['<TEMP>"round"]["guessed_letters"] == before, "a used key fired again"\nAssertionError: a used key fired again\n').returncode
+
+tests\test_desktop_gui.py:42: AssertionError
+============================== warnings summary ===============================
+..\..\venv-test\Lib\site-packages\starlette\testclient.py:40
+  <TEMP> DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1 failed, 210 passed, 1 warning in 261.00s (0:04:21)
+pytest exit=1

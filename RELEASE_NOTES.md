@@ -1,4 +1,71 @@
-# 1.0.0rc5 — Desktop release candidate 5 (2026-11-01)
+# 1.0.0rc6 — Desktop release candidate 6 (2026-11-01)
+
+A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
+keyboard and display checks, a review of every word by qualified reviewers, five learner
+sessions and some owner decisions are still open (see
+[docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)). It supersedes rc5 for every purpose: rc5 has a defect
+that can make a click guess the wrong letter.
+
+- **Installer:** `LanguageHangman-1.0.0rc6-Setup.exe`, SHA256 `32f4b0f0612d37ecc9e135b834f49f3769100adf5ff70fcbadfe7f14524f6ff7`, built from `e0aa9c0`.
+  **Unsigned**: Windows SmartScreen will show "unknown publisher".
+- **Upgrading:** run the new installer; profiles, progress and paused rounds are kept (checked
+  from rc5 on the build machine). Results on travel cards stay in Reports. A session paused on
+  a travel card finishes its word, then says it has ended.
+
+## New since 1.0.0rc5
+
+- **One set of words.** The 30 travel cards are gone, and so is the choice of situation. The six
+  English words that had been held back for them have joined the lists, which makes 1,544 words.
+- **Accents count as the normal letter.** `a` fills in `á`, `s` fills in `ß`, and every language
+  uses the same A–Z board. This reverses rc5's rule.
+- **All words runs until you stop.** There is no question about rounds. Once you have played
+  every word at that level they repeat, oldest first.
+- **End session** ends straight away, with no confirmation. Reports counts the session if you
+  finished at least one word; the word in play is dropped.
+- **Word cards is gone.** So is the Words choice in Practice setup: you choose a language and a
+  level.
+- **New names:** Standard is now All words, and Review is now Review my words.
+- **Review my words** plays every eligible word once, so it no longer shortens with a notice.
+
+## Fixed since 1.0.0rc5
+
+- **The letter keys no longer move (D-33).** A long feedback line used to narrow the board and
+  shift the keys by up to 30 pixels, about a whole key, so a click could guess a different
+  letter. The two columns of the round screen now have fixed, equal widths.
+
+## Known limitations
+
+- The words are unreviewed. Automated checks cover their structure, not their accuracy.
+- Words have clues but no example, pronunciation or usage note, and none were invented. Their
+  clues are in English, so they suit someone who reads English.
+- Accents are not practised, because a plain letter fills them in.
+- The restored lines mock the learner and use idioms that a learner of English may not follow.
+- Windows screen readers generally cannot read CustomTkinter's controls, and the letter keys
+  are drawn rather than separate controls; typing a letter remains the keyboard route.
+- The database is not encrypted; local passwords protect in-app access only. No email
+  password reset. Backups contain every profile's password hash: keep them private.
+- One app instance per Windows account; guest practice is deleted on sign-out or close.
+- The installer is unsigned and shows no licence terms during setup.
+- Upgrading from rc5 or earlier leaves one unused file in the program folder (D-34). rc6 does
+  not read it, and uninstalling removes it.
+- In the Clues card, the first clue's white background covers the card's thin border (D-35).
+- The Help page still mentions "the teaching cards", which are gone: read it as the word
+  lists (D-36).
+- On the build machine, the guess that ends a round takes 0.4–0.6 s and start-up about 1.1 s.
+- No cloud sync, automatic updates, multiplayer, machine learning or placement test.
+
+## Verification
+
+Automated suite on the build commit `e0aa9c0`: 212 passed, 0 skipped, in a clean clone. The
+first candidate `2bfbd61` was 210 passed, 1 failed: that failure exposed D-33. Lint, content and
+release checks clean.
+On the build machine (Windows 11 at 125%): upgrade from rc5 with data created by rc5, the
+17-step journey in the installed app without Python, beta import, recovery at both text sizes,
+restore, uninstall, and the installed licence and notices. Not yet: a clean machine, real
+100%/150% scaling, a person using the keyboard. Details:
+[docs/VERIFICATION.md](docs/VERIFICATION.md).
+
+## 1.0.0rc5 — Desktop release candidate 5 (2026-11-01)
 
 A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
 keyboard and display checks, a review of every word by qualified reviewers, five learner

@@ -1,0 +1,5 @@
+version 1.0.0rc6; database 4.55 MB
+open + upgrade check + quick_check           n=10   median     13.7 ms   p95     38.0 ms   max     38.0 ms
+full backup (copy + validation)              n=5    median    119.5 ms   p95    126.8 ms   max    126.8 ms
+progress report, large profile               n=20   median     58.1 ms   p95     76.0 ms   max     77.4 ms
+performance exit=1

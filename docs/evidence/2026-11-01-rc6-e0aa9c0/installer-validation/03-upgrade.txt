@@ -1,0 +1,13 @@
+candidate installer (built from e0aa9c0) sha256: 32f4b0f0612d37ecc9e135b834f49f3769100adf5ff70fcbadfe7f14524f6ff7
+size: 14785343 bytes
+learner data files before upgrade: 1; app.db sha256: 3cb3e267ed66671cd388083db9b241f4998a8cc82d15ca44390c15bdb85cdf0e
+installed exe before (rc5): 9de7b25420319c9c163dcf623ffb530ce48805c56a053accf50a1640bc1428b8
+upgrade installer exit: 0
+learner data files after upgrade: 1; app.db sha256: 3cb3e267ed66671cd388083db9b241f4998a8cc82d15ca44390c15bdb85cdf0e
+every learner data file unchanged by the installer: True
+installed exe after: c0df9ef049e8d828b52bdbbc93636f8ff303ec86a0948021b56b9ceee3968a9d
+installed exe identical to the rc6 build: True
+uninstall entries: 1 -> version 1.0.0rc6
+LICENSE.txt beside the program: True; notices: True; licence texts: 12
+word lists installed: ['english.json', 'german.json', 'italian.json', 'spanish.json']
+travel cards gone from the program folder: False
