@@ -36,8 +36,8 @@ sessions and some owner decisions are still open (see
 
 ## Verification
 
-Automated suite on the build commit `f66aa51`: 215 passed, 0 skipped, in a clean clone. Lint,
-content and release checks clean. On the build machine (Windows 11 at 125%): upgrade from rc7 with
+Automated suite on the final tree (`e2f34e5`): 215 passed, 0 skipped, ×3, in a clean clone. On
+the build commit `f66aa51`: 215 passed, 0 skipped. Lint, content and release checks clean. On the build machine (Windows 11 at 125%): upgrade from rc7 with
 data created by rc7, the 17-step journey in the installed app without Python, beta import, recovery
 at both text sizes, restore, uninstall, and the installed licence and notices. The real installer
 window showed the licence page with Next disabled; it was then ended from outside, so no person has

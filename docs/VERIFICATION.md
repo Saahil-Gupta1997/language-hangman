@@ -71,6 +71,7 @@ that was informal, not a recorded manual check.
 | `c58d208` rc7 build commit | 214 passed in the clean clone | 0 | clean | PASS, 1,544 words structurally valid | passed (17), source and installed | one test removed with its line, three added; all three new ones fail on rc6's code |
 | `52844d1` rc7 final tree | 214 passed, 0 skipped, ×3 | 0 | clean | PASS, 1,544 words structurally valid | passed (17) from source; installer code unchanged since `c58d208` | three consecutive runs in a clean clone, each exit 0 (`checks-final/` in rc7's folder) |
 | **`f66aa51` rc8 build commit** | **215 passed** in the clean clone | **0** | clean | PASS, 1,544 words structurally valid | passed (17), source and installed | one test added for the licence page |
+| **`e2f34e5` rc8 final tree** | **215 passed, 0 skipped, ×3** | **0** | clean | PASS, 1,544 words structurally valid | passed (17) from source; installer code unchanged since `f66aa51` | three consecutive runs in a clean clone, each exit 0 (`checks-final/`) |
 
 **The long first run on rc7's final tree.** Run 1 took 1 h 57 min against about 4 minutes for
 runs 2 and 3. Windows' system log shows the laptop in Modern Standby from 17:22 to 19:16, with one

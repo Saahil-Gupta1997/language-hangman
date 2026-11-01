@@ -35,7 +35,8 @@ engineering), **Deferred** (accepted for a later release).
 | `c58d208` | 1.0.0rc7 release candidate (installer `c0089bfb…e6d2c3` built from this commit): simpler round screens, D-34 to D-36 |
 | `52844d1`, `1dd7102` | rc7 documents, evidence and media, tested three times; rc7 source archive (tag `v1.0.0rc7` on `1dd7102`). No application change |
 | `f66aa51` | **1.0.0rc8 release candidate** (installer `f4b158b3…119288` built from this commit): MIT for the word lists and icon, licence page in setup |
-| later commits | documents and evidence only; no application change (check with `git diff f66aa51 -- src desktop_app.py packaging`) |
+| `e2f34e5` | rc8 documents, evidence and media; the final tree, tested three times |
+| later commits | documents and evidence only; rc8 source archive (tag `v1.0.0rc8`). No application change (check with `git diff f66aa51 -- src desktop_app.py packaging`) |
 
 ## Defect and task register
 
