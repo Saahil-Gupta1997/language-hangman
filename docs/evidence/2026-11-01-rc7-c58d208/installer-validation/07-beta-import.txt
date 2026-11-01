@@ -1,0 +1,16 @@
+v1.0.0-beta database (schema 0, created by the beta's own code at 023f2bd)
+sha256 a512e245e71ea08329bb0003e1236d5e95207d226f05bea8db7b09d1f55e7d24
+
+import with rc7's code (c58d208), exactly as the Restore / import button does:
+1.0.0rc7 | previous data kept as backups/before-restore-20261101T114656952471.sqlite
+
+installed rc7 app, normal launch on the imported data:
+window title: 'Language Hangman · 1.0.0rc7'; visible after 1.08 s
+captured 1343x997; app window: True
+closed normally, exit code 0
+
+beta credentials accepted: True
+beta history kept: {'rounds': 3, 'wins': 3, 'words': 3}
+profiles from before the import are gone (all profiles are replaced, as documented): True
+review at beginner: ['clean', 'small', 'early']
+review at novice: refused (no eligible review words)

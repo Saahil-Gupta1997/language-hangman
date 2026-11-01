@@ -1,0 +1,15 @@
+live data file corrupted (first 100 bytes zeroed); real 125% display scaling
+
+installed rc7, normal launch on damaged data, Standard text:
+window title: 'Language Hangman · Recovery · 1.0.0rc7'; visible after 0.88 s
+opening size 1043x847; app window: True
+minimum size 818x647
+closed, exit code 1
+
+installed rc7, normal launch on damaged data, Large text:
+window title: 'Language Hangman · Recovery · 1.0.0rc7'; visible after 0.93 s
+opening size 1043x847; app window: True
+minimum size 818x647
+closed, exit code 1
+
+settings.json removed again

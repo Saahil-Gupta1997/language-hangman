@@ -1,0 +1,6 @@
+The new rc7 tests, copied onto rc6's code (b370afb). Each must fail here and pass on rc7.
+FAILED tests/test_practice_rules.py::test_shipped_text_names_nothing_that_was_removed
+FAILED tests/test_practice_rules.py::test_upgrades_clear_the_program_before_copying
+FAILED tests/test_desktop_gui.py::test_gui_scenario[clues_leave_the_card_border_alone]
+FAILED tests/test_desktop_gui.py::test_gui_scenario[level_word_card_shows_its_clues]
+4 failed, 24 deselected in 7.47s

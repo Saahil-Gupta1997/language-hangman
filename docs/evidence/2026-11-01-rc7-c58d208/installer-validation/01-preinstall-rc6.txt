@@ -1,0 +1,12 @@
+date: 2026-11-01T17:15:59.688504+05:30
+validation data folder: a separate folder, set with LANGUAGE_HANGMAN_DATA_DIR
+owner's installed copy before: exe c0df9ef049e8d828b52bdbbc93636f8ff303ec86a0948021b56b9ceee3968a9d (rc6 build), entries ['1.0.0rc6']
+owner agreed on 2026-11-01 to it being closed and replaced; their data is not used
+owner's rc6 removed: exit 0, folder gone True
+pre-state: install dir exists=False, data folder used exists=False, start menu entry=False, uninstall entries=0
+rc5 first, so the upgrade has a leftover file to clear (D-34). sha256: a94a92696cf5f001fb7326fb92628557f5907b0122383d3269d3aa4e26d47531
+rc5 install exit: 0; registered version: 1.0.0rc5
+previous release: rc6 installer (built from e0aa9c0) sha256: 32f4b0f0612d37ecc9e135b834f49f3769100adf5ff70fcbadfe7f14524f6ff7
+rc6 install exit: 0; registered version: 1.0.0rc6
+installed rc6 exe sha256: c0df9ef049e8d828b52bdbbc93636f8ff303ec86a0948021b56b9ceee3968a9d
+rc5's travel cards file present after the rc6 upgrade (D-34): True

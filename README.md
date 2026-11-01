@@ -5,13 +5,13 @@ Spanish, Italian and German at five levels. It is built with Python, CustomTkint
 It is rule-based software built with AI assistance: it contains no machine learning, chatbot or
 network service, and it needs no account or internet connection.
 
-**Status: 1.0.0rc6, a tested release candidate. It is not the final 1.0. Nobody has reviewed
+**Status: 1.0.0rc7, a tested release candidate. It is not the final 1.0. Nobody has reviewed
 the words yet, and the app says so.**
 
 | Verified by automated and scripted checks on the build machine (Windows 11, 125%) | Still pending: needs people or the owner |
 | --- | --- |
-| 212 automated tests, lint, content and release checks on `aa82f18`, three times (installer built from `e0aa9c0`, same application code) | Installing on a clean Windows account without Python (G5) |
-| Installer built from `e0aa9c0`; install, upgrade from rc5 with its own data, beta import, recovery, uninstall | Keyboard-only use by a person; real 100% and 150% display scaling (G6–G8) |
+| 214 automated tests, lint, content and release checks on `c58d208`, the installer's commit | Installing on a clean Windows account without Python (G5) |
+| Installer built from `c58d208`; install, upgrade from rc6 with its own data, beta import, recovery, uninstall | Keyboard-only use by a person; real 100% and 150% display scaling (G6–G8) |
 | 17-step scripted journey in the installed app, without Python on `PATH` | Review of every word by qualified reviewers, one per language (G9) |
 | Third-party notices installed and checked against every shipped file | Five learner sessions (G10) |
 | Window layout and the game board measured at the minimum size (real 125%, emulated 100% and 150%) | Owner decisions: installer terms, Review rule, supported history, intended learner, who wrote the word sheet |
@@ -23,14 +23,14 @@ not a clean-machine test. Gates, evidence and the go/no-go record are in
 
 ## Demo
 
-[2½-minute captioned recording](docs/media/language-hangman-1.0.0rc6-demo.mp4): a new
+[2½-minute captioned recording](docs/media/language-hangman-1.0.0rc7-demo.mp4): a new
 profile, Review my words refused for a new learner, play that runs until you end it, the card
 after each word, reports, Review my words, resuming after closing, a plain letter revealing an
 accent, text size, settings and recovery from a damaged data file. It is a scripted run of
-revision `e0aa9c0` from source, driven through the app's own controls and slowed so that
+revision `c58d208` from source, driven through the app's own controls and slowed so that
 captions can be read; only the app window is captured.
 
-Screenshots from the installed rc6 build:
+Screenshots from the installed rc7 build:
 
 | Practice round | Review my words | Recovery window |
 | --- | --- | --- |
@@ -60,13 +60,13 @@ Screenshots from the installed rc6 build:
 
 ## Install
 
-1. Download `LanguageHangman-1.0.0rc6-Setup.exe` from the release package and check it:
+1. Download `LanguageHangman-1.0.0rc7-Setup.exe` from the release package and check it:
 
    ```powershell
-   Get-FileHash .\LanguageHangman-1.0.0rc6-Setup.exe -Algorithm SHA256
+   Get-FileHash .\LanguageHangman-1.0.0rc7-Setup.exe -Algorithm SHA256
    ```
 
-   Expected: `32f4b0f0612d37ecc9e135b834f49f3769100adf5ff70fcbadfe7f14524f6ff7`.
+   Expected: `c0089bfbc8cc9f56d2996e18e794438870c82a384ed797d4f6b699bab3e6d2c3`.
 2. Run it. **The installer is not code-signed**, so Windows SmartScreen shows "Windows
    protected your PC" and "Unknown publisher". Choose *More info › Run anyway* only if the
    checksum matched. It installs for the current user; no administrator rights are needed.
@@ -97,14 +97,14 @@ sessions are kept; any database upgrade runs on a copy after a pre-upgrade backu
 ## Performance (build machine)
 
 On an AMD Ryzen 7 6800H laptop with an NVMe SSD, on a fresh profile, a typical guess takes
-**32–45 ms** from submission to redrawn screen across three word lists (three runs of each, with
-48–102 samples a run; rc5 measured 34–41 ms in the same session). The guess that ends a round
-takes 430–553 ms at the 95th percentile (rc5: 452–608 ms). In one 200-round session, the last 20
-rounds took about as long as the first 20. With one profile holding 5,000+ completed rounds
-(5.57 MB of data), reports aggregate in 59 ms (20 samples), a full backup takes 126 ms (5
-samples), and moving between Home, Reports and Practice setup takes 451–710 ms (5 samples each).
-The installed program shows its window in 1.08–1.09 s, and in 2.06 s the first time it loads the
-words into a data file. Details and method:
+**35–49 ms** from submission to redrawn screen across three word lists (three runs of each, with
+48–102 samples a run; rc6 measured 35–40 ms in the same session). The guess that ends a round
+takes 522–648 ms at the 95th percentile (rc6: 434–635 ms). In one 200-round session, the last 20
+rounds were no slower than the first 20. With one profile holding 5,000+ completed rounds (5.57
+MB of data), reports aggregate in 57 ms (20 samples), a full backup takes 128 ms (5 samples), and
+moving between Home, Reports and Practice setup takes 365–599 ms (5 samples each). The installed
+program shows its window in 1.08–1.11 s, and in 1.96 s the first time it loads the words into a
+data file. Details and method:
 [docs/VERIFICATION.md](docs/VERIFICATION.md#performance-build-machine).
 
 ## Known limitations
@@ -126,17 +126,12 @@ words into a data file. Details and method:
   sign-out.
 - The installer is unsigned and shows no licence terms during setup (DEC-14 is open).
   `LICENSE.txt` and the third-party notices are installed next to the program.
-- The Help page still mentions "the teaching cards", which are gone: read it as the word
-  lists (D-36).
-- Upgrading from rc5 or earlier leaves one unused file in the program folder (D-34):
-  `_internal\src\desktop\content\english.json`. rc6 does not read it, and uninstalling
-  removes it.
 - Tested on the Windows 11 build machine only; Windows 10 and other machines are unchecked.
 - Supported history (proposed): up to 5 profiles and 5,000 rounds per profile.
 
 ## How it was built
 
-The beta and rc1 were written with AI coding assistance. The rc2 to rc6 work (defect fixes,
+The beta and rc1 were written with AI coding assistance. The rc2 to rc7 work (defect fixes,
 the interface redesign, the word lists, tests, packaging, validation and these documents) was
 carried out by Claude Code at the owner's direction; an independent review of rc2 found the
 restore defect fixed in rc3. Every fix was reproduced first and checked afterwards, and results
@@ -203,7 +198,7 @@ data, never yours. Build the installer with Python 3.12.1 and Inno Setup 6.7.3:
 | `packaging/`, `scripts/build_desktop.ps1` | PyInstaller and Inno Setup build |
 | `packaging/third-party/`, `scripts/third_party_notices.py` | Third-party notices and their coverage check |
 | `scripts/validation/` | Release validation: window capture, fixtures, measurement, evidence, kit, demo |
-| `tests/` | 212 tests, including GUI scenarios run one per process |
+| `tests/` | 214 tests, including GUI scenarios run one per process |
 
 **Legacy, unsupported:** `app.py`, `src/ui/`, `src/gateway/`, `frontend/`, `Dockerfile`,
 `data/words/` and most of `src/cli.py` belong to the earlier browser prototype. They are not

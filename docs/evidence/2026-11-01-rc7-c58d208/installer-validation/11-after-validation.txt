@@ -1,0 +1,5 @@
+final install of rc7 exit: 0 | entries: ['1.0.0rc7'] | exe True
+owner's real data unchanged, checked again after start-up timing, scaling and the demo: True (4 files)
+desktop shortcut present: True
+installed exe is the rc7 build: True
+note: rc6's own fresh install has no leftover file, so this validation installed rc5, then rc6, then rc7. 01-preinstall-rc6.txt shows rc5's travel cards file present after rc6, and 03-upgrade.txt shows it gone after rc7 (D-34). Files in the program folder that are not in the build: only LICENSE.txt and the two uninstaller files.

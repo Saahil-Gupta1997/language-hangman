@@ -1,0 +1,3 @@
+learner data created by rc6's own code (e0aa9c0, the revision the rc6 installer used)
+e0aa9c0
+created with 1.0.0rc6: schema 1 | profiles 2 | rounds 2 | saved sessions 1 | 1.14 MB | paused wrong letter z

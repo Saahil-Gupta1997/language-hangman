@@ -1,4 +1,56 @@
-# 1.0.0rc6 — Desktop release candidate 6 (2026-11-01)
+# 1.0.0rc7 — Desktop release candidate 7 (2026-11-01)
+
+A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
+keyboard and display checks, a review of every word by qualified reviewers, five learner
+sessions and some owner decisions are still open (see
+[docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)). It supersedes rc6 for every purpose.
+
+- **Installer:** `LanguageHangman-1.0.0rc7-Setup.exe`, SHA256 `c0089bfbc8cc9f56d2996e18e794438870c82a384ed797d4f6b699bab3e6d2c3`, built from `c58d208`.
+  **Unsigned**: Windows SmartScreen will show "unknown publisher".
+- **Upgrading:** run the new installer; profiles, progress and paused rounds are kept (checked
+  from rc6 on the build machine).
+
+## New since 1.0.0rc6
+
+- **Simpler round screens**, after the owner tested rc6. "Why this word" is gone from the clue
+  card, "These words have not been reviewed by a teacher yet" is gone from the word card, and
+  "This result contributes to game progress, not a language qualification" is gone from the
+  result screen. Practice setup and Help still say the words are unreviewed.
+
+## Fixed since 1.0.0rc6
+
+- **Upgrades clear the old program first (D-34).** A file a new build dropped no longer stays
+  behind. Learner data is outside the program folder and is not touched.
+- **The card borders are unbroken (D-35).**
+- **Help no longer mentions the teaching cards (D-36).**
+
+## Known limitations
+
+- The words are unreviewed. Automated checks cover their structure, not their accuracy.
+- Words have clues but no example, pronunciation or usage note, and none were invented. Their
+  clues are in English, so they suit someone who reads English.
+- Accents are not practised, because a plain letter fills them in.
+- The restored lines mock the learner and use idioms that a learner of English may not follow.
+- Windows screen readers generally cannot read CustomTkinter's controls, and the letter keys
+  are drawn rather than separate controls; typing a letter remains the keyboard route.
+- The database is not encrypted; local passwords protect in-app access only. No email
+  password reset. Backups contain every profile's password hash: keep them private.
+- One app instance per Windows account; guest practice is deleted on sign-out or close.
+- The installer is unsigned and shows no licence terms during setup.
+- On the build machine, the guess that ends a round takes 0.4–0.6 s and start-up about 1.1 s.
+- No cloud sync, automatic updates, multiplayer, machine learning or placement test.
+
+## Verification
+
+Automated suite on the build commit `c58d208`: 214 passed, 0 skipped, in a clean clone. Lint,
+content and release checks clean. The three new tests for D-34, D-35 and D-36 fail on rc6's code.
+On the build machine (Windows 11 at 125%): upgrade from rc6 with data created by rc6, reached
+through rc5 so that the upgrade had a leftover file to clear; the 17-step journey in the installed
+app without Python; beta import; recovery at both text sizes; restore; uninstall; and the installed
+licence and notices. Not yet: a clean machine, real 100%/150% scaling, a person using the keyboard.
+Details: [docs/VERIFICATION.md](docs/VERIFICATION.md).
+
+## 1.0.0rc6 — Desktop release candidate 6 (2026-11-01)
 
 A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
 keyboard and display checks, a review of every word by qualified reviewers, five learner

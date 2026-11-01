@@ -29,9 +29,11 @@ engineering), **Deferred** (accepted for a later release).
 | `1c2eb39`, `b81220d`, `8240fcf` | rc5 documents, evidence, test wiring (I-11) and the build script's logging; rc5 source archive (tag `v1.0.0rc5` on `b81220d`); the owner's all-four-languages decision. No application change |
 | `2bfbd61` | rc6's first candidate: one word set, plain-letter guessing, endless play. Failed a GUI scenario in its clean clone (D-33); not built |
 | `d7cac11` | rc6's second candidate: the letter keys stay still (D-33) and the measuring tool is corrected (I-13). A typical guess measured slower; not built |
-| `e0aa9c0` | **1.0.0rc6 release candidate** (installer `32f4b0f0…f6ff7` built from this commit): equal columns |
+| `e0aa9c0` | 1.0.0rc6 release candidate (installer `32f4b0f0…f6ff7` built from this commit): equal columns |
 | `aa82f18` | rc6 documents, evidence and media; the final tree, tested three times |
-| later commits | documents and evidence only; rc6 source archive (tag `v1.0.0rc6`). No application change (check with `git diff e0aa9c0 -- src desktop_app.py packaging`) |
+| `b370afb` | rc6's recorded results; rc6 source archive (tag `v1.0.0rc6`). No application change |
+| `c58d208` | **1.0.0rc7 release candidate** (installer `c0089bfb…e6d2c3` built from this commit): simpler round screens, D-34 to D-36 |
+| later commits | documents and evidence only; no application change (check with `git diff c58d208 -- src desktop_app.py packaging`) |
 
 ## Defect and task register
 
@@ -51,7 +53,7 @@ engineering), **Deferred** (accepted for a later release).
 | T-09 | P1 | Repository clarity (metadata, legacy labels, versions, dependencies, licence, provenance) | Done; licence pending owner (DEC-08) | `05eef7a`; CONTENT_REVIEW.md |
 | T-10 | P1 | TPM evidence | Done | this file, VERIFICATION.md, ACCEPTANCE.md, ARCHITECTURE.md |
 | D-11 | P2 | Legacy tests wrote `.session_secret` into real app data | Fixed | `tests/conftest.py` |
-| D-12 | P2 | "Why this word" showed wrong legacy reason text | Fixed | GUI and unit tests |
+| D-12 | P2 | "Why this word" showed wrong legacy reason text | Fixed; moot since rc7, which removed the line (T-37) | GUI and unit tests |
 | T-13 | P2 | GUI not exercised in PR CI | Fixed in workflow; not yet run on GitHub (no remote) | `.github/workflows/ci.yml` |
 | T-14 | P2 | Line endings varied with checkout settings | Fixed | `.gitattributes` |
 | D-15 | P3 | Easy mode shows two distinct clues (synonym field is empty by design) | Moot since rc6: the cards are gone and every word has three clues | DEC-27 |
@@ -80,9 +82,10 @@ engineering), **Deferred** (accepted for a later release).
 | T-35 | P1 | Remove the 30 travel cards, leaving one set of words: 1,544 words, with the six held back for the cards returned (owner, 2026-11-01, DEC-27) | **Done, content unreviewed** | `2bfbd61`; RQ-30, RQ-38; rc6 `level-list-conversion.txt` |
 | T-36 | P3 | Standard becomes All words, and Review becomes Review my words (owner, 2026-11-01, DEC-31) | **Done** | `2bfbd61` |
 | D-33 | P1 | The round screen's two columns took their width partly from their content, so a long feedback line narrowed the board: four widths (471–529 px) across the 40 lines, with the A key moving 30 px, about a whole key, so a click could guess a different letter. In rc5 too, since the long lines came back there | **Fixed**: columns of fixed, equal width, one board width across all 40 lines, and a GUI scenario that tries every line. The 3:2 split tried first wrapped more lines and slowed a typical guess, so the columns became equal | `d7cac11`, `e0aa9c0`; rc6 `d33-board-moves.txt`, `d33-columns-diagnosis.txt` |
-| D-34 | P3 | An upgrade keeps files the new build dropped, because `packaging/hangman.iss` has no `[InstallDelete]` section: after an upgrade from rc5, `_internal\src\desktop\content\english.json` (the travel cards, 31,446 bytes) stays in the program folder | **Open**, for the next build. rc6 does not read the file (its only `*.json` scan is inside `levels/`), the installed smoke passed with it present, uninstalling removes it, and a fresh install does not have it. A packaging fix needs a new candidate, which this alone did not justify (Claude Code's call; the owner can overrule it) | rc6 `installer-validation/03-upgrade.txt`, `11-after-validation.txt` |
-| D-35 | P3 | In the Clues card, the first clue line's white background covers the card's thin border at both edges | **Open**, cosmetic, for the next build. Seen in rc5 and rc6 | `installed-smoke/practice.png` in both folders |
-| D-36 | P3 | The Help page's last line still says "an independent review of the teaching cards", which rc6 removed: it should say the word lists. Claude Code updated the Help text for rc6 and missed this line. Found by a text sweep after the installer was validated. The same sweep found old wording ("situation", "Standard session") in `game_service.py`, but traced each case: the desktop app cannot show those messages | **Open**, for the next build. A change to `src` needs a new candidate, and that would replace the owner's installed copy again, so it is the owner's call | `src/desktop/settings_view.py:204` at `e0aa9c0` |
+| D-34 | P3 | An upgrade kept files the new build dropped, because `packaging/hangman.iss` had no `[InstallDelete]` section: after an upgrade from rc5, `_internal\src\desktop\content\english.json` (the travel cards, 31,446 bytes) stayed in the program folder | **Verified**: the installer clears `_internal` before copying. On the build machine the file was present after rc5 → rc6 and gone after rc6 → rc7, and the only program files not in the build are `LICENSE.txt` and the two uninstaller files. Learner data is outside the program folder and stayed byte-identical | `c58d208`; rc7 `installer-validation/01…`, `03-upgrade.txt`, `new-tests-on-rc6.txt` |
+| D-35 | P3 | In the Clues card, a full-width frame painted over the card's thin border at both edges, and the word card's empty spacer left a one-pixel gap in its bottom border | **Fixed**: both sit inside the border, and a GUI scenario checks the clue frame. Seen in rc5 and rc6 | `c58d208`; rc7 `installed-smoke/practice.png`, `new-tests-on-rc6.txt` |
+| D-36 | P3 | The Help page's last line still said "an independent review of the teaching cards", which rc6 removed. Claude Code updated the Help text for rc6 and missed this line; a text sweep found it after the rc6 installer was validated. The same sweep found old wording ("situation", "Standard session") in `game_service.py`, but traced each case: the desktop app cannot show those messages | **Fixed**: Help says the word lists, and a new test sweeps the desktop source for wording about removed features | `c58d208`; rc7 `new-tests-on-rc6.txt` |
+| T-37 | P3 | Simpler round screens: remove "Why this word", the not-reviewed note on the word card and the "language qualification" line (owner feedback, 2026-11-01, DEC-35) | **Done**. Practice setup and Help still say the words are unreviewed | `c58d208`; RQ-40 |
 | D-31 | P1 | Fixed text-wrap widths clipped the recovery instructions below the default window width, and body text by 10 px at the minimum size with Large text; the recovery window ignored the saved text size | **Verified** (automated at real 125% and emulated 100%/150%; installed build at real 125%); real 100%/150% and keyboard pending (G6, G7) | `942c780`; rc3 `defects/D-31…`, `scaling/` |
 
 ## RAID log
@@ -160,6 +163,8 @@ owner's confirmation before they are quoted as the owner's reasoning.
 | DEC-31 | "Standard" becomes All words, and "Review" becomes Review my words | The owner set these names in the rc6 plan | **Owner, 2026-11-01** | Decided |
 | DEC-32 | An ended session counts as completed in Reports if at least one word was finished; with none finished it is not counted | The owner set this in the rc6 plan | **Owner, 2026-11-01** | Decided |
 | DEC-33 | Details settled while building rc6: once every word has been played they repeat, oldest first; `ß` counts as `s`; a session paused on a travel card finishes its word, then says it has ended; old card rows stay in existing databases, so their results stay in Reports; an endless session keeps no list of words to replay | Each follows from DEC-27, DEC-28 or DEC-30, or keeps old data working | Claude Code, the first in the rc6 plan | Done; the owner can change any of them |
+| DEC-34 | Keep rc6 and build no rc7 for D-34, D-35 and D-36, which stay open for the next build | Claude Code recommended rc7, so that G5–G10 would not have to be repeated on a new build. Asked, the owner answered "Keep rc6". Their rationale is not recorded | **Owner, 2026-11-01** | **Superseded by DEC-35** the same day |
+| DEC-35 | Remove the two lines the owner marked and the "language qualification" line, fix D-34 to D-36, and build rc7 | The owner tested rc6, questioned the first two lines and answered "Yes, start rc7". Claude Code recommended keeping the not-reviewed warning in Practice setup and Help, and removing the third line; both were in the proposal the owner accepted. Installer licence terms were not part of it (DEC-14 stays open) | **Owner, 2026-11-01** | Decided |
 
 ## How AI assistance was used and verified
 
@@ -307,6 +312,21 @@ unchanged and rc6 was left installed with their desktop shortcut. Validation fou
 upgrade keeps a file the new build dropped (D-34), and checking the screenshots and text
 afterwards found a cosmetic flaw (D-35) and a stale Help line (D-36). All three are P3 and
 left for the next build. The words remain unreviewed.
+
+Dependencies: the human gates, reviewers per language, the clean machine, DEC-14, DEC-15, who
+wrote the word sheet, and a GitHub repository.
+
+### M14 — rc7: simpler round screens and the last three defects
+
+The owner tested rc6, marked two lines as unnecessary, and answered "Yes, start rc7" (DEC-35).
+The lines are gone, along with a third of the same kind, and D-34, D-35 and D-36 are fixed. rc6's
+own fresh install has no leftover file, so validation went from rc5 to rc6 to rc7 to prove the
+installer clears it. A second look at the word card found a one-pixel gap from the same cause as
+D-35, fixed before the commit.
+
+Built from `c58d208` after measuring, level with rc6, and validated on the build machine in a
+separate data folder, with the owner's agreement to replace their installed rc6. Their data was
+checked unchanged and rc7 was left installed with their desktop shortcut.
 
 Dependencies: the human gates, reviewers per language, the clean machine, DEC-14, DEC-15, who
 wrote the word sheet, and a GitHub repository.

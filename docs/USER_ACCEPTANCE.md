@@ -19,7 +19,7 @@ it is kept. Record consent (yes/no and date) outside this repository.
 
 ## Setup
 
-- A Windows computer with the rc6 installer (check its SHA256 matches ACCEPTANCE.md) or the
+- A Windows computer with the rc7 installer (check its SHA256 matches ACCEPTANCE.md) or the
   app already installed. Record the OS, display scaling and whether Python is installed.
 - Sessions use the English Beginner list unless the owner decides otherwise. These words have
   not been reviewed, and the feedback lines are sarcastic on purpose: tell participants so.

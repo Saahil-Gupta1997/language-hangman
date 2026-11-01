@@ -1,0 +1,6 @@
+Measured 2026-11-01 on the build machine, in normal use by the owner: AMD Ryzen 7 6800H (8C/16T), 15.2 GB RAM, NVMe SSD, Windows 11 Home 26200 at 125% scaling.
+Interpreter for all runs: the build environment (Python 3.12.1, CustomTkinter 5.2.2, Pillow 12.3.0). Tool: scripts/validation/measure.py as at e0aa9c0, unchanged since, the same copy run against clean clones of e0aa9c0 (rc6) and c58d208 (rc7).
+Guess to redrawn screen: a fresh profile in a temporary folder, 12 rounds, each word's letters in order, so every sample is a correct guess. Revisions alternated. cpu-load-before is one reading before each run, not load during it.
+long-session.txt: one All words session of 200 rounds, on rc7 only.
+performance.txt: 5 profiles, one with 5,000+ completed rounds, 5.57 MB. performance-rc6-same-session.txt: the same tool on rc6, straight afterwards. screen: rows include drawing.
+startup.txt: the installed EXE, 5 launches on a fresh copy of that dataset; the first launch also loads the words and makes the day's automatic backup.

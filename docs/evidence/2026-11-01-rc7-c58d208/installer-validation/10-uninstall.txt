@@ -1,0 +1,7 @@
+learner data files before uninstall: 7
+uninstaller exit: 0
+program files removed: True
+start menu entry removed: True
+uninstall registration removed: True
+learner data files after uninstall: 7
+every learner data file preserved byte-for-byte: True
