@@ -292,6 +292,7 @@ def test_shipped_text_names_nothing_that_was_removed():
         "why this word",
         "language qualification",
         "not been reviewed",
+        "release candidate",
     )
     for path in (root / "src" / "desktop").glob("*.py"):
         text = path.read_text(encoding="utf-8").lower()

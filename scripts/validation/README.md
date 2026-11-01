@@ -1,6 +1,6 @@
 # Release validation tooling
 
-The scripts that produce a release candidate's evidence. They live in the repository, not in
+The scripts that produce a release's evidence. They live in the repository, not in
 a scratch folder, so that a release can be reproduced by someone else — and so they survive
 (incident I-6: an earlier set was lost when a temporary folder was cleaned).
 

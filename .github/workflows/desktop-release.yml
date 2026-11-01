@@ -1,4 +1,4 @@
-name: Desktop release candidate
+name: Desktop release
 on:
   workflow_dispatch:
   push:

@@ -1,4 +1,4 @@
-"""Record the captioned demo of a release candidate.
+"""Record the captioned demo of a release.
 
     <python with imageio-ffmpeg> -m scripts.validation.demo <output.mp4> <revision>
 
@@ -127,7 +127,7 @@ def record(output, revision):
 
     film.card(
         [
-            f"Language Hangman {__version__} (release candidate)",
+            f"Language Hangman {__version__}",
             "Offline Windows desktop app for vocabulary practice "
             "(Python, CustomTkinter, SQLite).",
             "Rule-based software built with AI assistance. 1,544 words in four languages "
@@ -229,7 +229,6 @@ def record(output, revision):
             "native smoke journey passed.",
             "Installer (build machine): install, upgrade, beta import, recovery, "
             "uninstall verified.",
-            "Still pending: the owner's final approval.",
             "Details: README.md, docs/VERIFICATION.md and docs/ACCEPTANCE.md.",
         ],
         8,

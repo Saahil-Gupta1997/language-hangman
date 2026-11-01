@@ -199,7 +199,3 @@ class SettingsView:
             "THIRD-PARTY-NOTICES.txt and the licenses folder in the program's installation "
             "folder (by default %LOCALAPPDATA%\\Programs\\LanguageHangman)."
         )
-        self.text(
-            "Release candidate: the owner's final approval is still required before a 1.0 "
-            "release."
-        )
