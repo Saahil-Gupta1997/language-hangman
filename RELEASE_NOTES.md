@@ -33,7 +33,7 @@ demo. No other application change.
 
 ## Verification
 
-Automated suite on the final tree: see [docs/VERIFICATION.md](docs/VERIFICATION.md). On the build
+Automated suite on the final tree (`12afdd8`): 216 passed, 0 skipped, ×3, in a clean clone. On the build
 commit `5f89265`: 216 passed, 0 skipped, in a clean clone, with lint, content and release checks clean,
 and GitHub Actions passed on Linux and Windows, including the smoke journey on Windows. On the build
 machine (Windows 11 at 125%): upgrade from rc9 with data created by rc9, the 17-step journey in the

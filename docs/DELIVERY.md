@@ -39,6 +39,7 @@ engineering), **Deferred** (accepted for a later release).
 | `0d2b821` | 1.0.0rc9 release candidate (installer `495c646d…ede1f` built from this commit): window centring and the owner's gate decisions |
 | `479ce34`, `60143f4` | rc9 documents, evidence and media, tested three times; rc9 source archive (tag `v1.0.0rc9` on `60143f4`). No application change |
 | `5f89265` | **1.0.0 release** (installer `1707bd4a…fa1e` built from this commit): the version and the release-candidate wording only |
+| `12afdd8` | 1.0.0 documents, evidence and media; the final tree, tested three times |
 | later commits | documents and evidence only; 1.0.0 source archive (tag `v1.0.0`). No application change (check with `git diff 5f89265 -- src desktop_app.py packaging`) |
 
 ## Defect and task register

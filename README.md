@@ -9,7 +9,7 @@ network service, and it needs no account or internet connection.
 
 | Verified by automated and scripted checks | Reported by the owner on 1.0.0rc8, without a detailed record |
 | --- | --- |
-| 216 automated tests, lint, content and release checks on `5f89265` | Clean install on a separate system (G5) |
+| 216 automated tests, lint, content and release checks on `12afdd8`, three times (installer built from `5f89265`, same application code) | Clean install on a separate system (G5) |
 | GitHub Actions on Linux and Windows, including the smoke journey on Windows | Keyboard-only use (G6) |
 | Installer built from `5f89265`; licence page shown; install, upgrade from rc9 with its own data, beta import, recovery, uninstall | Display at real 100% (G7) |
 | 17-step scripted journey in the installed app, without Python on `PATH` | Recovery by hand (G8) |
