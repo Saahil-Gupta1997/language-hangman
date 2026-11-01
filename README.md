@@ -93,7 +93,7 @@ sessions are kept; any database upgrade runs on a copy after a pre-upgrade backu
 On an AMD Ryzen 7 6800H laptop with an NVMe SSD, with one profile holding 5,000+ completed
 rounds (4.55 MB of data): a typical guess takes **39 ms** from submission to redrawn screen
 (55 samples; 285 ms in rc3), and the guess that ends a round is slower than rc3 (606 ms at
-the 95th percentile against 329 ms), reports aggregate in 55 ms (20 samples), a full backup takes 102 ms
+the 95th percentile against 329 ms; neither rc3 figure has a raw record), reports aggregate in 55 ms (20 samples), a full backup takes 122 ms
 (5 samples), and moving between Home, Reports and Practice setup takes 354–565 ms (5 samples
 each) — slower than rc3's 238–365 ms, because those screens now group content into cards.
 The installed program shows its window in 0.88–0.93 s, and in 1.19 s on the day's first

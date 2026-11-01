@@ -149,7 +149,7 @@ exercised in steps 7 and 9. Failures cannot be injected into the installed build
 ## Third-party notices (T-28)
 
 `packaging/third-party/THIRD-PARTY-NOTICES.txt` lists 15 components with versions, licences
-and the files they cover; `licenses/` holds 13 texts. The build copies them next to the
+and the files they cover; `licenses/` holds 12 texts. The build copies them next to the
 program and runs `scripts/third_party_notices.py check`: it fails if a shipped file is not
 in the inventory, a notice is missing or changed, or the build environment's versions differ
 from the inventory. rc4 build folder: 979 files, 0 problems. Installed folder: 982 files, 0
@@ -166,19 +166,26 @@ observations, not guarantees.
 
 | Operation | Samples | Median | 95th percentile | rc3 median |
 | --- | --- | --- | --- | --- |
-| Open, upgrade check and quick check | 10 | 12 ms | 15 ms | 15 ms |
-| Full backup (copy and validation) | 5 | 102 ms | 123 ms | 128 ms |
+| Open, upgrade check and quick check | 10 | 13 ms | 17 ms | 15 ms |
+| Full backup (copy and validation) | 5 | 122 ms | 125 ms | 128 ms |
 | Reports aggregation, 5,000+ rounds | 20 | 55 ms | 74 ms | 65 ms |
 | Guess, round continues (service only) | 115 | 13 ms | 29 ms | 13 ms |
 | Guess that completes a round (all writes) | 30 | 30 ms | 40 ms | 28 ms |
 | **Guess to redrawn screen (the game's hot path)** | 55 | **39 ms** | 606 ms (rc3: 329 ms) | 285 ms |
 | Screen change: Home / Reports / Practice setup | 5 each | 354 / 565 / 503 ms | 446 / 585 / 513 ms | 238 / 365 / 317 ms |
 
+**Figures without a raw record.** rc3's `performance.txt` has no guess-to-redraw line and
+rc4's records only rc4's result, so rc3's 285 ms median and 329 ms 95th percentile appear
+only in documents. So does the 1.13 s measured on the discarded first rc4 build, the basis
+for "four times slower". No raw output was found in the evidence or in the temporary files
+left from the rc4 work. Treat the rc3 comparison as unconfirmed until `fd3b25a` is measured
+again (I-9).
+
 Start-up of the built EXE to a visible window, 5 launches on a fresh copy of the dataset:
 **1.19 s** for the first launch of the day, which also makes the automatic backup, then
 **0.88–0.93 s** (rc3: 1.65 s and 0.78–0.84 s).
 
-Two honest comparisons with rc3:
+Two honest comparisons with rc3 (the first uses the figures without a raw record):
 
 - **A typical guess is about seven times faster; the round-ending guess is slower.** A
   guess that continues a round now updates the
@@ -239,6 +246,14 @@ D-29, D-30, D-31 and T-28: reproduced on the rc2 code and re-run on `fd3b25a`
 **The rc4 summary and first record.** The handover and an earlier version of this record
 said 175 tests passed on `d543579`; the clean-clone run there was 174 passed, 1 failed. The
 archive record also named a commit it had not been run on. Both are corrected (I-8).
+
+**The rc4 figures and counts (I-9).** An audit against the evidence on 2026-11-01 corrected
+this record and DELIVERY.md. From `performance.txt`: open 13 ms and 17 ms (this table said
+12 and 15), full backup 122 ms and 125 ms (it said 102 and 123, and the README said 102),
+and guess to redrawn screen 39 ms and 606 ms (DELIVERY.md said 41 and 640). `licenses/`
+holds 12 texts, not 13; the thirteenth file is the notices list. `build-output/build.log`
+does not name the commit, so the link between the installer and `d543579` rests on the
+validation records and the tag. The installer and the raw evidence did not change.
 
 **rc3 → rc4.** The redesigned interface made a guess four times slower than rc3 (1.13 s
 median against 285 ms). Measurement caught it before release, the board was rewritten, and

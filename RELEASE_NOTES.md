@@ -21,7 +21,7 @@ some owner decisions are still open (see [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md
   30 teaching cards and the icon are not covered until their authorship is confirmed.
 - **Most guesses now draw about seven times faster than rc3** (39 ms against 285 ms
   median). The guess that ends a round is slower (606 ms against 329 ms at the 95th
-  percentile).
+  percentile). Neither rc3 figure has a raw record, so this comparison is unconfirmed.
 
 ## Known limitations
 

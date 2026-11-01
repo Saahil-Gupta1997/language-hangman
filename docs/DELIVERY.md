@@ -23,7 +23,7 @@ engineering), **Deferred** (accepted for a later release).
 | `849d1e1`, `8019a84`, `d543579` | rc4: UI redesign (T-29), MIT licence and validation tooling, board performance (D-32) |
 | `d543579` | **1.0.0rc4 release candidate** (installer `abb0cf94…ebcd3c` built from this commit) |
 | `f5ac6a2`, `21cee81`, `06fc02c`, `7c425fd` | tests, documents and release tooling only; nothing the installer bundles |
-| later commits | documentation and evidence only; no application change (check with `git diff fd3b25a -- src desktop_app.py packaging scripts tests`) |
+| later commits | documentation and evidence only; no application change (check with `git diff 7c425fd -- src desktop_app.py packaging scripts tests`) |
 
 ## Defect and task register
 
@@ -59,11 +59,11 @@ engineering), **Deferred** (accepted for a later release).
 | D-25 | P3 | Text size needed Ctrl+Shift+= | Fixed (Ctrl+=, numeric keypad) | GUI scenario |
 | D-26 | P2 | Intermittent Tk start-up failure in the test process | Fixed in tests; product unaffected (see VERIFICATION.md) | `4ad1e34` |
 | D-27 | P3 | Logging kept a handler for a different data folder | Fixed | `4ad1e34` |
-| T-28 | P1 | Installer shipped no third-party licence notices | **Verified** (build machine): 15-component inventory and 12 licence texts next to the program; the build fails if a shipped file is not covered; installed folder checked | `8e3b90f`; rc3 `defects/T-28…`, `installer-validation/04…` |
+| T-28 | P1 | Installer shipped no third-party licence notices | **Verified** (build machine): 15-component inventory, 11 licence texts and the notices file next to the program (rc3; rc4 has 12 texts); the build fails if a shipped file is not covered; installed folder checked | `8e3b90f`; rc3 `defects/T-28…`, `installer-validation/04…` |
 | D-29 | P2 | `release-check` scanned inside `.git`, so a clone on a `release/…` branch failed | **Verified**: clean in an ordinary clone, a worktree and the extracted source archive; genuine artifacts still reported | `3004976`; rc3 `defects/D-29…` |
 | D-30 | **P0** | Restore: if moving the second journal side file failed, the first stayed in `backups` while the message said the data was unchanged; a failed put-back raised a raw error | **Verified** (fault-injection tests; installed restore path re-run). Every move is recorded at once and put back; a failed put-back gives stage `rollback`, names each file's location and the safety copy, and no longer claims "unchanged" | `8e9e61d`; rc3 `defects/D-30…` |
 | T-29 | P2 | The UI read as a form: the word was a line of underscores among same-weight paragraphs, lives were a sentence, and seven identical buttons served as navigation, so no screen showed its primary action (owner feedback, 2026-11-01) | **Done**: game board (figure, letter tiles, lives, A–Z keys), slim navigation with the current page marked, primary/secondary/quiet/danger button weights, stat tiles, design tokens and the system UI font | `849d1e1`, `d543579`; rc4 `scaling/`, `media/` |
-| D-32 | P1 | The redesigned round screen rebuilt about 160 CustomTkinter widgets after every guess: 1.13 s median from guess to redrawn screen, against 285 ms in rc3 | **Fixed**: the board updates in place while a round continues, and is drawn on one canvas instead of about 55 widgets. 41 ms median, p95 640 ms (the guess that completes a round and changes the screen) | `d543579`; rc4 `performance.txt` |
+| D-32 | P1 | The redesigned round screen rebuilt about 160 CustomTkinter widgets after every guess: 1.13 s median from guess to redrawn screen, against 285 ms in rc3 (neither figure has a raw record, I-9) | **Fixed**: the board updates in place while a round continues, and is drawn on one canvas instead of about 55 widgets. 39 ms median, p95 606 ms (the guess that completes a round and changes the screen) | `d543579`; rc4 `performance.txt` |
 | D-31 | P1 | Fixed text-wrap widths clipped the recovery instructions below the default window width, and body text by 10 px at the minimum size with Large text; the recovery window ignored the saved text size | **Verified** (automated at real 125% and emulated 100%/150%; installed build at real 125%); real 100%/150% and keyboard pending (G6, G7) | `942c780`; rc3 `defects/D-31…`, `scaling/` |
 
 ## RAID log
@@ -86,10 +86,11 @@ engineering), **Deferred** (accepted for a later release).
 | RK-6 | Risk | Distributing without third-party notices breaches bundled licences | Owner + engineering | T-28 closed | Closed (rc3) |
 | I-4 | Issue | rc2 installed-app screenshots were cropped to 80%: the capture helper was not DPI aware (the published `docs/media/recovery.png` looked clipped) | Engineering | DPI-aware helper; rc3 captures complete; rc2 folder annotated | Closed |
 | I-5 | Issue | Two rc2 statements were inaccurate: "no control clipped horizontally" (10 px clipping existed at minimum size with Large text) and "every operation under one second" (start-up with the day's first backup took 1.26 s) | Engineering | Measured check added (D-31); performance restated with figures | Closed |
-| RK-7 | Risk | Python's licence asks distributors of the Microsoft Distributable Code (VCRUNTIME140.dll) to have end users agree to terms at least as protective as Microsoft's; the installer ships LICENSE.txt and the notices but shows no terms during setup | Owner | DEC-14 decided | Open |
+| RK-7 | Risk | Python's licence asks distributors of the Microsoft Distributable Code (VCRUNTIME140.dll) to have end users agree to terms at least as protective as Microsoft's; the installer ships LICENSE.txt and the notices but shows no terms during setup. rc4 stays that way by the owner's choice (2026-11-01, DEC-14). The licence wording names external end users, so outside testers may already count | Owner | DEC-14 decided | Open |
 | I-6 | Issue | The validation tooling lived only in a temporary folder and was cleaned after six weeks, with the beta database and the performance dataset: the release could not be revalidated without rewriting it | Engineering | Rewritten into `scripts/validation/` with a README, including the beta database builder and the guess-to-redraw measurement, which first stayed in scratch (I-8). The installer steps themselves are still run by hand from the README | Closed |
 | I-8 | Issue | The first rc4 record was wrong: it claimed 175 passed on `d543579` (the clean run was 174 passed, 1 failed), named archive commit `06fc02c` for checks run on `21cee81`, said two scratch-only tools were in the repository, left placeholders in this log, and left rc3 details in current documents. The handover repeated the first of these and an unsupported remark that the rc2 and rc3 demos shared a flaw | Engineering | Record audited against the runs; final tree tested three times in a clean clone; remark withdrawn | Closed |
 | I-7 | Issue | The UI redesign was measured only after the rc4 installer had been built and validated, so the artifact had to be discarded and rebuilt | Engineering | Performance measured before packaging in future candidates (RELEASE_CHECKLIST step 2) | Closed |
+| I-9 | Issue | An audit of the rc4 record on 2026-11-01 found: the D-32 row and M11 gave 41 ms (D-32 also p95 640 ms), not `performance.txt`'s 39 ms and 606 ms; VERIFICATION.md's open and backup rows and the README's backup figure did not match the same file; "13 licence texts" was 12 texts plus the notices file (rc3's "12" was 11 plus it); rc3's 285 ms and 329 ms and the first rc4 build's 1.13 s have no raw record; `build.log` does not name the commit | Engineering | Figures and counts corrected and the unrecorded figures marked. Closes when `fd3b25a` is measured again or the rc3 comparison is withdrawn, and the next build's log names its commit | Open |
 | DP-4 | Dependency | Clean Windows machine or account without Python | Owner | G5 run | Open |
 
 ## Decision log
@@ -107,19 +108,19 @@ owner's confirmation before they are quoted as the owner's reasoning.
 | DEC-05 | Keep legacy browser code and banks for history and regression tests only | Imported progress still reports; the desktop reuses the game engine | Retrospective | Owner to confirm |
 | DEC-06 | Review = all active review items for curated words in the situation, due first, once per session | Keeps Review usable on the day of practice (due-only would wait a day); matches rc1's fallback but as one consistent rule | Claude Code (this delivery) | **Owner to confirm** |
 | DEC-07 | Replace mocking feedback lines with plain encouraging English | Learners of English; sarcasm and idioms confuse and may offend | Claude Code | **Owner to confirm tone** |
-| DEC-08 | Licence: **MIT for this project's software**; the teaching content and the icon stay unlicensed until their authorship is confirmed | Rationale written by Claude Code, not stated by the owner. The owner said "MIT for the code"; the LICENSE scope note also names tests and documentation, and the copyright name comes from the Git author | **Owner, 2026-11-01** | Decided; **owner to confirm the scope and copyright line**; content licence open |
+| DEC-08 | Licence: **MIT for this project's software**; the teaching content and the icon stay unlicensed until their authorship is confirmed | Rationale written by Claude Code, not stated by the owner. The owner said "MIT for the code"; the LICENSE scope note also names tests and documentation, and the copyright name comes from the Git author. Asked to confirm, the owner answered "Keep rc4 as is" (2026-11-01), so LICENSE stays unchanged for rc4. Raised and not resolved: `docs/CONTENT_REVIEW.md` repeats most of the card text, so "documentation" overlaps the exclusion; `frontend/` and `assets/audio/` are not named; the year was not confirmed | **Owner, 2026-11-01** | Decided; scope and copyright line kept for rc4; content licence open |
 | DEC-09 | Version the new candidate as 1.0.0rc2 | It differs from the rc1 build; still a release candidate until gates close | Claude Code | Done |
 | DEC-10 | Supported history: up to 5 profiles, 5,000 completed rounds per profile | Measured on the build machine (rc3): in-process operations ≤ 386 ms at the 95th percentile; start-up 0.78–0.84 s, 1.65 s with the day's first backup | Proposal | **Owner to agree** |
 | DEC-11 | Minimum window 800×600 logical pixels | Fits 1080p at 150% scaling | Claude Code | Done |
 | DEC-12 | GUI tests run one per process | Removes a test-harness-only Tcl interaction (D-26) | Claude Code | Done |
 | DEC-13 | Build locally from a clean checkout; GitHub workflows prepared but not yet run | No remote repository available | Claude Code | Done |
-| DEC-14 | Whether the installer shows licence terms to end users (see RK-7), and which | Depends on the project licence (DEC-08) | — | **Owner decision needed before public distribution** |
+| DEC-14 | Whether the installer shows licence terms to end users (see RK-7), and which | Depends on the project licence (DEC-08). The owner answered "Keep rc4 as is" (2026-11-01), so rc4's setup shows no terms | Owner, for rc4 only | **Owner decision still needed before public distribution** |
 | DEC-15 | Intended learner: reads short, simple English (about CEFR A2), preparing for travel | A proposed profile for reviewing content and recruiting learners; not a certification that the content is A2 | Proposal (CONTENT_REVIEW.md) | **Owner to confirm; reviewer to test** |
 | DEC-16 | Version the corrected candidate 1.0.0rc3 | Code changed after rc2 (D-30, D-31, D-29, T-28); still a candidate until gates close | Claude Code | Done |
 | DEC-17 | Generate notices from the build environment and check coverage at build time | Keeps the notices true to what ships; a new file or version fails the build | Claude Code | Done |
 | DEC-18 | Redesign the UI within CustomTkinter rather than moving to native widgets or Qt | Claude Code's reasoning when offering the options, not the owner's: days rather than weeks, no packaging or licence change; the alternative (ttk) would also have fixed the screen-reader gap and remains open | **Owner, 2026-11-01** | Done |
 | DEC-19 | Draw the board on a canvas instead of building it from widgets | The only way to keep the redesign and stay faster than rc3; the keys were never focusable, so no keyboard route is lost | Claude Code | Done |
-| DEC-21 | Whether learners see a hanging figure | Claude Code added the drawing in the redesign without raising it. It may sit badly with the plain, encouraging tone in DEC-07; a neutral progress graphic is a small change | Claude Code | **Owner to confirm** |
+| DEC-21 | Whether learners see a hanging figure | Claude Code added the drawing in the redesign without raising it. It may sit badly with the plain, encouraging tone in DEC-07; a neutral progress graphic is a small change. The owner answered "Keep rc4 as is" (2026-11-01), so the figure stays. Changing it after G9 or G10 would mean rerunning the affected checks | Claude Code (added); **owner, 2026-11-01** (kept) | Decided for rc4 |
 | DEC-20 | Keep the validation tooling in the repository | A release that cannot be revalidated by someone else is not finished (I-6) | Claude Code | Done |
 
 ## How AI assistance was used and verified
@@ -135,7 +136,7 @@ owner's confirmation before they are quoted as the owner's reasoning.
   exercised by installing, upgrading, recovering and uninstalling it; screenshots were
   checked to contain only the application window. Hypotheses that turned out wrong
   (D-26's first two theories) were recorded and their code removed.
-- **Where the AI's own evidence was wrong.** Incidents I-1 to I-8 record them, including
+- **Where the AI's own evidence was wrong.** Incidents I-1 to I-9 record them, including
   cropped screenshots published with rc2 (I-4) and two rc2 claims that measurement later
   contradicted (I-5). An independent review found the D-30 rollback defect in AI-written
   code; fault-injection tests now cover it. In rc4 the AI's own redesign made the game four
@@ -220,7 +221,7 @@ with the validation tooling moved into the repository after the old set was lost
 
 The first rc4 installer passed the whole validation sequence, and then performance
 measurement showed the redesign had made a guess four times slower than rc3 (D-32). The
-board was rewritten as one drawn canvas that updates in place, bringing a guess to 41 ms
+board was rewritten as one drawn canvas that updates in place, bringing a guess to 39 ms
 median for a guess that continues a round, and the installer was rebuilt and revalidated
 from `d543579` (I-7). A guess that ends a round is slower than rc3. A later audit corrected
 the rc4 record (I-8). Clicking a letter is now hit-tested rather than a button, so a GUI scenario covers

@@ -13,7 +13,7 @@ filled in from automated output.
 | G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the final tree** (175 passed, 0 skipped, ×3, `7c425fd`; the build commit's clean run was 174 passed, 1 failed, see VERIFICATION.md) | Engineering | evidence/…/checks |
 | G3 | Installer built from the candidate commit in a clean checkout; SHA256 recorded | Yes | **Met** | Engineering | evidence/…/build-output |
 | G4 | Install, upgrade from the previous release, beta import, recovery, uninstall on Windows | Yes | **Met on the build machine** (not a clean machine) | Engineering | VERIFICATION.md installer steps 1–10 |
-| G16 | Performance measured on the candidate: the game's hot path no slower than the previous release | Yes | **Met** (guess to redrawn screen 39 ms, against 285 ms in rc3) | Engineering | VERIFICATION.md performance |
+| G16 | Performance measured on the candidate: the game's hot path no slower than the previous release | Yes | **Met on the median** (guess to redrawn screen 39 ms, against 285 ms recorded for rc3); slower at the 95th percentile (606 ms against 329 ms). Neither rc3 figure has a raw record (I-9) | Engineering | VERIFICATION.md performance |
 | G5 | Clean Windows account without Python: install, launch, sign in, play | Yes | Pending | Owner | Manual record M1 |
 | G6 | Keyboard-only journey, visible focus, Enter/Escape, text size | Yes | Pending (bindings and Tab traversal verified automatically) | Owner | Manual record M2 |
 | G7 | Layout at real 100%, 125% and 150% and at the minimum window size, main and recovery windows | Yes | Pending (real 125% and emulated 100%/150% pass) | Owner | Manual record M3 |
@@ -21,7 +21,7 @@ filled in from automated output.
 | G9 | Qualified review of all 30 teaching cards | Yes | Pending | Owner to appoint reviewer | CONTENT_REVIEW.md |
 | G10 | Five learner sessions recorded | Yes | Pending | Owner to recruit | USER_ACCEPTANCE.md |
 | G11 | Material issues from G5–G10 fixed and retested | Yes | Not started | Engineering + owner | DELIVERY.md register |
-| G12 | Owner decisions: Review rule (DEC-06), feedback tone (DEC-07), supported history (DEC-10), installer terms (DEC-14), intended learner (DEC-15). **Licence (DEC-08) decided: MIT for the software** | Yes (DEC-14 before publishing) | Partly met | Owner | DELIVERY.md decision log |
+| G12 | Owner decisions: Review rule (DEC-06), feedback tone (DEC-07), supported history (DEC-10), installer terms (DEC-14: none in rc4, decision still needed before publishing), intended learner (DEC-15). **Licence (DEC-08) decided: MIT for the software; scope and copyright line kept for rc4. Hanging figure (DEC-21) kept for rc4** | Yes (DEC-14 before publishing) | Partly met | Owner | DELIVERY.md decision log |
 | G13 | Windows CI and release workflows run on GitHub for the release commit | No | Pending (no remote yet) | Owner | Actions run links |
 | G14 | Code signing | No | Not planned; installer documented as unsigned | Owner | README.md |
 | G15 | Third-party licence notices shipped with the installer (T-28) | Yes, before public distribution | **Met on the build machine** | Engineering | VERIFICATION.md "Third-party notices" |
@@ -117,7 +117,7 @@ are still there.
 | Windows installer (unsigned) | release package | `LanguageHangman-1.0.0rc4-Setup.exe`, 14,736,907 bytes, SHA256 `abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c` |
 | Installed program | inside the installer | `LanguageHangman.exe` SHA256 `e6b3c0f910b626036b0df0753481b9b6fe9fd8ca51ab3a3d0cbe9b54df571436` |
 | Licence | `LICENSE`; installed as `LICENSE.txt` beside the program | MIT for the software; content and icon not yet licensed |
-| Third-party notices | `packaging/third-party/`; installed next to the program | 15 components, 13 licence texts |
+| Third-party notices | `packaging/third-party/`; installed next to the program | 15 components, 12 licence texts and the notices file |
 | Source archive | release package | see `SHA256SUMS.txt` in the release package |
 | Build log | `docs/evidence/2026-11-01-rc4-d543579/build-output/` | — |
 | Automated results | `docs/evidence/2026-11-01-rc4-d543579/checks/` | build commit: 174 passed, 1 failed, kept as recorded; final tree in `checks-final/` |
