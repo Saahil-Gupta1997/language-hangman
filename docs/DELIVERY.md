@@ -21,7 +21,8 @@ engineering), **Deferred** (accepted for a later release).
 | `fd3b25a` | 1.0.0rc3 release candidate (installer `5e1b3107…665f84` built from this commit) |
 | `944fe27` | rc3 documentation and evidence; rc3 source archive (tag `v1.0.0rc3`) |
 | `849d1e1`, `8019a84`, `d543579` | rc4: UI redesign (T-29), MIT licence and validation tooling, board performance (D-32) |
-| `RC4_REVISION` | **1.0.0rc4 release candidate** (installer `RC4_SHA_SHORT` built from this commit) |
+| `d543579` | **1.0.0rc4 release candidate** (installer `abb0cf94…ebcd3c` built from this commit) |
+| `f5ac6a2`, `21cee81`, `06fc02c`, FINAL_REVISION | tests, documents and release tooling only; nothing the installer bundles |
 | later commits | documentation and evidence only; no application change (check with `git diff fd3b25a -- src desktop_app.py packaging scripts tests`) |
 
 ## Defect and task register
@@ -86,7 +87,8 @@ engineering), **Deferred** (accepted for a later release).
 | I-4 | Issue | rc2 installed-app screenshots were cropped to 80%: the capture helper was not DPI aware (the published `docs/media/recovery.png` looked clipped) | Engineering | DPI-aware helper; rc3 captures complete; rc2 folder annotated | Closed |
 | I-5 | Issue | Two rc2 statements were inaccurate: "no control clipped horizontally" (10 px clipping existed at minimum size with Large text) and "every operation under one second" (start-up with the day's first backup took 1.26 s) | Engineering | Measured check added (D-31); performance restated with figures | Closed |
 | RK-7 | Risk | Python's licence asks distributors of the Microsoft Distributable Code (VCRUNTIME140.dll) to have end users agree to terms at least as protective as Microsoft's; the installer ships LICENSE.txt and the notices but shows no terms during setup | Owner | DEC-14 decided | Open |
-| I-6 | Issue | The validation tooling lived only in a temporary folder and was cleaned after six weeks, with the beta database and the performance dataset: the release could not be revalidated without rewriting it | Engineering | Rewritten into `scripts/validation/` with a README; fixtures regenerate the beta database and the dataset | Closed |
+| I-6 | Issue | The validation tooling lived only in a temporary folder and was cleaned after six weeks, with the beta database and the performance dataset: the release could not be revalidated without rewriting it | Engineering | Rewritten into `scripts/validation/` with a README, including the beta database builder and the guess-to-redraw measurement, which first stayed in scratch (I-8). The installer steps themselves are still run by hand from the README | Closed |
+| I-8 | Issue | The first rc4 record was wrong: it claimed 175 passed on `d543579` (the clean run was 174 passed, 1 failed), named archive commit `06fc02c` for checks run on `21cee81`, said two scratch-only tools were in the repository, left placeholders in this log, and left rc3 details in current documents. The handover repeated the first of these and an unsupported remark that the rc2 and rc3 demos shared a flaw | Engineering | Record audited against the runs; final tree tested three times in a clean clone; remark withdrawn | Closed |
 | I-7 | Issue | The UI redesign was measured only after the rc4 installer had been built and validated, so the artifact had to be discarded and rebuilt | Engineering | Performance measured before packaging in future candidates (RELEASE_CHECKLIST step 2) | Closed |
 | DP-4 | Dependency | Clean Windows machine or account without Python | Owner | G5 run | Open |
 
@@ -105,7 +107,7 @@ owner's confirmation before they are quoted as the owner's reasoning.
 | DEC-05 | Keep legacy browser code and banks for history and regression tests only | Imported progress still reports; the desktop reuses the game engine | Retrospective | Owner to confirm |
 | DEC-06 | Review = all active review items for curated words in the situation, due first, once per session | Keeps Review usable on the day of practice (due-only would wait a day); matches rc1's fallback but as one consistent rule | Claude Code (this delivery) | **Owner to confirm** |
 | DEC-07 | Replace mocking feedback lines with plain encouraging English | Learners of English; sarcasm and idioms confuse and may offend | Claude Code | **Owner to confirm tone** |
-| DEC-08 | Licence: **MIT for this project's software**; the teaching content and the icon stay unlicensed until their authorship is confirmed | Permissive, standard for a portfolio project, and it does not claim rights over content whose provenance is unconfirmed | **Owner, 2026-11-01** | Decided; content licence still open |
+| DEC-08 | Licence: **MIT for this project's software**; the teaching content and the icon stay unlicensed until their authorship is confirmed | Rationale written by Claude Code, not stated by the owner. The owner said "MIT for the code"; the LICENSE scope note also names tests and documentation, and the copyright name comes from the Git author | **Owner, 2026-11-01** | Decided; **owner to confirm the scope and copyright line**; content licence open |
 | DEC-09 | Version the new candidate as 1.0.0rc2 | It differs from the rc1 build; still a release candidate until gates close | Claude Code | Done |
 | DEC-10 | Supported history: up to 5 profiles, 5,000 completed rounds per profile | Measured on the build machine (rc3): in-process operations ≤ 386 ms at the 95th percentile; start-up 0.78–0.84 s, 1.65 s with the day's first backup | Proposal | **Owner to agree** |
 | DEC-11 | Minimum window 800×600 logical pixels | Fits 1080p at 150% scaling | Claude Code | Done |
@@ -115,8 +117,9 @@ owner's confirmation before they are quoted as the owner's reasoning.
 | DEC-15 | Intended learner: reads short, simple English (about CEFR A2), preparing for travel | A proposed profile for reviewing content and recruiting learners; not a certification that the content is A2 | Proposal (CONTENT_REVIEW.md) | **Owner to confirm; reviewer to test** |
 | DEC-16 | Version the corrected candidate 1.0.0rc3 | Code changed after rc2 (D-30, D-31, D-29, T-28); still a candidate until gates close | Claude Code | Done |
 | DEC-17 | Generate notices from the build environment and check coverage at build time | Keeps the notices true to what ships; a new file or version fails the build | Claude Code | Done |
-| DEC-18 | Redesign the UI within CustomTkinter rather than moving to native widgets or Qt | Days rather than weeks, no packaging or licence change; the alternative (ttk) would also have fixed the screen-reader gap and remains open | **Owner, 2026-11-01** | Done |
+| DEC-18 | Redesign the UI within CustomTkinter rather than moving to native widgets or Qt | Claude Code's reasoning when offering the options, not the owner's: days rather than weeks, no packaging or licence change; the alternative (ttk) would also have fixed the screen-reader gap and remains open | **Owner, 2026-11-01** | Done |
 | DEC-19 | Draw the board on a canvas instead of building it from widgets | The only way to keep the redesign and stay faster than rc3; the keys were never focusable, so no keyboard route is lost | Claude Code | Done |
+| DEC-21 | Whether learners see a hanging figure | Claude Code added the drawing in the redesign without raising it. It may sit badly with the plain, encouraging tone in DEC-07; a neutral progress graphic is a small change | Claude Code | **Owner to confirm** |
 | DEC-20 | Keep the validation tooling in the repository | A release that cannot be revalidated by someone else is not finished (I-6) | Claude Code | Done |
 
 ## How AI assistance was used and verified
@@ -132,7 +135,7 @@ owner's confirmation before they are quoted as the owner's reasoning.
   exercised by installing, upgrading, recovering and uninstalling it; screenshots were
   checked to contain only the application window. Hypotheses that turned out wrong
   (D-26's first two theories) were recorded and their code removed.
-- **Where the AI's own evidence was wrong.** Incidents I-1 to I-7 record them, including
+- **Where the AI's own evidence was wrong.** Incidents I-1 to I-8 record them, including
   cropped screenshots published with rc2 (I-4) and two rc2 claims that measurement later
   contradicted (I-5). An independent review found the D-30 rollback defect in AI-written
   code; fault-injection tests now cover it. In rc4 the AI's own redesign made the game four
@@ -218,8 +221,9 @@ with the validation tooling moved into the repository after the old set was lost
 The first rc4 installer passed the whole validation sequence, and then performance
 measurement showed the redesign had made a guess four times slower than rc3 (D-32). The
 board was rewritten as one drawn canvas that updates in place, bringing a guess to 41 ms
-median — faster than rc3 — and the installer was rebuilt and revalidated from `d543579`
-(I-7). Clicking a letter is now hit-tested rather than a button, so a GUI scenario covers
+median for a guess that continues a round, and the installer was rebuilt and revalidated
+from `d543579` (I-7). A guess that ends a round is slower than rc3. A later audit corrected
+the rc4 record (I-8). Clicking a letter is now hit-tested rather than a button, so a GUI scenario covers
 it.
 
 Dependencies unchanged: the human gates, the clean machine, DEC-14 (installer terms, still

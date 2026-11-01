@@ -10,7 +10,7 @@ filled in from automated output.
 | # | Gate | Blocking | Status | Owner | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | G1 | P0 defects fixed with regression tests: D-01, D-02, D-03 (rc2) and D-30 (rc3) | Yes | **Met** | Engineering | VERIFICATION.md RQ-01..RQ-11 |
-| G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met** (175 passed, 0 skipped, `d543579`) | Engineering | evidence/…/checks |
+| G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the final tree** (FINAL_RESULT, FINAL_REVISION; the build commit's clean run was 174 passed, 1 failed, see VERIFICATION.md) | Engineering | evidence/…/checks |
 | G3 | Installer built from the candidate commit in a clean checkout; SHA256 recorded | Yes | **Met** | Engineering | evidence/…/build-output |
 | G4 | Install, upgrade from the previous release, beta import, recovery, uninstall on Windows | Yes | **Met on the build machine** (not a clean machine) | Engineering | VERIFICATION.md installer steps 1–10 |
 | G16 | Performance measured on the candidate: the game's hot path no slower than the previous release | Yes | **Met** (guess to redrawn screen 39 ms, against 285 ms in rc3) | Engineering | VERIFICATION.md performance |
@@ -94,8 +94,8 @@ in to Windows, then start the app:
 
 ### Upgrade (optional repeat of G4)
 
-Install the 1.0.0rc2 installer, create a profile and play a round through its UI, then run
-the rc3 installer over it and sign in with the same profile: progress and any paused round
+Install the 1.0.0rc3 installer, create a profile and play a round through its UI, then run
+the rc4 installer over it and sign in with the same profile: progress and any paused round
 are still there.
 
 ### Record
@@ -120,7 +120,7 @@ are still there.
 | Third-party notices | `packaging/third-party/`; installed next to the program | 15 components, 13 licence texts |
 | Source archive | release package | see `SHA256SUMS.txt` in the release package |
 | Build log | `docs/evidence/2026-11-01-rc4-d543579/build-output/` | — |
-| Automated results | `docs/evidence/2026-11-01-rc4-d543579/checks/` | 175 passed, JUnit XML |
+| Automated results | `docs/evidence/2026-11-01-rc4-d543579/checks/` | build commit: 174 passed, 1 failed, kept as recorded; final tree in `checks-final/` |
 | Defect reproductions (D-29, D-30, D-31, T-28) | `docs/evidence/2026-09-19-rc3-fd3b25a/defects/` | rc2 code vs `fd3b25a` |
 | Installer validation | `docs/evidence/2026-11-01-rc4-d543579/installer-validation/` | steps 01–10, Inno Setup logs, screenshots |
 | Installed smoke journey | `docs/evidence/2026-11-01-rc4-d543579/installed-smoke/` | 16 checks |

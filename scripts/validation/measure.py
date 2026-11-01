@@ -1,6 +1,7 @@
 """Measure desktop operations and window layout for the release record.
 
     python -m scripts.validation.measure performance <dataset folder>
+    python -m scripts.validation.measure round
     python -m scripts.validation.measure scaling <output folder>
 
 Performance figures are single-machine observations, not guarantees: every line reports its
@@ -114,6 +115,40 @@ def performance(dataset):
     shutil.rmtree(work, ignore_errors=True)
 
 
+def round_redraw(rounds=12):
+    """Time a guess from submission to redrawn screen, on a fresh profile."""
+    from src.desktop.application import HangmanDesktop
+
+    data = Path(tempfile.mkdtemp(prefix="hangman-round-"))
+    app = HangmanDesktop(data / "app.db", data)
+    app.show_login(register=True)
+    app.username_entry.insert(0, "timer")
+    app.password_entry.insert(0, "timer-pass-2026")
+    app.confirm_entry.insert(0, "timer-pass-2026")
+    app.authenticate(register=True)
+    samples = []
+    for _ in range(rounds):
+        app.show_practice()
+        if not app.payload:
+            app.rounds.set("10")
+            app.start_session()
+        for letter in sorted(set(app.payload["round"]["word"])):
+            if app.payload["round"]["saved"]:
+                break
+            start = time.perf_counter()
+            app.guess_entry.delete(0, "end")
+            app.guess_entry.insert(0, letter)
+            app.submit_guess()
+            app.update()
+            samples.append((time.perf_counter() - start) * 1000)
+        if app.payload["next_round"]:
+            app.advance()
+        else:
+            app.practice.discard(app.user["id"])
+    app.close_application()
+    report("guess to redrawn screen", samples)
+
+
 def settle(window, factor, size):
     """CustomTkinter pins a window's size for about a second after a scaling change."""
     from src.desktop.widgets import TEXT_SCALING
@@ -181,4 +216,6 @@ def scaling(output, real_percent=125):
 
 
 if __name__ == "__main__":
-    {"performance": performance, "scaling": scaling}[sys.argv[1]](*sys.argv[2:])
+    {"performance": performance, "round": round_redraw, "scaling": scaling}[sys.argv[1]](
+        *sys.argv[2:]
+    )

@@ -48,10 +48,19 @@ capture only the application's own window.
 | `525c377` M2 | 158 passed ×3 | 0 | clean | PASS | passed (11 checks) | reproductions no longer reproduce |
 | `4ad1e34` rc2 | 163 passed ×3 | 0 | clean | PASS, 24 dispositioned | passed (16), source and installed | independent review on Linux: 157 passed, 6 GUI skipped, 1 warning (reported to the owner; not run here) |
 | `fd3b25a` rc3 | 174 passed | 0 | clean | PASS, 24 dispositioned | passed (16), source and installed | 1 warning (Starlette, legacy tests only) |
-| **`d543579` rc4** | **175 passed** | **0** | clean | PASS, 24 dispositioned | **passed (16), source and installed** | redesigned UI; new scenario clicks a letter key |
+| `d543579` rc4 build commit | **174 passed, 1 failed** in the clean clone | 0 | clean | PASS, 24 dispositioned | passed (16), source and installed | `focused_control_scrolls_into_view` failed; see below. 175 had passed on the uncommitted working tree |
+| `f5ac6a2`..`21cee81` | 175 passed on the extracted `21cee81` archive | 0 | clean | PASS | not re-run | the failing scenario now waits for the layout to settle |
+| **FINAL_REVISION rc4 final tree** | **FINAL_RESULT** | **0** | clean | PASS, 24 dispositioned | installer code unchanged since `d543579` | three consecutive runs in a clean clone |
 
-On a machine without a display, the eight GUI scenarios skip by design (not run on Linux for
-rc3). `test_release_check_on_a_real_release_branch_clone_and_worktree` skips if Git is not
+**The failure on the build commit.** `focused_control_scrolls_into_view` failed once in the
+clean clone of `d543579`. It is a test scenario, and it failed on a position measured
+straight after a resize. Making it wait for the layout to settle was the fix; that the race
+was the cause is the likely explanation, not a proven one, because the failure was not
+reproduced on demand. The installer's inputs did not change. The original failing output
+stays in `checks/pytest.txt`.
+
+On a machine without a display, the nine GUI scenarios skip by design (not run on Linux for
+rc4). `test_release_check_on_a_real_release_branch_clone_and_worktree` skips if Git is not
 installed. The GitHub workflows have not run: there is no remote repository (G13).
 
 ### What was re-run for rc4, and what was carried forward
@@ -84,9 +93,9 @@ python -m pytest -rs            # read pytest's own exit code
 python desktop_app.py --smoke-test <output-folder>
 ```
 
-For rc3, `release-check` was clean in a worktree and in an ordinary clone on `release/1.0`
-(`checks/release-check-worktree-and-clone.txt`), and on the extracted source archive (see the
-release package's `VERIFICATION-*.txt`).
+For rc4, `release-check` was clean in an ordinary clone on `release/1.0`
+(`checks/release-check.txt`) and on the extracted source archive (see the release package's
+`VERIFICATION-*.txt`). The worktree case last ran for rc3.
 
 ## Installer validation (rc4, build machine)
 
@@ -124,7 +133,7 @@ Fault-injection tests in `tests/test_recovery.py`, run in the 174:
 | Putting a file back fails | `test_failed_rollback_says_where_the_side_files_are_kept` | Stage `rollback`; message names each kept file, its original place and the safety copy; no "unchanged" claim |
 
 The first and last fail on the rc2 code (`defects/D-30-restore-rollback.txt`). The installed
-build contains the same code (EXE built from `fd3b25a`); its successful restore paths were
+build contains the same code (EXE built from `d543579`); its successful restore paths were
 exercised in steps 7 and 9. Failures cannot be injected into the installed build.
 
 ## Recovery window and text wrapping (D-31)
@@ -140,16 +149,18 @@ exercised in steps 7 and 9. Failures cannot be injected into the installed build
 ## Third-party notices (T-28)
 
 `packaging/third-party/THIRD-PARTY-NOTICES.txt` lists 15 components with versions, licences
-and the files they cover; `licenses/` holds 12 texts. The build copies them next to the
+and the files they cover; `licenses/` holds 13 texts. The build copies them next to the
 program and runs `scripts/third_party_notices.py check`: it fails if a shipped file is not
 in the inventory, a notice is missing or changed, or the build environment's versions differ
-from the inventory. rc3 build folder: 978 files, 0 problems. Installed folder: 980 files, 0
-problems. The rc2 program folder fails the same check (12 notices missing).
+from the inventory. rc4 build folder: 979 files, 0 problems. Installed folder: 982 files, 0
+problems.
 
 ## Performance (build machine)
 
 Dataset: 5 profiles; one with **5,000+ completed rounds** (150 played through the app's
-services, the rest copied rows with spread dates) and 4.55 MB. Measured in-process from
+services, the rest copied rows with spread dates) and 4.55 MB. It was rebuilt for rc4
+because the rc3 dataset (5.3 MB) was lost (I-6), so the rc3 column is a guide, not a
+like-for-like comparison. The guess-to-redraw row used a fresh profile on both revisions. Measured in-process from
 `d543579` while the owner was using the computer (`performance.txt`). Single-machine
 observations, not guarantees.
 
@@ -160,7 +171,7 @@ observations, not guarantees.
 | Reports aggregation, 5,000+ rounds | 20 | 55 ms | 74 ms | 65 ms |
 | Guess, round continues (service only) | 115 | 13 ms | 29 ms | 13 ms |
 | Guess that completes a round (all writes) | 30 | 30 ms | 40 ms | 28 ms |
-| **Guess to redrawn screen (the game's hot path)** | 55 | **39 ms** | 606 ms | 285 ms |
+| **Guess to redrawn screen (the game's hot path)** | 55 | **39 ms** | 606 ms (rc3: 329 ms) | 285 ms |
 | Screen change: Home / Reports / Practice setup | 5 each | 354 / 565 / 503 ms | 446 / 585 / 513 ms | 238 / 365 / 317 ms |
 
 Start-up of the built EXE to a visible window, 5 launches on a fresh copy of the dataset:
@@ -169,10 +180,12 @@ Start-up of the built EXE to a visible window, 5 launches on a fresh copy of the
 
 Two honest comparisons with rc3:
 
-- **The hot path is seven times faster.** A guess that continues a round now updates the
+- **A typical guess is about seven times faster; the round-ending guess is slower.** A
+  guess that continues a round now updates the
   board in place instead of rebuilding the screen, and the board is one drawn canvas
   instead of about 55 widgets (D-32). The 95th percentile, 606 ms, is the guess that
-  *completes* a round, where the screen genuinely changes to the learning card.
+  *completes* a round and rebuilds the screen for the learning card. That is slower than
+  rc3's 329 ms.
 - **Navigation screens are 100–200 ms slower**, because Home, Reports and Practice setup
   now group content into cards and stat tiles, which are more widgets than the plain
   paragraphs they replaced. All stay well under a second.
@@ -183,7 +196,7 @@ building when the interface changed.
 
 ## Requirement-to-test traceability
 
-| Req | Requirement | Automated evidence | Native / installed evidence (rc3) | Result |
+| Req | Requirement | Automated evidence | Native / installed evidence (rc4) | Result |
 | --- | --- | --- | --- | --- |
 | RQ-01 | Fresh profile cannot start Review; Standard offered | `test_fresh_profile_cannot_start_review` | smoke; step 6 | Pass |
 | RQ-02 | Review uses only eligible practised words in the situation; due first; once per session | `test_review_uses_only_practised_words_from_the_situation`, `test_review_plays_due_words_before_words_not_yet_due` | smoke | Pass (rule pending owner, DEC-06) |
@@ -208,7 +221,7 @@ building when the interface changed.
 | RQ-21 | Keyboard: dropdowns operable, focus visible and in view, text-size shortcuts; recovery actions reachable by Tab | GUI scenarios (4) | — | Handler level pass; **real keyboard pending** (G6) |
 | RQ-22 | Layout at 100/125/150% and minimum size; text wraps to the window (D-31) | GUI `window_opens_inside_the_work_area`, `recovery_window_fits_at_minimum_size`, `main_window_text_wraps_at_minimum_size` | installed at real 125%; `scaling/` (12 captures: round and recovery, three scalings, two text sizes) | 125% pass; 100/150% emulated pass; **real 100/150% pending** (G7) |
 | RQ-27 | A letter key guesses that letter, and a used key does nothing | GUI `letter_keys_guess_on_click` | demo; smoke uses the typing route | Pass |
-| RQ-28 | A guess redraws the round without rebuilding the screen (D-32) | — | `performance.txt`: 39 ms median, 55 samples | Pass |
+| RQ-28 | A guess redraws the round without rebuilding the screen (D-32) | — | `performance.txt`: 39 ms median, 55 samples | Pass for guesses that continue a round; the round-ending guess still rebuilds |
 | RQ-23 | Content structurally valid; warnings dispositioned | `scripts/check_curated_content.py` | — | Pass; **educator review pending** (G9) |
 | RQ-24 | Learner acceptance (5 sessions) | — | — | **Pending** (G10) |
 | RQ-25 | Third-party notices ship and match what is bundled (T-28) | `tests/test_third_party_notices.py` (3) | build check; step 4 | Pass (build machine) |
@@ -222,6 +235,10 @@ D-29, D-30, D-31 and T-28: reproduced on the rc2 code and re-run on `fd3b25a`
 (`evidence/2026-09-19-rc3-fd3b25a/defects/`).
 
 ## Corrections to earlier records
+
+**The rc4 summary and first record.** The handover and an earlier version of this record
+said 175 tests passed on `d543579`; the clean-clone run there was 174 passed, 1 failed. The
+archive record also named a commit it had not been run on. Both are corrected (I-8).
 
 **rc3 → rc4.** The redesigned interface made a guess four times slower than rc3 (1.13 s
 median against 285 ms). Measurement caught it before release, the board was rewritten, and

@@ -19,7 +19,9 @@ some owner decisions are still open (see [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md
   cards for learning content.
 - **The software is under the MIT licence.** `LICENSE.txt` installs beside the program. The
   30 teaching cards and the icon are not covered until their authorship is confirmed.
-- **A guess is now seven times faster to draw than rc3** (39 ms against 285 ms).
+- **Most guesses now draw about seven times faster than rc3** (39 ms against 285 ms
+  median). The guess that ends a round is slower (606 ms against 329 ms at the 95th
+  percentile).
 
 ## Known limitations
 
@@ -38,8 +40,9 @@ some owner decisions are still open (see [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md
 
 ## Verification
 
-On revision `d543579`: 175 automated tests passed (0 skipped), lint and content checks
-clean, release check clean. On the build machine (Windows 11 at 125%): upgrade from rc3 with
+Automated suite on the final tree (FINAL_REVISION): FINAL_RESULT, three runs in a clean
+clone. On the build commit `d543579` the clean run was 174 passed, 1 failed; that test was
+then changed, and the installer's inputs were not. Lint, content and release checks clean. On the build machine (Windows 11 at 125%): upgrade from rc3 with
 data created by rc3, the 16-step journey in the installed app without Python, beta import,
 recovery at both text sizes, restore, uninstall, and the installed licence and notices. Not
 yet: a clean machine, real 100%/150% scaling, a person using the keyboard. Details:

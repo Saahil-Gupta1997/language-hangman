@@ -131,6 +131,14 @@ passwords protect in-app access, not the files.
   `src/desktop/widgets.py`: destroyed dropdowns stayed registered for rescaling, and
   destroyed windows left timers pending. Dropdowns were also mouse-only.
 
+## Round screen
+
+The figure, word, lives and A–Z keys are drawn on one canvas (`GameBoard`), because building
+them from CustomTkinter widgets made every guess slow (D-32). A guess that continues a round
+redraws the board in place; a guess that ends a round rebuilds the screen. Canvas content is
+not exposed as separate controls, and the keys are not in the Tab order: the guess box and
+Submit button are the keyboard route.
+
 ## Boundaries
 
 The installer bundles only the desktop import graph, CustomTkinter resources and the

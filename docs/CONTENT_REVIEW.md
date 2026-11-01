@@ -25,8 +25,8 @@ A qualified English-language teacher (for example CELTA, TESOL or equivalent exp
 teaching adults at A2–B1). Record name or initials, qualification, date and the file's
 revision (`git rev-parse HEAD`).
 
-The cards are unchanged from rc2 to rc3 (`git diff 4ad1e34 fd3b25a -- src/desktop/content`
-is empty), so a review of either candidate applies to both.
+The cards are unchanged from rc2 to rc4 (`git diff 4ad1e34 d543579 -- src/desktop/content`
+is empty), so a review of any of these candidates applies to all of them.
 
 ## What to check on every card
 
@@ -125,7 +125,6 @@ Points for the owner:
   its LICENSE file and classifier say MIT. The MIT text is shipped; it satisfies either.
 - **Microsoft Distributable Code**: Python's licence asks anyone redistributing
   `VCRUNTIME140.dll` to have end users agree to terms at least as protective as Microsoft's.
-  The installer currently shows no licence terms (RK-7, decision DEC-14, together with the
-  project licence DEC-08).
+  The installer currently shows no licence terms during setup (RK-7, decision DEC-14).
 - Pillow's Windows build used here contains no GPL components (no libimagequant); its font
   module (FreeType, HarfBuzz) is not shipped.
