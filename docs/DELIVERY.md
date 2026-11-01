@@ -33,7 +33,8 @@ engineering), **Deferred** (accepted for a later release).
 | `aa82f18` | rc6 documents, evidence and media; the final tree, tested three times |
 | `b370afb` | rc6's recorded results; rc6 source archive (tag `v1.0.0rc6`). No application change |
 | `c58d208` | **1.0.0rc7 release candidate** (installer `c0089bfb…e6d2c3` built from this commit): simpler round screens, D-34 to D-36 |
-| later commits | documents and evidence only; no application change (check with `git diff c58d208 -- src desktop_app.py packaging`) |
+| `52844d1` | rc7 documents, evidence and media; the final tree, tested three times |
+| later commits | documents and evidence only; rc7 source archive (tag `v1.0.0rc7`). No application change (check with `git diff c58d208 -- src desktop_app.py packaging`) |
 
 ## Defect and task register
 

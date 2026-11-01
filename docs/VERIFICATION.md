@@ -68,6 +68,11 @@ shortcut. rc7 has not yet been started on their real data.
 | `e0aa9c0` rc6 build commit | 212 passed in the clean clone | 0 | clean | PASS, 1,544 words structurally valid | passed (17), source and installed | equal columns; the installer was built from this commit |
 | `aa82f18` rc6 final tree | 212 passed, 0 skipped, ×3 | 0 | clean | PASS, 1,544 words structurally valid | passed (17) from source; installer code unchanged since `e0aa9c0` | three consecutive runs in a clean clone, each exit 0 (`checks-final/` in rc6's folder) |
 | **`c58d208` rc7 build commit** | **214 passed** in the clean clone | **0** | clean | PASS, 1,544 words structurally valid | passed (17), source and installed | one test removed with its line, three added; all three new ones fail on rc6's code |
+| **`52844d1` rc7 final tree** | **214 passed, 0 skipped, ×3** | **0** | clean | PASS, 1,544 words structurally valid | passed (17) from source; installer code unchanged since `c58d208` | three consecutive runs in a clean clone, each exit 0 (`checks-final/`) |
+
+**The long first run on rc7's final tree.** Run 1 took 1 h 57 min against about 4 minutes for
+runs 2 and 3. Windows' system log shows the laptop in Modern Standby from 17:22 to 19:16, with one
+brief wake, and run 1 finished at 19:19. It passed; it was paused, not repeated.
 
 **The failure on rc6's first candidate.** `letter_keys_guess_on_click` failed in the clean clone
 of `2bfbd61` with "a used key fired again": the click had landed on a different key. This was a
@@ -215,7 +220,8 @@ files, 0 problems.
 rc7 and rc6 were measured in one session on 2026-11-01 from clean clones of `c58d208` and
 `e0aa9c0`, with the same tool and interpreter and with the revisions alternating
 (`performance/`). The owner was using the computer. These are single-machine observations,
-not guarantees.
+not guarantees. Windows logged a power-source change at 17:10, as the guess runs ended, so the
+long session and the other operations ran after it; the log does not say which way it changed.
 
 **Guess to redrawn screen, the game's hot path** (a fresh profile; three runs of each; correct
 guesses only, about one in five of which ends a round):

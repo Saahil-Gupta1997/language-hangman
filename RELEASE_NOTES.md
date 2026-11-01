@@ -42,8 +42,8 @@ sessions and some owner decisions are still open (see
 
 ## Verification
 
-Automated suite on the build commit `c58d208`: 214 passed, 0 skipped, in a clean clone. Lint,
-content and release checks clean. The three new tests for D-34, D-35 and D-36 fail on rc6's code.
+Automated suite on the final tree (`52844d1`): 214 passed, 0 skipped, ×3, in a clean clone. On
+the build commit `c58d208`: 214 passed, 0 skipped. Lint, content and release checks clean. The three new tests for D-34, D-35 and D-36 fail on rc6's code.
 On the build machine (Windows 11 at 125%): upgrade from rc6 with data created by rc6, reached
 through rc5 so that the upgrade had a leftover file to clear; the 17-step journey in the installed
 app without Python; beta import; recovery at both text sizes; restore; uninstall; and the installed
