@@ -19,9 +19,9 @@ some owner decisions are still open (see [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md
   cards for learning content.
 - **The software is under the MIT licence.** `LICENSE.txt` installs beside the program. The
   30 teaching cards and the icon are not covered until their authorship is confirmed.
-- **Most guesses now draw about seven times faster than rc3** (39 ms against 285 ms
-  median). The guess that ends a round is slower (606 ms against 329 ms at the 95th
-  percentile). Neither rc3 figure has a raw record, so this comparison is unconfirmed.
+- **Most guesses now draw about seven times faster than rc3** (44–56 ms against 273–349 ms
+  median, three runs each on the same day). The guess that ends a round is about twice as
+  slow (763–789 ms against 330–407 ms at the 95th percentile).
 
 ## Known limitations
 

@@ -1,0 +1,37 @@
+Guess to redrawn screen, rc3 and rc4 measured in one session, 2026-11-01 10:37-10:40 local time.
+
+Why: rc3's 285 ms and 329 ms had no raw record (incident I-9). This file does not recover
+that original run. It is a new measurement of both revisions under the same conditions.
+
+Revisions: fd3b25a (rc3) and d543579 (rc4, the installer's build commit), each a clean clone.
+Run from source, not from an installed build.
+Tool: scripts/validation/measure.py round, unmodified (blob 3bcff46, the same file at 9c9ffbb).
+It does not exist at fd3b25a, so the same copy was run against both clones.
+Interpreter: the rc4 build environment: Python 3.12.1, CustomTkinter 5.2.2, Pillow 12.3.0.
+Both revisions pin the same desktop dependencies.
+Method: 12 rounds on a fresh profile in a temporary data folder, guessing each word's letters
+in order, so every sample is a correct guess and about one in five completes a round. Revisions
+alternated in the order rc3, rc4, rc4, rc3, rc3, rc4 so that drift falls on both.
+Machine: AMD Ryzen 7 6800H (8C/16T), 15.2 GB RAM, NVMe SSD; Windows 11 Home 26200 at 125% scaling.
+
+Conditions: the owner's computer, in normal use. cpu-load-before is one reading taken before
+each run, not load during it. The owner's installed rc4 was open throughout on its own data
+folder. No operating-system input was sent. Every run exited 0 with empty stderr. Hashes of the
+real learner data files, taken before and after, are identical (app.lock excluded, it is held open).
+
+Raw output:
+
+run 1 rc3 fd3b25a start 10:37:35 end 10:37:56 cpu-load-before 22% exit 0 :: guess to redrawn screen                      n=55   median    273.4 ms   p95    330.1 ms   max    536.6 ms
+run 2 rc4 d543579 start 10:37:58 end 10:38:24 cpu-load-before 4% exit 0 :: guess to redrawn screen                      n=55   median     49.7 ms   p95    773.9 ms   max   1146.0 ms
+run 3 rc4 d543579 start 10:38:25 end 10:38:50 cpu-load-before 4% exit 0 :: guess to redrawn screen                      n=55   median     56.0 ms   p95    789.0 ms   max    987.6 ms
+run 4 rc3 fd3b25a start 10:38:52 end 10:39:19 cpu-load-before 29% exit 0 :: guess to redrawn screen                      n=55   median    349.4 ms   p95    406.7 ms   max    550.1 ms
+run 5 rc3 fd3b25a start 10:39:20 end 10:39:47 cpu-load-before 26% exit 0 :: guess to redrawn screen                      n=55   median    342.4 ms   p95    385.2 ms   max    634.5 ms
+run 6 rc4 d543579 start 10:39:48 end 10:40:13 cpu-load-before 40% exit 0 :: guess to redrawn screen                      n=55   median     44.1 ms   p95    763.1 ms   max   1126.8 ms
+
+Reading these: the tool does not separate guesses that continue a round from guesses that end
+one. In rc4 the 95th percentile falls among the round-ending guesses. In rc3 every guess
+rebuilds the screen, so its 95th percentile sits close to its median.
+
+Against the earlier records: rc3's 285 ms is inside this session's median range and 329 ms is
+just below its p95 range. rc4's 39 ms and 606 ms (performance.txt) were not reproduced: all
+three rc4 runs here are higher. Observations on one machine, not guarantees.

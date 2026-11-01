@@ -13,7 +13,7 @@ filled in from automated output.
 | G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the final tree** (175 passed, 0 skipped, ×3, `7c425fd`; the build commit's clean run was 174 passed, 1 failed, see VERIFICATION.md) | Engineering | evidence/…/checks |
 | G3 | Installer built from the candidate commit in a clean checkout; SHA256 recorded | Yes | **Met** | Engineering | evidence/…/build-output |
 | G4 | Install, upgrade from the previous release, beta import, recovery, uninstall on Windows | Yes | **Met on the build machine** (not a clean machine) | Engineering | VERIFICATION.md installer steps 1–10 |
-| G16 | Performance measured on the candidate: the game's hot path no slower than the previous release | Yes | **Met on the median** (guess to redrawn screen 39 ms, against 285 ms recorded for rc3); slower at the 95th percentile (606 ms against 329 ms). Neither rc3 figure has a raw record (I-9) | Engineering | VERIFICATION.md performance |
+| G16 | Performance measured on the candidate: the game's hot path no slower than the previous release | Yes | **Met on the median** (guess to redrawn screen 44–56 ms against 273–349 ms in rc3, three runs each on 2026-11-01); about twice as slow at the 95th percentile (763–789 ms against 330–407 ms) | Engineering | VERIFICATION.md performance |
 | G5 | Clean Windows account without Python: install, launch, sign in, play | Yes | Pending | Owner | Manual record M1 |
 | G6 | Keyboard-only journey, visible focus, Enter/Escape, text size | Yes | Pending (bindings and Tab traversal verified automatically) | Owner | Manual record M2 |
 | G7 | Layout at real 100%, 125% and 150% and at the minimum window size, main and recovery windows | Yes | Pending (real 125% and emulated 100%/150% pass) | Owner | Manual record M3 |
@@ -124,7 +124,7 @@ are still there.
 | Defect reproductions (D-29, D-30, D-31, T-28) | `docs/evidence/2026-09-19-rc3-fd3b25a/defects/` | rc2 code vs `fd3b25a` |
 | Installer validation | `docs/evidence/2026-11-01-rc4-d543579/installer-validation/` | steps 01–10, Inno Setup logs, screenshots |
 | Installed smoke journey | `docs/evidence/2026-11-01-rc4-d543579/installed-smoke/` | 16 checks |
-| Performance | `docs/evidence/2026-11-01-rc4-d543579/performance.txt` | 5,000+ round profile, sample counts, hot path |
+| Performance | `docs/evidence/2026-11-01-rc4-d543579/performance.txt`, `guess-redraw-remeasure.txt` | 5,000+ round profile, sample counts, hot path; rc3 and rc4 guess to redraw measured in one session |
 | Scaling | `docs/evidence/2026-11-01-rc4-d543579/scaling/` | round and recovery at three scalings, two text sizes |
 | Demo recording | `docs/media/language-hangman-1.0.0rc4-demo.mp4` | 151 s, SHA256 `d945bc2ad87257a1b3aa9aefab4d7e0eb9d92752b0d7eb07b39147d1e5ad347f`; scripted run of `d543579` from a clean clone, slowed 1.3× for captions |
 | rc3 and earlier evidence | `docs/evidence/2026-09-19-rc3-fd3b25a/`, `…-rc2-4ad1e34/`, `…-baseline-16f3fc3/`, `…-m2-525c377/` | historical; see the I-4 note in the rc2 folder |

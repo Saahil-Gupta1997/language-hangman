@@ -174,25 +174,37 @@ observations, not guarantees.
 | **Guess to redrawn screen (the game's hot path)** | 55 | **39 ms** | 606 ms (rc3: 329 ms) | 285 ms |
 | Screen change: Home / Reports / Practice setup | 5 each | 354 / 565 / 503 ms | 446 / 585 / 513 ms | 238 / 365 / 317 ms |
 
-**Figures without a raw record.** rc3's `performance.txt` has no guess-to-redraw line and
-rc4's records only rc4's result, so rc3's 285 ms median and 329 ms 95th percentile appear
-only in documents. So does the 1.13 s measured on the discarded first rc4 build, the basis
-for "four times slower". No raw output was found in the evidence or in the temporary files
-left from the rc4 work. Treat the rc3 comparison as unconfirmed until `fd3b25a` is measured
-again (I-9).
+**Measured again, 2026-11-01 (I-9).** rc3's `performance.txt` has no guess-to-redraw line and
+rc4's records only rc4's result, so rc3's 285 ms and 329 ms have no raw record; none was found
+in the evidence or in the temporary files left from the rc4 work. Both revisions were
+therefore measured again in one session, from clean clones, with the same tool and
+interpreter: three alternating runs of 55 samples each
+([`guess-redraw-remeasure.txt`](evidence/2026-11-01-rc4-d543579/guess-redraw-remeasure.txt)).
+
+| Revision | Median (three runs) | 95th percentile (three runs) | Longest guess |
+| --- | --- | --- | --- |
+| rc3 `fd3b25a` | 273 / 342 / 349 ms | 330 / 385 / 407 ms | 634 ms |
+| rc4 `d543579` | 44 / 50 / 56 ms | 763 / 774 / 789 ms | 1,146 ms |
+
+rc3's recorded 285 ms sits inside this range and 329 ms just below it, so they are plausible,
+though they still have no raw record. **rc4's recorded 39 ms and 606 ms were not reproduced:**
+all three new runs are higher. Those two figures are real output in `performance.txt`, kept
+as recorded, but they are not the only result. The comparison holds on the middle runs: a
+typical guess about seven times faster (50 ms against 342 ms) and a round-ending guess about
+twice as slow (774 ms against 385 ms). The 1.13 s from the discarded first rc4 build still
+has no raw record, so "four times slower" cannot be confirmed.
 
 Start-up of the built EXE to a visible window, 5 launches on a fresh copy of the dataset:
 **1.19 s** for the first launch of the day, which also makes the automatic backup, then
 **0.88–0.93 s** (rc3: 1.65 s and 0.78–0.84 s).
 
-Two honest comparisons with rc3 (the first uses the figures without a raw record):
+Two honest comparisons with rc3:
 
 - **A typical guess is about seven times faster; the round-ending guess is slower.** A
   guess that continues a round now updates the
   board in place instead of rebuilding the screen, and the board is one drawn canvas
-  instead of about 55 widgets (D-32). The 95th percentile, 606 ms, is the guess that
-  *completes* a round and rebuilds the screen for the learning card. That is slower than
-  rc3's 329 ms.
+  instead of about 55 widgets (D-32). The 95th percentile is the guess that *completes* a
+  round and rebuilds the screen for the learning card. That is about twice as slow as rc3.
 - **Navigation screens are 100–200 ms slower**, because Home, Reports and Practice setup
   now group content into cards and stat tiles, which are more widgets than the plain
   paragraphs they replaced. All stay well under a second.
