@@ -1,19 +1,21 @@
 # Language Hangman Desktop
 
-An offline Windows app for practising English travel vocabulary through Hangman: 30
-curated words for the Restaurant, Airport and Hotel. It is built with Python, CustomTkinter
-and SQLite. It is rule-based software built with AI assistance: it contains no machine
-learning, chatbot or network service, and it needs no account or internet connection.
+An offline Windows app for practising vocabulary through Hangman: 30 English travel cards for
+the Restaurant, Airport and Hotel, plus word lists in English, Spanish, Italian and German at
+five levels. It is built with Python, CustomTkinter and SQLite. It is rule-based software built
+with AI assistance: it contains no machine learning, chatbot or network service, and it needs
+no account or internet connection.
 
-**Status: 1.0.0rc4, a tested release candidate. It is not the final 1.0.**
+**Status: 1.0.0rc5, a tested release candidate. It is not the final 1.0. Nobody has reviewed
+the word lists yet, and the app says so.**
 
 | Verified by automated and scripted checks on the build machine (Windows 11, 125%) | Still pending: needs people or the owner |
 | --- | --- |
-| 175 automated tests, lint, content and release checks on `7c425fd` (installer built from `d543579`, same application code) | Installing on a clean Windows account without Python (G5) |
-| Installer built from that commit; install, upgrade from rc3 with its own data, beta import, recovery, uninstall | Keyboard-only use by a person; real 100% and 150% display scaling (G6–G8) |
-| 16-step scripted journey in the installed app, without Python on `PATH` | Review of all 30 teaching cards by a qualified reviewer (G9) |
+| 194 automated tests, lint, content and release checks on `f2bb6b9`, the installer's commit; final-tree run to follow | Installing on a clean Windows account without Python (G5) |
+| Installer built from `f2bb6b9`; install, upgrade from rc4 with its own data, beta import, recovery, uninstall | Keyboard-only use by a person; real 100% and 150% display scaling (G6–G8) |
+| 17-step scripted journey in the installed app, without Python on `PATH` | Review of every word by qualified reviewers, one per language (G9) |
 | Third-party notices installed and checked against every shipped file | Five learner sessions (G10) |
-| Window layout and the game board measured at the minimum size (real 125%, emulated 100% and 150%) | Owner decisions: installer terms, Review rule, feedback tone, supported history, intended learner |
+| Window layout and the game board measured at the minimum size (real 125%, emulated 100% and 150%) | Owner decisions: installer terms, Review rule, supported history, intended learner, who wrote the word sheet |
 
 Automated GUI checks call the app's own handlers and Tk's focus order; they are not a person
 using a keyboard. The build machine has had Python and earlier versions installed, so it is
@@ -22,14 +24,14 @@ not a clean-machine test. Gates, evidence and the go/no-go record are in
 
 ## Demo
 
-[2½-minute captioned recording](docs/media/language-hangman-1.0.0rc4-demo.mp4): a new
+[2¾-minute captioned recording](docs/media/language-hangman-1.0.0rc5-demo.mp4): a new
 profile, Review offered as Standard for a new learner, a Standard session with learning
-cards, reports, a shortened Review, resuming after closing, word cards, text size, settings
-and recovery from a damaged data file. It is a scripted run of revision `d543579` from
-source, driven through the app's own controls and slowed so that captions can be read; only
-the app window is captured.
+cards, reports, a shortened Review, resuming after closing, word cards and word lists, a German
+board with its extra keys, text size, settings and recovery from a damaged data file. It is a
+scripted run of revision `f2bb6b9` from source, driven through the app's own controls and
+slowed so that captions can be read; only the app window is captured.
 
-Screenshots from the installed rc4 build:
+Screenshots from the installed rc5 build:
 
 | Practice round | Review shortened, with the reason | Recovery window |
 | --- | --- | --- |
@@ -38,29 +40,34 @@ Screenshots from the installed rc4 build:
 ## What it does
 
 - Local profiles protected by a password, and guest practice that is not saved.
-- 30 curated English words in three travel situations, with plain-English meanings, an
-  original example, a usage note and an approximate respelling for pronunciation.
-- Easy (7 lives, clues shown) or Hard (5 lives), 3, 5 or 10 rounds per session.
-- A game board: the figure, the word as letter tiles, lives as pips, and an A–Z keyboard
-  that doubles as the record of what you have tried. Type a letter or click a key.
+- 30 English travel cards in three situations, with plain-English meanings, an original
+  example, a usage note and an approximate respelling for pronunciation.
+- 1,538 words in English, Spanish, Italian and German at five levels, each with three clues
+  in English. They come from the owner's older word sheet and **have not been reviewed**.
+- Easy (7 lives, clues after wrong guesses 1, 3 and 5) or Hard (5 lives, all clues with 2 lives
+  left), 3, 5 or 10 rounds per session.
+- A game board: the figure, the word as letter tiles, lives as pips, and a keyboard that
+  doubles as the record of what you have tried, with each language's extra letters. Type a
+  letter or click a key.
+- Sarcastic feedback lines: the owner's originals, restored in rc5.
 - **Standard** practice, and **Review** of words you have already practised in that
-  situation (due words first). A new learner is offered Standard instead, and a shortened
-  Review says why.
+  situation or level (due words first). A new learner is offered Standard instead, and a
+  shortened Review says why.
 - Sessions are saved after every guess and can be resumed after closing the app.
-- Reports on rounds, sessions, words and guesses; word cards for all 30 words.
+- Reports on rounds, sessions, words and guesses; word cards for every word.
 - Full backup and restore, a daily automatic backup (seven kept), profile export and
   deletion, and a recovery window if the data file is damaged.
 - Text size, keyboard operation and privacy-safe diagnostics.
 
 ## Install
 
-1. Download `LanguageHangman-1.0.0rc4-Setup.exe` from the release package and check it:
+1. Download `LanguageHangman-1.0.0rc5-Setup.exe` from the release package and check it:
 
    ```powershell
-   Get-FileHash .\LanguageHangman-1.0.0rc4-Setup.exe -Algorithm SHA256
+   Get-FileHash .\LanguageHangman-1.0.0rc5-Setup.exe -Algorithm SHA256
    ```
 
-   Expected: `abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c`.
+   Expected: `a94a92696cf5f001fb7326fb92628557f5907b0122383d3269d3aa4e26d47531`.
 2. Run it. **The installer is not code-signed**, so Windows SmartScreen shows "Windows
    protected your PC" and "Unknown publisher". Choose *More info › Run anyway* only if the
    checksum matched. It installs for the current user; no administrator rights are needed.
@@ -83,30 +90,36 @@ sessions are kept; any database upgrade runs on a copy after a pre-upgrade backu
   in `backups\quarantine-…` and you can sign in again.
 - **Moving from the older browser beta:** on the sign-in screen, choose *Restore / import
   old database* and pick the beta's `data\app.db`. This replaces all current profiles after
-  confirmation. Old results stay in reports; new practice uses the 30 curated words.
+  confirmation. Old results stay in reports; new practice uses the current words.
 - **Diagnostics** (Settings) export the app, Python and Windows versions, database checks
   and recent failure records (operation, stage, error type). They exclude passwords,
   usernames, session content and personal folder paths.
 
 ## Performance (build machine)
 
-On an AMD Ryzen 7 6800H laptop with an NVMe SSD, with one profile holding 5,000+ completed
-rounds (4.55 MB of data): a typical guess takes **44–56 ms** from submission to redrawn screen
-(three runs of 55 samples on a fresh profile; 273–349 ms in rc3), and the guess that ends a round
-is about twice as slow as rc3 (763–789 ms at the 95th percentile against 330–407 ms), reports aggregate in 55 ms (20 samples), a full backup takes 122 ms
-(5 samples), and moving between Home, Reports and Practice setup takes 354–565 ms (5 samples
-each) — slower than rc3's 238–365 ms, because those screens now group content into cards.
-The installed program shows its window in 0.88–0.93 s, and in 1.19 s on the day's first
-launch, which also makes the automatic backup. Details and method:
+On an AMD Ryzen 7 6800H laptop with an NVMe SSD, on a fresh profile, a typical guess takes
+**40–42 ms** from submission to redrawn screen on travel cards (three runs of 55 samples; rc4
+measured 28–51 ms in the same session). The guess that ends a round takes 555–589 ms at the 95th
+percentile on travel cards and 709–803 ms in a word list. With one profile holding 5,000+
+completed rounds (4.55 MB of data), reports aggregate in 56 ms (20 samples), a full backup takes
+95 ms (5 samples), and moving between Home, Reports and Practice setup takes 357–626 ms (5
+samples each). Word cards takes 1.9–3.1 s to open, and switching word list takes about 0.15 s.
+The installed program shows its window in 1.03–1.04 s, and in 2.06 s the first time it loads the
+word lists into a data file. Details and method:
 [docs/VERIFICATION.md](docs/VERIFICATION.md#performance-build-machine).
 
 ## Known limitations
 
-- English only; 30 words. Meanings are in English, not translations. The intended learner
-  (reads short, simple English, about CEFR A2) is a proposed profile awaiting the owner and
-  a reviewer; the content is not certified for any level.
-- Pronunciation is an approximate respelling, not audio or IPA.
-- Easy mode offers two distinct clues per word (the synonym clue is empty by design).
+- **The word lists are unreviewed.** Automated checks cover their structure, not whether a
+  word, clue or level is right. Levels are the old sheet's own labels and measure nothing.
+- Explanations and clues are in English in every language, not translations. The intended
+  learner (reads short, simple English, about CEFR A2) is a proposed profile awaiting the
+  owner and a reviewer; the content is not certified for any level.
+- Pronunciation is an approximate respelling on travel cards, not audio or IPA. Word-list
+  words have no pronunciation, example or usage note.
+- Travel cards offer two distinct clues per word (their synonym clue is empty by design);
+  word-list words offer three.
+- The feedback lines are sarcastic on purpose, and a learner of English may not follow them.
 - Windows screen readers generally cannot read CustomTkinter controls.
 - The database is not encrypted; passwords protect in-app access only. There is no
   password reset by email. Full backups contain every profile's password hash: keep them
@@ -120,13 +133,14 @@ launch, which also makes the automatic backup. Details and method:
 
 ## How it was built
 
-The beta and rc1 were written with AI coding assistance. The rc2 to rc4 work (defect fixes,
-the interface redesign, tests, packaging, validation and these documents) was carried out by
-Claude Code at the owner's direction; an independent review of rc2 found the restore defect
-fixed in rc3. Every fix was reproduced first and checked afterwards, and results are tied to
-commits. Mistakes in the AI's own work are recorded rather than hidden — including the
-redesign in rc4 that made the game four times slower, which measurement caught before
-release (incidents I-1 to I-7). Educator, learner and manual checks are left for people to
+The beta and rc1 were written with AI coding assistance. The rc2 to rc5 work (defect fixes,
+the interface redesign, the word lists, tests, packaging, validation and these documents) was
+carried out by Claude Code at the owner's direction; an independent review of rc2 found the
+restore defect fixed in rc3. Every fix was reproduced first and checked afterwards, and results
+are tied to commits. Mistakes in the AI's own work are recorded rather than hidden — including
+the rc4 redesign that slowed the game, which measurement caught before release, and five rc5
+test scenarios that were written but not run until a count exposed them (incidents I-1 to
+I-11). Educator, learner and manual checks are left for people to
 perform and record. See
 [How AI assistance was used and verified](docs/DELIVERY.md#how-ai-assistance-was-used-and-verified).
 

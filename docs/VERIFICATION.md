@@ -1,17 +1,20 @@
-# Verification — Language Hangman 1.0.0rc4
+# Verification — Language Hangman 1.0.0rc5
 
 What was actually executed, on which revision and artifact, with what result. Manual and
 human acceptance gates, and their status, are in [ACCEPTANCE.md](ACCEPTANCE.md). Nothing
-here was produced by a learner, an educator or a manual tester.
+here was produced by a learner, an educator or a manual tester, and **nothing here checks
+that the level-list words or their clues are correct**.
 
-**Release candidate:** revision `d543579` (branch `release/1.0`); installer
-`LanguageHangman-1.0.0rc4-Setup.exe`, SHA256 `abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c`. Evidence:
-[`evidence/2026-11-01-rc4-d543579/`](evidence/2026-11-01-rc4-d543579/). Commits after
-`d543579` change tests, documents and release tooling only: `git diff d543579 -- src
-desktop_app.py packaging` is empty, and the one change under `scripts/` is the demo
-recorder, which PyInstaller does not bundle. So the installer matches the published source.
+**Release candidate:** revision `f2bb6b9` (branch `release/1.0`); installer
+`LanguageHangman-1.0.0rc5-Setup.exe`, SHA256 `a94a92696cf5f001fb7326fb92628557f5907b0122383d3269d3aa4e26d47531`. Evidence:
+[`evidence/2026-11-01-rc5-f2bb6b9/`](evidence/2026-11-01-rc5-f2bb6b9/). Commits after
+`f2bb6b9` change documents, evidence, one line of test wiring (I-11) and one logging line
+in the build script: `git diff f2bb6b9 -- src desktop_app.py packaging` is empty, and
+PyInstaller does not bundle `scripts/` or `tests/`. So the installer matches the published
+source.
 
-The previous candidates' evidence stays in place: rc3 in
+The previous candidates' evidence stays in place: rc4 in
+[`evidence/2026-11-01-rc4-d543579/`](evidence/2026-11-01-rc4-d543579/), rc3 in
 [`evidence/2026-09-19-rc3-fd3b25a/`](evidence/2026-09-19-rc3-fd3b25a/), rc2 in
 [`evidence/2026-09-19-rc2-4ad1e34/`](evidence/2026-09-19-rc2-4ad1e34/).
 
@@ -22,7 +25,7 @@ The previous candidates' evidence stays in place: rc3 in
 | Machine | AMD Ryzen 7 6800H (8 cores/16 threads), 15.2 GB RAM, NVMe SSD |
 | OS | Windows 11 Home 10.0.26200, 1920×1080 panel at **125%** display scaling (the real setting) |
 | Runtime / build | Python 3.12.1 · CustomTkinter 5.2.2 · Pillow 12.3.0 · PyInstaller 6.11.1 · Inno Setup 6.7.3 |
-| Executed by | Claude Code (AI assistant) on the owner's computer, 2026-09-19 (rc2, rc3) and 2026-11-01 (rc4) |
+| Executed by | Claude Code (AI assistant) on the owner's computer, 2026-09-19 (rc2, rc3) and 2026-11-01 (rc4, rc5) |
 
 This is the development and build machine: Python, the build tools and earlier versions of
 the app have all been on it. Installer results below are **build-machine** results. A clean
@@ -30,14 +33,20 @@ Windows account without Python (G5) has not been tested. The owner was using the
 throughout, so no step sent operating-system keystrokes or mouse input, and screenshots
 capture only the application's own window.
 
+For rc5 the owner had rc4 installed and open on their own data. With their agreement it was
+closed and replaced, and every step ran in a separate data folder set with
+`LANGUAGE_HANGMAN_DATA_DIR`. Hashes of their data files are unchanged from before validation
+to after it, and rc5 was left installed with their desktop shortcut restored.
+
 ## Kinds of evidence
 
 | Label | Meaning | What it is not |
 | --- | --- | --- |
 | Automated | pytest: service tests, fault-injection tests and GUI scenarios. GUI scenarios open real windows and call the app's own handlers, bindings and Tk's focus traversal | Not real key presses, not visible focus judged by eye |
-| Smoke journey | `--smoke-test`: 16 scripted checks in a real window, from source or the installed EXE | Same limits as above |
+| Smoke journey | `--smoke-test`: 17 scripted checks in a real window, from source or the installed EXE | Same limits as above |
 | Installed build | The real installer on the build machine; the installed EXE launched normally | Not a clean machine; sign-in was checked with code of the same revision, not typed |
 | Real / emulated scaling | 125% is the machine's real setting; 100% and 150% are emulated with CustomTkinter's scaling | Emulation is not the Windows setting |
+| Content check | `scripts/check_curated_content.py`: structure of the 30 cards and the level lists | Says nothing about whether a word or clue is correct |
 | Manual | A person using the installed app | **None performed yet** (ACCEPTANCE.md M1–M4) |
 
 ## Results by revision
@@ -50,31 +59,43 @@ capture only the application's own window.
 | `fd3b25a` rc3 | 174 passed | 0 | clean | PASS, 24 dispositioned | passed (16), source and installed | 1 warning (Starlette, legacy tests only) |
 | `d543579` rc4 build commit | **174 passed, 1 failed** in the clean clone | 0 | clean | PASS, 24 dispositioned | passed (16), source and installed | `focused_control_scrolls_into_view` failed; see below. 175 had passed on the uncommitted working tree |
 | `f5ac6a2`..`21cee81` | 175 passed on the extracted `21cee81` archive | 0 | clean | PASS | not re-run | the failing scenario now waits for the layout to settle |
-| **`7c425fd` rc4 final tree** | **175 passed, 0 skipped, ×3** | **0** | clean | PASS, 24 dispositioned | installer code unchanged since `d543579` | three consecutive runs in a clean clone |
+| `7c425fd` rc4 final tree | 175 passed, 0 skipped, ×3 | 0 | clean | PASS, 24 dispositioned | installer code unchanged since `d543579` | three consecutive runs in a clean clone |
+| **`f2bb6b9` rc5 build commit** | **194 passed** in the clean clone; first run 193 passed, 1 failed (below) | **0** | clean | PASS, 24 dispositioned; 1,538 level-list words structurally valid | passed (17), source and installed | 19 new tests. Five new GUI scenarios were written but not yet in the runner's list (I-11) |
 
-**The failure on the build commit.** `focused_control_scrolls_into_view` failed once in the
+**Five GUI scenarios missed the build-commit run.** The new scenarios existed at `f2bb6b9`,
+but `tests/test_desktop_gui.py` lists scenarios by name and they were not added, so the 194
+did not include them. An arithmetic check of the totals caught this. All five then passed
+on the same application code, and they are in the final-tree runs (I-11).
+
+**The first clean run of the rc5 build commit.** `test_release_check_on_a_real_release_branch_clone_and_worktree`
+failed once: the check script had set `TEMP` to the long scratch folder, and the test's own
+`git init` failed there on Windows' path limit ("cannot stat"). The same commit then passed all
+194 with the system temp folder, which shows the script as the cause (I-10). The output is kept
+in `checks-first-run/`.
+
+**The failure on the rc4 build commit.** `focused_control_scrolls_into_view` failed once in the
 clean clone of `d543579`. It is a test scenario, and it failed on a position measured
 straight after a resize. Making it wait for the layout to settle was the fix; that the race
 was the cause is the likely explanation, not a proven one, because the failure was not
 reproduced on demand. The installer's inputs did not change. The original failing output
-stays in `checks/pytest.txt`.
+stays in the rc4 folder's `checks/pytest.txt`.
 
-On a machine without a display, the nine GUI scenarios skip by design (not run on Linux for
-rc4). `test_release_check_on_a_real_release_branch_clone_and_worktree` skips if Git is not
+On a machine without a display, the 14 GUI scenarios skip by design (not run on Linux for
+rc5). `test_release_check_on_a_real_release_branch_clone_and_worktree` skips if Git is not
 installed. The GitHub workflows have not run: there is no remote repository (G13).
 
-### What was re-run for rc4, and what was carried forward
+### What was re-run for rc5, and what was carried forward
 
-The interface changed in rc4, so everything that touches it was re-run on `d543579` or its
-installer: the suite, the smoke journey from source and from the installed build, the whole
-installer sequence, performance, the scaling checks, the demo and the screenshots.
+The practice flow, the board, the word data and the feedback lines changed in rc5, so
+everything that touches them was re-run on `f2bb6b9` or its installer: the suite, the smoke
+journey from source and from the installed build, the whole installer sequence, performance,
+the scaling checks, the demo and the screenshots.
 
 Carried forward without re-running, because neither the code nor the inputs changed: the
 D-26 harness investigation, the original D-01..D-03 reproduction scripts (their regression
-tests ran again inside the 175), and the rc3 defect reproductions for D-29 to D-31 (their
-regression tests also ran again). The v1.0.0-beta database used for the import check was
-rebuilt with the beta's own code, because the original was lost with a temporary folder
-(incident I-6); it contains the same three words.
+tests ran again inside the 194), and the rc3 defect reproductions for D-29 to D-31 (their
+regression tests also ran again). The v1.0.0-beta database for the import check is the file
+rebuilt for rc4 with the beta's own code (SHA256 `a512e245…`); the original was lost (I-6).
 
 ## Verification sequence
 
@@ -93,37 +114,37 @@ python -m pytest -rs            # read pytest's own exit code
 python desktop_app.py --smoke-test <output-folder>
 ```
 
-For rc4, `release-check` was clean in an ordinary clone on `release/1.0`
+For rc5, `release-check` was clean in an ordinary clone of `f2bb6b9`
 (`checks/release-check.txt`) and on the extracted source archive (see the release package's
-`VERIFICATION-*.txt`). The worktree case last ran for rc3.
+`VERIFICATION-*.txt`). The worktree case runs inside the suite.
 
-## Installer validation (rc4, build machine)
+## Installer validation (rc5, build machine)
 
-Installer 14,736,907 bytes, SHA256 `abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c`, built by `scripts/build_desktop.ps1` in a fresh
-clone of `d543579`; installed EXE SHA256
-`e6b3c0f910b626036b0df0753481b9b6fe9fd8ca51ab3a3d0cbe9b54df571436`. Unsigned.
+Installer 14,791,371 bytes, SHA256 `a94a92696cf5f001fb7326fb92628557f5907b0122383d3269d3aa4e26d47531`, built by `scripts/build_desktop.ps1` in a fresh
+clone of `f2bb6b9`; installed EXE SHA256
+`9de7b25420319c9c163dcf623ffb530ce48805c56a053accf50a1640bc1428b8`. Unsigned.
 Files: `evidence/…/installer-validation/`.
 
 | # | Check | Result |
 | --- | --- | --- |
-| 1 | Pre-state; install 1.0.0rc3 (`5e1b3107…`) | Nothing installed before; rc3 installed and registered |
-| 2 | rc3 creates its own data with rc3's code (`fd3b25a`): 2 profiles, a win, a loss, a round paused mid-guess | Done |
-| 3 | **Upgrade**: run the rc4 installer over rc3 | Exit 0; the data file byte-identical; installed EXE identical to the build; one `1.0.0rc4` registration; `LICENSE.txt`, the notices and 12 licence texts beside the program |
-| 4 | Third-party notices in the installed folder | 982 files, 13 notice files, **0 problems**; installed `LICENSE.txt` identical to the repository's |
-| 5 | Normal launch of installed rc4 on the upgraded data; sign-in and data checked with `d543579` code | Sign-in screen in 1.72 s; rc3 password accepted, wrong one rejected; 2 rounds kept; paused round resumed and completed |
-| 6 | Installed `--smoke-test`, `PATH` = Windows folders only, no `PYTHON*` variables | Exit 0; 16/16 in 25 s; real data untouched |
+| 1 | The owner's rc4 uninstalled; pre-state; install 1.0.0rc4 (`abb0cf94…`) | Nothing installed before; rc4 installed and registered |
+| 2 | rc4 creates its own data with rc4's code (`d543579`): 2 profiles, a win, a loss, a round paused mid-guess | Done |
+| 3 | **Upgrade**: run the rc5 installer over rc4 | Exit 0; the data file byte-identical; installed EXE identical to the build; one `1.0.0rc5` registration; `LICENSE.txt`, the notices and 12 licence texts beside the program; all four level lists installed |
+| 4 | Third-party notices in the installed folder | 986 files, 13 notice files, **0 problems**; installed `LICENSE.txt` identical to the repository's |
+| 5 | Normal launch of installed rc5 on the upgraded data; sign-in and data checked with `f2bb6b9` code | Sign-in screen in 2.27 s, including the first word load; rc4 password accepted, wrong one rejected; 2 rounds kept; paused round resumed and completed |
+| 6 | Installed `--smoke-test`, `PATH` = Windows folders only, no `PYTHON*` variables | Exit 0; 17/17 in 28 s, including the German level list; validation data untouched |
 | 7 | Import a v1.0.0-beta database (schema 0) through the restore path | Opens normally; beta sign-in and 3 rounds kept; Review offers only practised curated words (`clean` in Hotel, `early` in Airport, Restaurant refused) |
-| 8 | Damage the live data file; launch the installed app, Standard and Large text | **Recovery window** in 0.89–0.94 s; captured at opening and minimum size; text fits at both sizes |
-| 9 | Restore the newest automatic backup (the first button's code path) | Damaged bytes quarantined exactly; both profiles back; **no stale side files**; normal start in 0.94 s |
-| 10 | Uninstall | Program, Start-menu entry and registration removed; all 8 data files kept byte-for-byte |
+| 8 | Damage the live data file; launch the installed app, Standard and Large text | **Recovery window** in 0.83–0.88 s; captured at opening and minimum size; text fits at both sizes |
+| 9 | Restore the newest automatic backup (the first button's code path) | Damaged bytes quarantined exactly; both profiles back; **no stale side files**; normal start in 1.04 s |
+| 10 | Uninstall | Program, Start-menu entry and registration removed; all 7 data files kept byte-for-byte |
 
-A first rc4 installer passed this same sequence before performance measurement rejected the
-build (D-32); it was discarded, and every step above was run again on the rebuilt installer
-(incident I-7).
+The uninstall in step 1 also removed the owner's desktop shortcut, which the final silent
+install did not bring back. That was noticed in the uninstall log and put right by rerunning
+the installer with the desktop-shortcut option.
 
 ## Restore rollback (D-30)
 
-Fault-injection tests in `tests/test_recovery.py`, run in the 174:
+Fault-injection tests in `tests/test_recovery.py`, run in the 194:
 
 | Case | Test | Result |
 | --- | --- | --- |
@@ -133,7 +154,7 @@ Fault-injection tests in `tests/test_recovery.py`, run in the 174:
 | Putting a file back fails | `test_failed_rollback_says_where_the_side_files_are_kept` | Stage `rollback`; message names each kept file, its original place and the safety copy; no "unchanged" claim |
 
 The first and last fail on the rc2 code (`defects/D-30-restore-rollback.txt`). The installed
-build contains the same code (EXE built from `d543579`); its successful restore paths were
+build contains the same code (EXE built from `f2bb6b9`); its successful restore paths were
 exercised in steps 7 and 9. Failures cannot be injected into the installed build.
 
 ## Recovery window and text wrapping (D-31)
@@ -152,66 +173,77 @@ exercised in steps 7 and 9. Failures cannot be injected into the installed build
 and the files they cover; `licenses/` holds 12 texts. The build copies them next to the
 program and runs `scripts/third_party_notices.py check`: it fails if a shipped file is not
 in the inventory, a notice is missing or changed, or the build environment's versions differ
-from the inventory. rc4 build folder: 979 files, 0 problems. Installed folder: 982 files, 0
+from the inventory. rc5 build folder: 983 files, 0 problems. Installed folder: 986 files, 0
 problems.
 
 ## Performance (build machine)
 
-Dataset: 5 profiles; one with **5,000+ completed rounds** (150 played through the app's
-services, the rest copied rows with spread dates) and 4.55 MB. It was rebuilt for rc4
-because the rc3 dataset (5.3 MB) was lost (I-6), so the rc3 column is a guide, not a
-like-for-like comparison. The guess-to-redraw row used a fresh profile on both revisions. Measured in-process from
-`d543579` while the owner was using the computer (`performance.txt`). Single-machine
-observations, not guarantees.
+rc5 and rc4 were measured in one session on 2026-11-01 from clean clones of `f2bb6b9` and
+`d543579`, with the same tool and interpreter and with the revisions alternating
+(`performance/`). The owner was using the computer. These are single-machine observations,
+not guarantees.
 
-| Operation | Samples | Median | 95th percentile | rc3 median |
+**Guess to redrawn screen, the game's hot path** (a fresh profile; three runs of each;
+correct guesses only, about one in five of which ends a round):
+
+| Words | Samples per run | Median | 95th percentile | Longest guess |
 | --- | --- | --- | --- | --- |
-| Open, upgrade check and quick check | 10 | 13 ms | 17 ms | 15 ms |
-| Full backup (copy and validation) | 5 | 122 ms | 125 ms | 128 ms |
-| Reports aggregation, 5,000+ rounds | 20 | 55 ms | 74 ms | 65 ms |
-| Guess, round continues (service only) | 115 | 13 ms | 29 ms | 13 ms |
-| Guess that completes a round (all writes) | 30 | 30 ms | 40 ms | 28 ms |
-| **Guess to redrawn screen (the game's hot path)** | 55 | **39 ms** | 606 ms (rc3: 329 ms) | 285 ms |
-| Screen change: Home / Reports / Practice setup | 5 each | 354 / 565 / 503 ms | 446 / 585 / 513 ms | 238 / 365 / 317 ms |
+| rc4, travel cards | 55 | 28 / 41 / 51 ms | 559 / 570 / 583 ms | 1,003 ms |
+| **rc5, travel cards** | 55 | **40 / 41 / 42 ms** | **555 / 581 / 589 ms** | 1,096 ms |
+| rc5, Spanish Beginner | 59 | 53 / 59 / 127 ms | 709 / 709 / 712 ms | 951 ms |
+| rc5, German Expert | 110 | 31 / 32 / 32 ms | 763 / 790 / 803 ms | 1,389 ms |
 
-**Measured again, 2026-11-01 (I-9).** rc3's `performance.txt` has no guess-to-redraw line and
-rc4's records only rc4's result, so rc3's 285 ms and 329 ms have no raw record; none was found
-in the evidence or in the temporary files left from the rc4 work. Both revisions were
-therefore measured again in one session, from clean clones, with the same tool and
-interpreter: three alternating runs of 55 samples each
-([`guess-redraw-remeasure.txt`](evidence/2026-11-01-rc4-d543579/guess-redraw-remeasure.txt)).
+Travel cards are no slower than rc4 (G16). The guess that ends a round is 150–200 ms slower
+in a word list than on travel cards, which is probably because the next word is chosen from
+about 80 candidates instead of 10; that cause has not been measured.
+
+**Other operations** (5 profiles, one with 5,000+ completed rounds, 4.55 MB; the rc4 column is
+rc4's `performance.txt`, measured earlier the same day):
+
+| Operation | Samples | Median | 95th percentile | rc4 median |
+| --- | --- | --- | --- | --- |
+| Open, upgrade check and quick check | 10 | 13 ms | 16 ms | 13 ms |
+| Full backup (copy and validation) | 5 | 95 ms | 114 ms | 122 ms |
+| Reports aggregation, 5,000+ rounds | 20 | 56 ms | 66 ms | 55 ms |
+| Guess, round continues (service only) | 115 | 14 ms | 16 ms | 13 ms |
+| Guess that completes a round (all writes) | 30 | 33 ms | 43 ms | 30 ms |
+| Screen change: Home / Reports / Practice setup | 5 each | 357 / 538 / 626 ms | 458 / 559 / 632 ms | 354 / 565 / 503 ms |
+
+**Word cards** (`word-cards.txt`, a fresh profile, two runs of five against rc4 in the same
+session): opening the page takes 1.9–3.1 s, against 1.8 s in rc4. It still builds 30 cards from
+widgets, now with two filters above them. Switching to a word list takes 117–166 ms at the
+median, because a list is one text box.
+
+**Start-up of the installed EXE to a visible window**, 5 launches on a fresh copy of the dataset:
+1.03–1.04 s, and 2.06 s for the first launch, which also loads the level lists for the first
+time and makes the day's automatic backup (rc4: 0.88–0.93 s and 1.19 s). Loading and checking
+the words at every start accounts for most of the difference: about 129 ms when timed on its
+own.
+
+Three honest comparisons:
+
+- **Sessions differ more than versions do.** rc4's 95th percentile above is 559–583 ms, and
+  earlier the same day it was 763–789 ms. Compare only within a session.
+- **rc4's recorded 39 ms and 606 ms** are real output in rc4's `performance.txt`, but they are
+  one run, and later runs differ.
+- **Against rc3**, a typical guess is much faster and a round-ending guess about twice as slow.
+  That is rc4's trade-off, and rc5 keeps it. Navigation is slower than rc3, because screens
+  group content into cards.
+
+### rc3 and rc4, earlier the same day (I-9)
+
+rc3's `performance.txt` has no guess-to-redraw line and rc4's records only rc4's result, so
+rc3's 285 ms and 329 ms have no raw record; none was found in the evidence or in the temporary
+files left from the rc4 work. Both revisions were therefore measured again in one session
+(`evidence/2026-11-01-rc4-d543579/guess-redraw-remeasure.txt`):
 
 | Revision | Median (three runs) | 95th percentile (three runs) | Longest guess |
 | --- | --- | --- | --- |
 | rc3 `fd3b25a` | 273 / 342 / 349 ms | 330 / 385 / 407 ms | 634 ms |
 | rc4 `d543579` | 44 / 50 / 56 ms | 763 / 774 / 789 ms | 1,146 ms |
 
-rc3's recorded 285 ms sits inside this range and 329 ms just below it, so they are plausible,
-though they still have no raw record. **rc4's recorded 39 ms and 606 ms were not reproduced:**
-all three new runs are higher. Those two figures are real output in `performance.txt`, kept
-as recorded, but they are not the only result. The comparison holds on the middle runs: a
-typical guess about seven times faster (50 ms against 342 ms) and a round-ending guess about
-twice as slow (774 ms against 385 ms). The 1.13 s from the discarded first rc4 build still
-has no raw record, so "four times slower" cannot be confirmed.
-
-Start-up of the built EXE to a visible window, 5 launches on a fresh copy of the dataset:
-**1.19 s** for the first launch of the day, which also makes the automatic backup, then
-**0.88–0.93 s** (rc3: 1.65 s and 0.78–0.84 s).
-
-Two honest comparisons with rc3:
-
-- **A typical guess is about seven times faster; the round-ending guess is slower.** A
-  guess that continues a round now updates the
-  board in place instead of rebuilding the screen, and the board is one drawn canvas
-  instead of about 55 widgets (D-32). The 95th percentile is the guess that *completes* a
-  round and rebuilds the screen for the learning card. That is about twice as slow as rc3.
-- **Navigation screens are 100–200 ms slower**, because Home, Reports and Practice setup
-  now group content into cards and stat tiles, which are more widgets than the plain
-  paragraphs they replaced. All stay well under a second.
-
-The redesign was measured only after the first rc4 installer had been built and validated,
-which is why that artifact was discarded (incident I-7); the checklist now measures before
-building when the interface changed.
+rc3's recorded figures are plausible but still have no raw record. The 1.13 s from the
+discarded first rc4 build has none either, so "four times slower" cannot be confirmed.
 
 ## Requirement-to-test traceability
 
@@ -232,7 +264,7 @@ building when the interface changed.
 | RQ-13 | Close and reopen during and between rounds | `test_guesses_and_hints_resume`, journey tests | smoke, real process termination (2) | Pass |
 | RQ-14 | Correct reports after wins, losses, abandoned sessions | `test_lost_round_and_repeated_guess`, journey tests | smoke | Pass |
 | RQ-15 | Backup/restore, export, profile deletion scoped | `test_profile_deletion_export_and_diagnostics_are_scoped`, backup tests | smoke | Pass |
-| RQ-16 | Genuine upgrade keeps credentials and progress | `test_legacy_upgrade_preserves_data_and_takes_backup` | steps 2–5 (data made by rc2) | Pass |
+| RQ-16 | Genuine upgrade keeps credentials and progress | `test_legacy_upgrade_preserves_data_and_takes_backup` | steps 2–5 (data made by rc4) | Pass |
 | RQ-17 | Uninstall preserves learner data | — | step 10 | Pass |
 | RQ-18 | Runs without Python installed | — | step 6 (no Python on `PATH`) | Partial: clean machine pending (G5) |
 | RQ-19 | Privacy-safe diagnostics with operation, stage, version | `test_diagnostics_contain_codes_but_no_personal_data` | — | Pass |
@@ -240,7 +272,14 @@ building when the interface changed.
 | RQ-21 | Keyboard: dropdowns operable, focus visible and in view, text-size shortcuts; recovery actions reachable by Tab | GUI scenarios (4) | — | Handler level pass; **real keyboard pending** (G6) |
 | RQ-22 | Layout at 100/125/150% and minimum size; text wraps to the window (D-31) | GUI `window_opens_inside_the_work_area`, `recovery_window_fits_at_minimum_size`, `main_window_text_wraps_at_minimum_size` | installed at real 125%; `scaling/` (12 captures: round and recovery, three scalings, two text sizes) | 125% pass; 100/150% emulated pass; **real 100/150% pending** (G7) |
 | RQ-27 | A letter key guesses that letter, and a used key does nothing | GUI `letter_keys_guess_on_click` | demo; smoke uses the typing route | Pass |
-| RQ-28 | A guess redraws the round without rebuilding the screen (D-32) | — | `performance.txt`: 39 ms median, 55 samples | Pass for guesses that continue a round; the round-ending guess still rebuilds |
+| RQ-28 | A guess redraws the round without rebuilding the screen (D-32) | — | `performance/guess-to-redraw.txt`: 40–42 ms median, 55 samples per run | Pass for guesses that continue a round; the round-ending guess still rebuilds |
+| RQ-29 | Feedback lines are the 40 originals, word for word (T-31, DEC-07) | `test_the_original_feedback_lines_are_back_word_for_word` | `installed-smoke/practice.png` | Pass |
+| RQ-30 | Level lists: four languages, five levels, three clues, no repeats (T-30) | `test_every_language_has_all_five_levels_and_the_counts_add_up`, `scripts/check_curated_content.py` | step 3 | Pass for structure; **accuracy pending** (G9) |
+| RQ-31 | A level session stays in its language and level; Review stays inside it | `test_a_level_session_stays_in_its_language_and_level`, `test_review_at_a_level_only_uses_words_practised_at_that_level` | step 6 (German list) | Pass |
+| RQ-32 | Legacy banks stay out of practice with two packs (D-02) | `test_seeding_keeps_the_travel_cards_and_never_offers_legacy_banks`, `test_legacy_content_is_excluded_from_new_practice` | step 7 | Pass |
+| RQ-33 | Accents, ß, capitals, spaces and hyphens work; every letter has a key | `test_an_accented_letter_is_its_own_letter`, `test_german_nouns_keep_their_capital_and_are_guessed_in_lower_case`, `test_sharp_s_can_be_guessed_and_composed_input_is_accepted`, `test_phrases_show_their_spaces_and_hyphens_without_being_guessed`, `test_every_letter_in_the_lists_has_a_key` (4), GUI `accent_keys_are_on_the_board_for_each_language` | step 6 | Pass; **real keyboard pending** (G6) |
+| RQ-34 | Setup, board, learning card and Word cards work for word lists, at minimum size | GUI `word_set_choices_follow_the_language`, `long_phrases_fit_the_board_at_minimum_size`, `level_word_card_shows_its_clues`, `word_cards_page_lists_a_level_without_a_card_per_word` | demo | Pass; **a person using them pending** (G6, G7) |
+| RQ-35 | Three clues show on Easy and Hard for level-list words | `test_level_words_show_three_different_clues_on_easy`, `test_hard_mode_shows_all_three_clues_with_two_lives_left` | — | Pass |
 | RQ-23 | Content structurally valid; warnings dispositioned | `scripts/check_curated_content.py` | — | Pass; **educator review pending** (G9) |
 | RQ-24 | Learner acceptance (5 sessions) | — | — | **Pending** (G10) |
 | RQ-25 | Third-party notices ship and match what is bundled (T-28) | `tests/test_third_party_notices.py` (3) | build check; step 4 | Pass (build machine) |
@@ -254,6 +293,9 @@ D-29, D-30, D-31 and T-28: reproduced on the rc2 code and re-run on `fd3b25a`
 (`evidence/2026-09-19-rc3-fd3b25a/defects/`).
 
 ## Corrections to earlier records
+
+**The rc5 test count.** The first draft of this record said the five new GUI scenarios had
+run in the 194. They had not (I-11).
 
 **The rc4 summary and first record.** The handover and an earlier version of this record
 said 175 tests passed on `d543579`; the clean-clone run there was 174 passed, 1 failed. The
@@ -300,4 +342,7 @@ before.
 - Windows 10.
 - The GitHub Actions workflows (no remote repository).
 - Educator review of the content; learner sessions.
+- Whether any level-list word, clue or level is correct: no check here can tell.
+- A person playing a word list, or typing or clicking accented letters.
+- A profile with long histories in word lists: the performance dataset uses travel cards.
 - Code signing (the installer is unsigned).

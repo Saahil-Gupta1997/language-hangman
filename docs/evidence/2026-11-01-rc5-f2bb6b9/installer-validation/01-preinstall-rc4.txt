@@ -1,0 +1,9 @@
+date: 2026-11-01T12:53:39.041225+05:30
+validation data folder: a separate folder, set with LANGUAGE_HANGMAN_DATA_DIR
+owner's installed copy before: exe e6b3c0f910b626036b0df0753481b9b6fe9fd8ca51ab3a3d0cbe9b54df571436 (rc4 build), entries []
+owner agreed on 2026-11-01 to it being closed and replaced; their data is not used
+owner's rc4 removed: exit 0, folder gone True
+pre-state: install dir exists=False, data folder used exists=False, start menu entry=False, uninstall entries=0
+previous release: rc4 installer (built from d543579) sha256: abb0cf94428503316b2619add6bd3388b8ca4f3c22bc116e6b90e649e9ebcd3c
+rc4 install exit: 0; registered version: 1.0.0rc4
+installed rc4 exe sha256: e6b3c0f910b626036b0df0753481b9b6fe9fd8ca51ab3a3d0cbe9b54df571436

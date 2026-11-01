@@ -1,0 +1,2 @@
+f2bb6b913756cfebbd0a6e03ff937aad265fb84e
+read from the build clone after the build; build.log itself does not name the commit (I-9)

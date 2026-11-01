@@ -1,0 +1,11 @@
+restore as the recovery window's first button does (rc5 code, f2bb6b9):
+recovery window would offer: ['safety backup', 'pre-upgrade backup', 'daily backup']
+restored: safety backup
+damaged bytes preserved exactly: True
+profiles after recovery: ['upgrader', 'second']
+stale side files left behind: none
+
+installed rc5 app, normal launch after recovery:
+window title: 'Language Hangman · 1.0.0rc5'; visible after 1.04 s
+captured 1343x997; app window: True
+closed normally, exit code 0

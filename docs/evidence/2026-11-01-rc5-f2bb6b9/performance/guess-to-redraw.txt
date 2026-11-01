@@ -1,0 +1,12 @@
+rc4-travel d543579 start 11:52:28 end 11:52:47 cpu-load-before 28% exit 0 stderr-bytes 0 :: guess to redrawn screen, travel cards        n=55   median     28.3 ms   p95    559.0 ms   max    935.2 ms
+rc5-travel f2bb6b9 start 11:52:49 end 11:53:09 cpu-load-before 35% exit 0 stderr-bytes 0 :: guess to redrawn screen, travel cards        n=55   median     42.4 ms   p95    554.9 ms   max   1016.7 ms
+rc5-level f2bb6b9 start 11:53:11 end 11:53:35 cpu-load-before 20% exit 0 stderr-bytes 0 :: guess to redrawn screen, Spanish Beginner    n=59   median     52.9 ms   p95    711.7 ms   max    938.5 ms
+rc5-level f2bb6b9 start 11:53:37 end 11:54:03 cpu-load-before 22% exit 0 stderr-bytes 0 :: guess to redrawn screen, German Expert       n=110  median     32.4 ms   p95    790.5 ms   max   1094.6 ms
+rc4-travel d543579 start 11:54:05 end 11:54:26 cpu-load-before 2% exit 0 stderr-bytes 0 :: guess to redrawn screen, travel cards        n=55   median     40.8 ms   p95    583.3 ms   max    984.8 ms
+rc5-travel f2bb6b9 start 11:54:27 end 11:54:49 cpu-load-before 10% exit 0 stderr-bytes 0 :: guess to redrawn screen, travel cards        n=55   median     41.4 ms   p95    589.2 ms   max   1081.0 ms
+rc5-level f2bb6b9 start 11:54:50 end 11:55:14 cpu-load-before 30% exit 0 stderr-bytes 0 :: guess to redrawn screen, Spanish Beginner    n=59   median     59.2 ms   p95    708.8 ms   max    951.2 ms
+rc5-level f2bb6b9 start 11:55:16 end 11:55:43 cpu-load-before 23% exit 0 stderr-bytes 0 :: guess to redrawn screen, German Expert       n=110  median     31.8 ms   p95    763.4 ms   max   1389.0 ms
+rc4-travel d543579 start 11:55:45 end 11:56:05 cpu-load-before 27% exit 0 stderr-bytes 0 :: guess to redrawn screen, travel cards        n=55   median     50.7 ms   p95    569.7 ms   max   1002.8 ms
+rc5-travel f2bb6b9 start 11:56:07 end 11:56:28 cpu-load-before 24% exit 0 stderr-bytes 0 :: guess to redrawn screen, travel cards        n=55   median     40.2 ms   p95    580.8 ms   max   1095.6 ms
+rc5-level f2bb6b9 start 11:56:30 end 11:56:54 cpu-load-before 37% exit 0 stderr-bytes 0 :: guess to redrawn screen, Spanish Beginner    n=59   median    126.8 ms   p95    709.4 ms   max    904.5 ms
+rc5-level f2bb6b9 start 11:56:56 end 11:57:23 cpu-load-before 34% exit 0 stderr-bytes 0 :: guess to redrawn screen, German Expert       n=110  median     30.5 ms   p95    803.1 ms   max   1164.8 ms

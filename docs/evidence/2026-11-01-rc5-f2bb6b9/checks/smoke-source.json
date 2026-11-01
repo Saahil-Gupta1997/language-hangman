@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "version": "1.0.0rc5",
+  "checks": [
+    "registration",
+    "review refused for a new profile; standard offered",
+    "clue after wrong guess; session resumes",
+    "three rounds recorded in reports",
+    "review uses only practised words and explains the shorter session",
+    "lost round and abandoned session reported correctly",
+    "profile export contains progress and no credentials",
+    "profile deletion keeps other profiles intact",
+    "backup and restore",
+    "text size change after dropdown screens",
+    "German level list starts with its own letter keys",
+    "guest practice and sign out",
+    "round resumes after the app process is ended mid-round",
+    "learning card and next round resume after the process ends between rounds",
+    "damaged database detected at start-up",
+    "backup restored over damaged database; damaged bytes quarantined",
+    "sign in and progress after recovery"
+  ],
+  "screenshots": [
+    "review-unavailable.png",
+    "practice.png",
+    "review-shortened.png",
+    "reports.png",
+    "recovery.png"
+  ]
+}

@@ -1,0 +1,6 @@
+built EXE sha256 9de7b25420319c9c163dcf623ffb530ce48805c56a053accf50a1640bc1428b8 (identical to the installed EXE: True), start-up to visible window, 5 launches on a fresh copy of the dataset:
+  launch 1 (includes the first word load and the day's first automatic backup): 2.06 s
+  launch 2 (backup already done): 1.03 s
+  launch 3 (backup already done): 1.03 s
+  launch 4 (backup already done): 1.03 s
+  launch 5 (backup already done): 1.04 s

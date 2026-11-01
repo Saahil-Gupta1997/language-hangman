@@ -1,0 +1,8 @@
+words.xlsx sha256 18ce600f28c7a1e0251e6ff09420d2c2f805d68391b61a8ccc85503cd74e13a3
+converted at f2bb6b9 with scripts/build_level_words.py; the four JSON files came out byte-identical to the commit: see the last line
+English: 394 words {'beginner': 76, 'novice': 78, 'intermediate': 80, 'advanced': 80, 'expert': 80}; left out {'already a travel card': 6}
+Spanish: 389 words {'beginner': 80, 'novice': 76, 'intermediate': 77, 'advanced': 79, 'expert': 77}; left out {'repeat of a word at the same or a lower level': 11}
+Italian: 390 words {'beginner': 79, 'novice': 77, 'intermediate': 78, 'advanced': 80, 'expert': 76}; left out {'repeat of a word at the same or a lower level': 10}
+German: 365 words {'beginner': 70, 'novice': 70, 'intermediate': 76, 'advanced': 76, 'expert': 73}; left out {'repeat of a word at the same or a lower level': 35}
+Total: 1538 words
+files changed by re-running the conversion: 0

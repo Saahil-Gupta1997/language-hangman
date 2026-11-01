@@ -1,4 +1,59 @@
-# 1.0.0rc4 — Desktop release candidate 4 (2026-11-01)
+# 1.0.0rc5 — Desktop release candidate 5 (2026-11-01)
+
+A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
+keyboard and display checks, a review of every word by qualified reviewers, five learner
+sessions and some owner decisions are still open (see
+[docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)). It supersedes rc4 for every purpose.
+
+- **Installer:** `LanguageHangman-1.0.0rc5-Setup.exe`, SHA256 `a94a92696cf5f001fb7326fb92628557f5907b0122383d3269d3aa4e26d47531`, built from `f2bb6b9`.
+  **Unsigned**: Windows SmartScreen will show "unknown publisher".
+- **Upgrading:** run the new installer; profiles, progress and paused rounds are kept
+  (checked from rc4 on the build machine).
+
+## New since 1.0.0rc4
+
+- **Word lists in four languages.** 1,538 words in English, Spanish, Italian and German at
+  five levels, from the owner's older word sheet, each with three clues in English. **Nobody
+  has reviewed them**, and the app says so.
+- **The original feedback lines are back**, word for word: all 40, sarcasm included, at the
+  owner's choice.
+- **Practice setup** now has Language and Words. Situation applies only to the 30 English
+  travel cards, which have not changed.
+- **The board handles other languages.** It adds each language's accented keys and shows ß as
+  itself. An accented letter is its own letter, so `n` does not reveal `ñ`. Spaces and hyphens
+  show from the start, long phrases wrap, and German nouns keep their capitals.
+- **Word cards** lists every word by language and level.
+- **Licence:** the word lists are outside the MIT grant, like the teaching cards.
+
+## Known limitations
+
+- The word lists are unreviewed. Automated checks cover their structure, not their accuracy.
+- Word-list words have clues but no example, pronunciation or usage note, and none were
+  invented. Their clues are in English, so they suit someone who reads English.
+- Pronunciation is an approximate respelling, on travel cards only.
+- The restored lines mock the learner and use idioms that a learner of English may not follow.
+- Windows screen readers generally cannot read CustomTkinter's controls, and the letter keys
+  are drawn rather than separate controls; typing a letter remains the keyboard route, which
+  needs a keyboard that can type the accented letters.
+- The database is not encrypted; local passwords protect in-app access only. No email
+  password reset. Backups contain every profile's password hash: keep them private.
+- One app instance per Windows account; guest practice is deleted on sign-out or close.
+- The installer is unsigned and shows no licence terms during setup.
+- On the build machine, Word cards takes 2–3 s to open and start-up takes about 1.0 s; both
+  are slower than rc4. The guess that ends a round takes 0.6–0.8 s.
+- No cloud sync, automatic updates, multiplayer, machine learning or placement test.
+
+## Verification
+
+Automated suite on the build commit `f2bb6b9`: 194 passed, 0 skipped; five more GUI scenarios
+ran afterwards (I-11). Lint, content and release checks clean.
+On the build machine (Windows 11 at 125%): upgrade from rc4 with data created by rc4, the
+17-step journey in the installed app without Python, beta import, recovery at both text sizes,
+restore, uninstall, and the installed licence and notices. Not yet: a clean machine, real
+100%/150% scaling, a person using the keyboard. Details:
+[docs/VERIFICATION.md](docs/VERIFICATION.md).
+
+## 1.0.0rc4 — Desktop release candidate 4 (2026-11-01)
 
 A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
 keyboard and display checks, an educator's review of the 30 cards, five learner sessions and

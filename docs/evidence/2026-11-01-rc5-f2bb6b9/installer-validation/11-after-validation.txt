@@ -1,0 +1,4 @@
+final install of rc5 exit: 0 | entries: ['1.0.0rc5'] | exe True
+owner's real data unchanged: True
+note: 01-preinstall-rc4.txt shows no registry entry for the owner's copy, but uninstall-owner-rc4.log records its key being deleted, so that first read was wrong; the cause was not investigated. After validation exactly one entry exists, for 1.0.0rc5.
+The owner's rc4 had a desktop shortcut, which the uninstall removed and the final silent install did not restore. It was noticed in that log and restored by rerunning the rc5 installer with /MERGETASKS=desktopicon; the shortcut then pointed at the installed rc5 and the owner's data was checked unchanged again.

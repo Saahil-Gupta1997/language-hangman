@@ -1,0 +1,4 @@
+986 files checked, 13 notice files, 0 problems
+exit=0
+
+LICENSE.txt installed == repository LICENSE: yes

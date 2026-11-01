@@ -1,9 +1,10 @@
-# Content review — English travel starter pack
+# Content review — travel cards and level lists
 
-The 30 teaching cards in `src/desktop/content/english.json` must be checked by a qualified
-reviewer before 1.0 (gate G9 in [ACCEPTANCE.md](ACCEPTANCE.md)). This file is the
-reviewer's worksheet and the record of the result. **No independent review has taken
-place yet**; the "Reviewer verdict" columns below are empty until one does.
+The 30 teaching cards in `src/desktop/content/english.json` and the 1,538 level-list words in
+`src/desktop/content/levels/` must be checked by qualified reviewers before 1.0 (gate G9 in
+[ACCEPTANCE.md](ACCEPTANCE.md)). This file is the reviewer's worksheet and the record of the
+result. **No independent review has taken place yet**; the "Reviewer verdict" columns below
+are empty until one does, and the app labels the level lists "not yet reviewed".
 
 ## Intended learner (proposed profile — owner to confirm, DEC-15)
 
@@ -25,8 +26,9 @@ A qualified English-language teacher (for example CELTA, TESOL or equivalent exp
 teaching adults at A2–B1). Record name or initials, qualification, date and the file's
 revision (`git rev-parse HEAD`).
 
-The cards are unchanged from rc2 to rc4 (`git diff 4ad1e34 d543579 -- src/desktop/content`
-is empty), so a review of any of these candidates applies to all of them.
+The 30 cards are unchanged from rc2 to rc5 (`git diff 4ad1e34 f2bb6b9 --
+src/desktop/content/english.json` is empty), so a review of any of these candidates applies
+to all of them. The level lists are new in rc5 and need a reviewer for each language.
 
 ## What to check on every card
 
@@ -78,6 +80,38 @@ are logged in [DELIVERY.md](DELIVERY.md), fixed and retested (gate G11).
 Clues shown during play are the meaning (first clue) and the association text (second
 clue), which are separate fields in the file; please glance at those too.
 
+## Level lists (rc5): 1,538 words, not yet reviewed
+
+Converted from the owner's older `words.xlsx` by `scripts/build_level_words.py`. Each word has
+a level, a word type and three clues, and no example, pronunciation or usage note: nothing was
+invented to fill those gaps. Clues are in English in every language, so the lists suit someone
+who reads English.
+
+| Language | Beginner | Novice | Intermediate | Advanced | Expert | Total |
+| --- | --- | --- | --- | --- | --- | --- |
+| English | 76 | 78 | 80 | 80 | 80 | 394 |
+| Spanish | 80 | 76 | 77 | 79 | 77 | 389 |
+| Italian | 79 | 77 | 78 | 80 | 76 | 390 |
+| German | 70 | 70 | 76 | 76 | 73 | 365 |
+
+What the conversion changed, and nothing else: 56 repeats within a language were removed,
+keeping the lowest level; the 6 English words already on travel cards were removed (clean,
+early, quiet, room, slowly, water); and capitals were normalised (lower case, except German
+nouns and German phrases, which stay as the sheet wrote them).
+
+**Reviewers:** one qualified reviewer per language, using the matching
+`4-level-list-review-<language>.csv` in the acceptance kit, which has blank columns for their
+verdicts. For each word check that:
+
+1. The word is spelled correctly and really is a word or phrase of that language.
+2. The English clues are correct for this word. They were written per concept and shared
+   between languages, so a clue can fit the English meaning better than the translation.
+3. The level is reasonable. The levels are the sheet's own and have not been assessed.
+
+Automated checks confirm only the structure: no repeats, three different clues, and every
+letter on the keyboard. They say nothing about accuracy. Rows such as the German `Quanten-`, a
+word fragment, are examples of what only a reviewer can judge.
+
 ## Automated editorial warnings (24) — disposition
 
 The content check flags usage notes that do not name the situation word (for example
@@ -88,18 +122,20 @@ English with a concrete use (slowly, passport, flight, delayed, ready, pillow, b
 The rewritten notes are part of this review. `scripts/check_curated_content.py` fails if a
 future warning has no recorded decision.
 
-## Feedback lines (D-17) — tone check
+## Feedback lines (D-17, reversed in rc5)
 
-Wrong- and right-guess messages are in `src/utils/feedback_lines.py`. The earlier lines mocked
-the learner ("Do you know the alphabet?") and used idioms; they were replaced with short,
-plain encouragement. Please confirm the tone (decision DEC-07).
+Wrong- and right-guess messages are in `src/utils/feedback_lines.py`. rc2 replaced the original
+lines because they mocked the learner and used idioms (D-17). In rc5 the owner restored the 40
+originals word for word (decision DEC-07), so the sarcastic tone is deliberate. Reviewers and
+facilitators need not correct it, but please note anything a learner could not understand.
 
 ## Provenance (for owner confirmation)
 
 | Item | Where | Origin as far as the repository shows | Confirm |
 | --- | --- | --- | --- |
 | 30 teaching cards | `src/desktop/content/english.json` | Written for this project during rc1 ("original" per rc1 notes), with AI assistance; 7 usage notes revised in rc2 by Claude Code | Owner: authorship and licence |
-| Feedback lines | `src/utils/feedback_lines.py` | Rewritten in rc2 by Claude Code | Owner |
+| Level lists | `src/desktop/content/levels/*.json` | Converted in rc5 from `words.xlsx` in the owner's older Hangman Learning app (March 2025); who wrote the sheet is not recorded | Owner: authorship and licence |
+| Feedback lines | `src/utils/feedback_lines.py` | The owner's `humorous_lines.py`, restored in rc5 | Owner: authorship |
 | Application icon | `assets/app.ico` | Not recorded | Owner: source and rights |
 | Audio tones | `assets/audio/*.wav` | "Simple generated fallback tones" (assets/audio/README.md); **not used** by the desktop app | — |
 | Legacy word banks | `data/words/*.json` | Beta-era, AI-assisted; not shipped in the installer | — |

@@ -1,0 +1,12 @@
+candidate installer (built from f2bb6b9) sha256: a94a92696cf5f001fb7326fb92628557f5907b0122383d3269d3aa4e26d47531
+size: 14791371 bytes
+learner data files before upgrade: 1; app.db sha256: 193446e7186be70a5f61b38a0e3afb06d3b61a21a64410366e4fa288666b20cd
+installed exe before (rc4): e6b3c0f910b626036b0df0753481b9b6fe9fd8ca51ab3a3d0cbe9b54df571436
+upgrade installer exit: 0
+learner data files after upgrade: 1; app.db sha256: 193446e7186be70a5f61b38a0e3afb06d3b61a21a64410366e4fa288666b20cd
+every learner data file unchanged by the installer: True
+installed exe after: 9de7b25420319c9c163dcf623ffb530ce48805c56a053accf50a1640bc1428b8
+installed exe identical to the rc5 build: True
+uninstall entries: 1 -> version 1.0.0rc5
+LICENSE.txt beside the program: True; notices: True; licence texts: 12
+level lists installed: ['english.json', 'german.json', 'italian.json', 'spanish.json']

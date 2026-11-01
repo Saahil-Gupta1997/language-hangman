@@ -1,0 +1,12 @@
+version 1.0.0rc5; database 4.55 MB
+open + upgrade check + quick_check           n=10   median     13.1 ms   p95     15.7 ms   max     15.7 ms
+full backup (copy + validation)              n=5    median     95.0 ms   p95    114.3 ms   max    114.3 ms
+progress report, large profile               n=20   median     55.8 ms   p95     65.6 ms   max     68.3 ms
+guess (round continues)                      n=115  median     14.1 ms   p95     16.0 ms   max    111.1 ms
+guess that completes a round (all writes)    n=30   median     32.8 ms   p95     42.6 ms   max     52.1 ms
+screen: Home                                 n=5    median    357.1 ms   p95    458.2 ms   max    458.2 ms
+screen: Reports (full history table)         n=5    median    538.1 ms   p95    559.4 ms   max    559.4 ms
+screen: Practice setup                       n=5    median    626.2 ms   p95    631.5 ms   max    631.5 ms
+screen: Word cards (travel)                  n=5    median   2489.3 ms   p95   2596.6 ms   max   2596.6 ms
+screen: Word cards (one level list)          n=5    median   1381.4 ms   p95   1761.4 ms   max   1761.4 ms
+performance exit=0

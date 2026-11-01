@@ -19,8 +19,10 @@ it is kept. Record consent (yes/no and date) outside this repository.
 
 ## Setup
 
-- A Windows computer with the rc4 installer (check its SHA256 matches ACCEPTANCE.md) or the
+- A Windows computer with the rc5 installer (check its SHA256 matches ACCEPTANCE.md) or the
   app already installed. Record the OS, display scaling and whether Python is installed.
+- Sessions use the English travel cards unless the owner decides otherwise, so the tasks and
+  the participant profile are unchanged from rc4.
 - A fresh profile for each participant; delete it afterwards (Settings › Delete my profile).
 - The facilitator observes and only helps when the participant is stuck for about a minute
   or asks. Every intervention is recorded.

@@ -1,0 +1,5 @@
+Measured 2026-11-01 on the build machine, in normal use by the owner: AMD Ryzen 7 6800H (8C/16T), 15.2 GB RAM, NVMe SSD, Windows 11 Home 26200 at 125% scaling.
+Interpreter for all runs: the rc4 build environment (Python 3.12.1, CustomTkinter 5.2.2, Pillow 12.3.0). Tool: scripts/validation/measure.py at f2bb6b9, the same copy run against clean clones of d543579 (rc4) and f2bb6b9 (rc5).
+Guess to redrawn screen: a fresh profile in a temporary folder, 12 rounds, each word's letters in order, so every sample is a correct guess. Revisions alternated. cpu-load-before is one reading before each run, not load during it.
+performance.txt: 5 profiles, one with 5,000+ completed rounds, 4.55 MB (the rc4 dataset, copied). screen: rows include drawing. "Word cards (one level list)" includes opening the page first; word-cards.txt times opening and switching separately, on a fresh profile.
+startup.txt: the installed EXE, 5 launches on a fresh copy of that dataset; the first launch also loads the 1,538 level-list words for the first time and makes the day's automatic backup.

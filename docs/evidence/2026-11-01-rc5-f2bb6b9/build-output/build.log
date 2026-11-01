@@ -1,0 +1,1139 @@
+Requirement already satisfied: customtkinter==5.2.2 in <TEMP> (from -r requirements-desktop.txt (line 2)) (5.2.2)
+Requirement already satisfied: Pillow==12.3.0 in <TEMP> (from -r requirements-desktop.txt (line 3)) (12.3.0)
+Requirement already satisfied: pyinstaller==6.11.1 in <TEMP> (from -r requirements-build.txt (line 3)) (6.11.1)
+Requirement already satisfied: darkdetect in <TEMP> (from customtkinter==5.2.2->-r requirements-desktop.txt (line 2)) (0.8.0)
+Requirement already satisfied: packaging in <TEMP> (from customtkinter==5.2.2->-r requirements-desktop.txt (line 2)) (26.3)
+Requirement already satisfied: setuptools>=42.0.0 in <TEMP> (from pyinstaller==6.11.1->-r requirements-build.txt (line 3)) (84.2.1)
+Requirement already satisfied: altgraph in <TEMP> (from pyinstaller==6.11.1->-r requirements-build.txt (line 3)) (0.17.5)
+Requirement already satisfied: pyinstaller-hooks-contrib>=2024.9 in <TEMP> (from pyinstaller==6.11.1->-r requirements-build.txt (line 3)) (2026.9)
+Requirement already satisfied: pefile!=2024.8.26,>=2022.5.30 in <TEMP> (from pyinstaller==6.11.1->-r requirements-build.txt (line 3)) (2023.2.7)
+Requirement already satisfied: pywin32-ctypes>=0.2.1 in <TEMP> (from pyinstaller==6.11.1->-r requirements-build.txt (line 3)) (0.2.3)
+422 INFO: PyInstaller: 6.11.1, contrib hooks: 2026.9
+422 INFO: Python: 3.12.1
+471 INFO: Platform: Windows-11-10.0.26200-SP0
+471 INFO: Python environment: <TEMP>
+478 INFO: Removing temporary files and cleaning cache in <HOME>\AppData\Local\pyinstaller
+607 INFO: Module search paths (PYTHONPATH):
+['<TEMP>',
+ '<HOME>\\AppData\\Local\\Programs\\Python\\Python312\\python312.zip',
+ '<HOME>\\AppData\\Local\\Programs\\Python\\Python312\\DLLs',
+ '<HOME>\\AppData\\Local\\Programs\\Python\\Python312\\Lib',
+ '<HOME>\\AppData\\Local\\Programs\\Python\\Python312',
+ '<TEMP>',
+ '<TEMP>',
+ '<TEMP>',
+ '<TEMP>']
+1422 INFO: Appending 'datas' from .spec
+1424 INFO: checking Analysis
+1424 INFO: Building Analysis because Analysis-00.toc is non existent
+1424 INFO: Running Analysis Analysis-00.toc
+1424 INFO: Target bytecode optimization level: 0
+1424 INFO: Initializing module dependency graph...
+1430 INFO: Initializing module graph hook caches...
+1509 INFO: Analyzing base_library.zip ...
+4786 INFO: Processing standard module hook 'hook-heapq.py' from '<TEMP>'
+5156 INFO: Processing standard module hook 'hook-encodings.py' from '<TEMP>'
+10758 INFO: Processing standard module hook 'hook-pickle.py' from '<TEMP>'
+17116 INFO: Caching module dependency graph...
+17367 INFO: Looking for Python shared library...
+17388 INFO: Using Python shared library: <HOME>\AppData\Local\Programs\Python\Python312\python312.dll
+17388 INFO: Analyzing <TEMP>
+17931 INFO: Processing standard module hook 'hook-customtkinter.py' from '<TEMP>'
+18086 INFO: Processing pre-find-module-path hook 'hook-tkinter.py' from '<TEMP>'
+18090 INFO: TclTkInfo: initializing cached Tcl/Tk info...
+19233 INFO: Processing standard module hook 'hook-_tkinter.py' from '<TEMP>'
+19555 INFO: Processing standard module hook 'hook-platform.py' from '<TEMP>'
+19641 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from '<TEMP>'
+19648 INFO: SetuptoolsInfo: initializing cached setuptools info...
+21430 INFO: Processing standard module hook 'hook-packaging.py' from '<TEMP>'
+21459 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from '<TEMP>'
+22599 INFO: Processing standard module hook 'hook-PIL.py' from '<TEMP>'
+22838 INFO: Processing standard module hook 'hook-PIL.Image.py' from '<TEMP>'
+24111 INFO: Processing standard module hook 'hook-xml.py' from '<TEMP>'
+24258 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from '<TEMP>'
+24899 INFO: Processing standard module hook 'hook-PIL.ImageFilter.py' from '<TEMP>'
+26779 INFO: Processing standard module hook 'hook-sqlite3.py' from '<TEMP>'
+28948 INFO: Analyzing hidden import 'PIL.ImageGrab'
+28993 INFO: Processing module hooks (post-graph stage)...
+29006 WARNING: Hidden import "pkg_resources" not found!
+30243 INFO: Processing standard module hook 'hook-PIL.SpiderImagePlugin.py' from '<TEMP>'
+31583 INFO: Processing standard module hook 'hook-_tkinter.py' from '<TEMP>'
+31613 INFO: Performing binary vs. data reclassification (939 entries)
+43874 INFO: Looking for ctypes DLLs
+43890 WARNING: Ignoring AppKit.framework/AppKit imported from <TEMP> - only basenames are supported with ctypes imports!
+43924 INFO: Analyzing run-time hooks ...
+43928 INFO: Including run-time hook 'pyi_rth_inspect.py' from '<TEMP>'
+43946 INFO: Including run-time hook 'pyi_rth__tkinter.py' from '<TEMP>'
+44031 INFO: Looking for dynamic libraries
+44764 INFO: Extra DLL search directories (AddDllDirectory): []
+44764 INFO: Extra DLL search directories (PATH): []
+46268 INFO: Warnings written to <TEMP>
+46364 INFO: Graph cross-reference written to <TEMP>
+46563 INFO: checking PYZ
+46563 INFO: Building PYZ because PYZ-00.toc is non existent
+46564 INFO: Building PYZ (ZlibArchive) <TEMP>
+47850 INFO: Building PYZ (ZlibArchive) <TEMP> completed successfully.
+47899 INFO: checking PKG
+47900 INFO: Building PKG because PKG-00.toc is non existent
+47900 INFO: Building PKG (CArchive) LanguageHangman.pkg
+47978 INFO: Building PKG (CArchive) LanguageHangman.pkg completed successfully.
+47980 INFO: Bootloader <TEMP>
+47980 INFO: checking EXE
+47980 INFO: Building EXE because EXE-00.toc is non existent
+47980 INFO: Building EXE from EXE-00.toc
+47980 INFO: Copying bootloader EXE to <TEMP>
+48123 INFO: Copying icon to EXE
+48143 INFO: Copying 0 resources to EXE
+48145 INFO: Embedding manifest in EXE
+49329 INFO: Appending PKG archive to EXE
+49439 INFO: Fixing EXE headers
+51422 INFO: Building EXE from EXE-00.toc completed successfully.
+51440 INFO: checking COLLECT
+51441 INFO: Building COLLECT because COLLECT-00.toc is non existent
+51441 INFO: Building COLLECT COLLECT-00.toc
+56336 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+983 files checked, 13 notice files, 0 problems
+Inno Setup 6 Command-Line Compiler
+Copyright (C) 1997-2026 Jordan Russell. All rights reserved.
+Portions Copyright (C) 2000-2026 Martijn Laan. All rights reserved.
+Portions Copyright (C) 2001-2004 Alex Yackimoff. All rights reserved.
+https://www.innosetup.com
+
+Compiler engine version: Inno Setup 6.7.3
+Non-commercial use only
+
+Preprocessing
+   Reading file: <HOME>\AppData\Local\Programs\Inno Setup 6\ISPPBuiltins.iss
+Parsing [Setup] section, line 6
+Parsing [Setup] section, line 7
+Parsing [Setup] section, line 8
+Parsing [Setup] section, line 9
+Parsing [Setup] section, line 10
+Parsing [Setup] section, line 11
+Parsing [Setup] section, line 12
+Parsing [Setup] section, line 13
+Parsing [Setup] section, line 14
+Parsing [Setup] section, line 15
+Parsing [Setup] section, line 16
+Parsing [Setup] section, line 17
+Parsing [Setup] section, line 18
+Parsing [Setup] section, line 19
+Parsing [Setup] section, line 20
+Parsing [Setup] section, line 21
+Parsing [Setup] section, line 22
+Creating output directory: <TEMP>
+Reading file (WizardImageFile)
+Reading file (WizardSmallImageFile)
+Preparing Setup program executable
+   Verification successful
+   Updating icons (Setup.e32)
+   Updating version info (Setup.e32)
+Determining language code pages
+   Reading file: <HOME>\AppData\Local\Programs\Inno Setup 6\Default.isl
+   Messages in script file
+Reading default messages from Default.isl
+Parsing [LangOptions], [Messages], and [CustomMessages] sections
+   Reading file: <HOME>\AppData\Local\Programs\Inno Setup 6\Default.isl
+   Messages in script file
+Reading [Code] section
+Parsing [Tasks] section, line 27
+Parsing [Icons] section, line 29
+Parsing [Icons] section, line 30
+Parsing [Run] section, line 32
+Parsing [Files] section, line 24
+Parsing [Files] section, line 25
+Creating setup files
+   Verification successful
+   Updating icons (Setup.exe)
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing: <TEMP>
+   Compressing Setup program executable
+   Updating version info (Setup.exe)
+   Updating manifest (Setup.exe)
+
+
+Successful compile (21.125 sec). Resulting Setup program filename is:
+<TEMP>
+Built Language Hangman 1.0.0rc5

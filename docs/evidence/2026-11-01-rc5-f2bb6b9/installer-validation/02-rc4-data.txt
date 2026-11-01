@@ -1,0 +1,3 @@
+learner data created by rc4's own code (d543579, the revision the rc4 installer used)
+d543579
+created with 1.0.0rc4: schema 1 | profiles 2 | rounds 2 | saved sessions 1 | 0.16 MB | paused wrong letter z

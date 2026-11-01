@@ -1,0 +1,6 @@
+1.0.0rc4 open Word cards (travel cards)     n=5 median  1783.6 ms  max  1804.5 ms
+1.0.0rc5 open Word cards (travel cards)     n=5 median  1944.0 ms  max  2058.7 ms
+1.0.0rc5 switch to another level list       n=5 median   116.5 ms  max   563.0 ms
+1.0.0rc4 open Word cards (travel cards)     n=5 median  1769.6 ms  max  1918.3 ms
+1.0.0rc5 open Word cards (travel cards)     n=5 median  3086.3 ms  max  3437.9 ms
+1.0.0rc5 switch to another level list       n=5 median   165.9 ms  max   888.9 ms

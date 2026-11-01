@@ -1,0 +1,3 @@
+First clean-clone run of f2bb6b9, kept as it happened: 193 passed, 1 failed.
+The script had set TEMP to the long scratch folder, and the failing test's git init hit the Windows path limit (I-10).
+The rerun in ../checks used the system temp folder on the same commit: 194 passed.

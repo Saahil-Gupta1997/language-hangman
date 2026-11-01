@@ -16,6 +16,8 @@ function Invoke-Native([scriptblock]$Command, [string]$Failure) {
 Invoke-Native { & $Python -m pip install --disable-pip-version-check -r requirements-build.txt } "Build dependencies failed."
 $version = (& $Python -c "import src; print(src.__version__)").Trim()
 if ($LASTEXITCODE -ne 0 -or -not $version) { throw "Could not read the application version." }
+# The log must tie the artifact to its revision (I-9).
+Write-Host "Building Language Hangman $version from commit $(git rev-parse HEAD)"
 Invoke-Native { & $Python -m PyInstaller --clean --noconfirm packaging/hangman.spec } "Application build failed."
 # Third-party notices sit next to the program (T-28); the check fails the build if any
 # shipped file is not in the inventory or a notice is missing.
