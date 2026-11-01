@@ -291,6 +291,7 @@ def test_shipped_text_names_nothing_that_was_removed():
         "word cards",
         "why this word",
         "language qualification",
+        "not been reviewed",
     )
     for path in (root / "src" / "desktop").glob("*.py"):
         text = path.read_text(encoding="utf-8").lower()

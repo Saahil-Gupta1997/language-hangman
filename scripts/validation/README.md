@@ -12,7 +12,7 @@ a scratch folder, so that a release can be reproduced by someone else — and so
 | `measure.py` | Performance figures with sample counts; window layout at three scalings and two text sizes |
 | `evidence.py` | Scrubs personal paths and copies evidence into `docs/evidence/`, refusing screenshots that are not the app's own window |
 | `beta_database.py` | Rebuilds a v1.0.0-beta database with the beta's own code, for the import check; run it from a checkout of `023f2bd` |
-| `kit.py` | Builds the printable acceptance kit from `docs/ACCEPTANCE.md`, `CONTENT_REVIEW.md` and `USER_ACCEPTANCE.md`, plus one level-list review sheet per language |
+| `kit.py` | Builds the printable manual-check sheet from `docs/ACCEPTANCE.md` |
 | `demo.py` | Records the captioned demo (needs `imageio-ffmpeg` in a scratch environment) |
 
 Nothing here writes a result into an acceptance record: human gates are filled in by the

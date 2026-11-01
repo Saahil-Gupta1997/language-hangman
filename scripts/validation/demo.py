@@ -131,7 +131,7 @@ def record(output, revision):
             "Offline Windows desktop app for vocabulary practice "
             "(Python, CustomTkinter, SQLite).",
             "Rule-based software built with AI assistance. 1,544 words in four languages "
-            "at five levels (not yet reviewed).",
+            "at five levels.",
             f"Scripted run of revision {revision}; captures the app window only.",
         ],
         6,
@@ -182,7 +182,7 @@ def record(output, revision):
     app.show_practice()
     app.language.set("German")
     app.level.set("Novice")
-    film.show(app, "Four languages at five levels; no word has been reviewed yet", 4)
+    film.show(app, "Four languages at five levels", 4)
     app.start_session()
     film.show(app, "Every language plays on A-Z: a plain letter reveals its accents", 4)
     app.practice.discard(app.user["id"])
@@ -229,8 +229,7 @@ def record(output, revision):
             "native smoke journey passed.",
             "Installer (build machine): install, upgrade, beta import, recovery, "
             "uninstall verified.",
-            "Still pending: clean-computer install, manual checks, educator review, "
-            "five learner sessions.",
+            "Still pending: the owner's final approval.",
             "Details: README.md, docs/VERIFICATION.md and docs/ACCEPTANCE.md.",
         ],
         8,

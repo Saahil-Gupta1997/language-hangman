@@ -9,17 +9,13 @@ are filled in by the person who did the work, never from automated output.
 
 from __future__ import annotations
 
-import csv
 import html
-import json
 import re
 import shutil
 import sys
 from pathlib import Path
 
 from src import __version__
-from src.utils.config import LEVEL_WORDS_DIR
-from src.utils.constants import PRACTICE_LANGUAGES
 
 ROOT = Path(__file__).resolve().parents[2]
 STYLE = """
@@ -109,25 +105,6 @@ def page(title, banner, markdown):
     )
 
 
-def level_review_sheets(output):
-    """One spreadsheet per language for G9: the verdict columns stay blank for the reviewer."""
-    for language in PRACTICE_LANGUAGES:
-        words = json.loads((LEVEL_WORDS_DIR / f"{language}.json").read_text(encoding="utf-8"))
-        with (output / f"4-level-list-review-{language}.csv").open(
-            "w", encoding="utf-8-sig", newline=""
-        ) as sheet:
-            table = csv.writer(sheet)
-            table.writerow(
-                ["Word", "Type", "Level", "Meaning", "Synonyms", "Association"]
-                + ["Word correct?", "Level fits?", "Clues correct?", "Correction"]
-            )
-            for word in words["words"]:
-                table.writerow(
-                    [word["word"], word["category"], word["difficulty"], word["meaning"]]
-                    + [word["synonym"], word["association"], "", "", "", ""]
-                )
-
-
 def build(output, installer_sha256):
     output = Path(output)
     if output.exists():
@@ -146,19 +123,10 @@ def build(output, installer_sha256):
     )
     documents = {
         "1-manual-checks-M1-M4": ("Manual checks M1-M4", manual),
-        "2-content-review-worksheet": (
-            "Content review worksheet",
-            (docs / "CONTENT_REVIEW.md").read_text(encoding="utf-8"),
-        ),
-        "3-learner-sessions": (
-            "Learner sessions",
-            (docs / "USER_ACCEPTANCE.md").read_text(encoding="utf-8"),
-        ),
     }
     for name, (title, markdown) in documents.items():
         (output / f"{name}.html").write_text(page(title, banner, markdown), encoding="utf-8")
         (output / f"{name}.md").write_text(markdown, encoding="utf-8", newline="\n")
-    level_review_sheets(output)
     (output / "README.txt").write_text(
         f"""Language Hangman {__version__} - acceptance kit
 
@@ -172,23 +140,11 @@ Check it first in PowerShell:
 It is not code-signed: Windows SmartScreen will say "unknown publisher".
 
 1-manual-checks-M1-M4       For a tester; roughly 90 minutes in total (estimate).
-                            Gates G5-G8: clean install on a Windows account without
-                            Python, keyboard only, real 100/125/150% display scaling,
-                            and recovery through the installed app.
-2-content-review-worksheet  For every reviewer. Gate G9: what to check on each word, plus
-                            the intended-learner profile to confirm or correct.
-3-learner-sessions          For a facilitator; roughly 30-45 minutes per learner
-                            (estimate), five learners. Gate G10: consent, tasks, what to
-                            record, and the record table. Sessions use the English Beginner
-                            list unless the owner decides otherwise.
-4-level-list-review-*.csv   One sheet per language for a qualified reviewer of that
-                            language. Gate G9: 1,544 words in all; open in Excel and fill
-                            in the blank columns. Nobody has reviewed these words yet.
+                            Clean install on a Windows account without Python, keyboard
+                            only, display scaling, and recovery through the installed app.
 
-Please return the completed record tables (a photo or scan is fine) with the tester's or
-reviewer's name or initials and the date. Report anything that goes wrong, including what
-you did, what you expected and what happened; the diagnostics export in Settings helps.
-Do not send learners' names or anyone's full database.
+Report anything that goes wrong, including what you did, what you expected and what
+happened; the diagnostics export in Settings helps. Do not send anyone's full database.
 """,
         encoding="utf-8",
         newline="\n",

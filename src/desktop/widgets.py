@@ -73,6 +73,9 @@ def release_window(window):
     ScalingTracker.window_dpi_scaling_dict.pop(window, None)
 
 
+FRAME_ALLOWANCE = 16  # logical pixels of window frame, left and right together
+
+
 def _work_area():
     """Return the desktop work area (excluding the taskbar) in physical pixels, if known."""
     if sys.platform != "win32":
@@ -100,10 +103,12 @@ def fit_to_work_area(window, width, height, minimum):
         return
     left, top, right, bottom = area
     scaling = ScalingTracker.get_window_scaling(window)
-    width = max(minimum[0], min(width, int((right - left) / scaling) - 16))
+    width = max(minimum[0], min(width, int((right - left) / scaling) - FRAME_ALLOWANCE))
     height = max(minimum[1], min(height, int((bottom - top) / scaling) - TITLE_BAR_ALLOWANCE))
     # CustomTkinter scales width and height but not the position, which stays physical.
-    x = left + max(0, (right - left - round(width * scaling)) // 2)
+    # Windows' frame is outside that width, so centring has to count it too (D-38).
+    frame = round(FRAME_ALLOWANCE * scaling)
+    x = left + max(0, (right - left - round(width * scaling) - frame) // 2)
     y = top + max(0, (bottom - top - round((height + TITLE_BAR_ALLOWANCE) * scaling)) // 2)
     window.geometry(f"{width}x{height}+{x}+{y}")
 

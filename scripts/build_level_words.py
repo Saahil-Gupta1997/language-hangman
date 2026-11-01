@@ -7,8 +7,7 @@ The sheet is read with the standard library, so the app needs no Excel dependenc
 
 Every row is kept as written apart from two checked changes, both reported here: a word that
 repeats within a language keeps only its lowest level, and capitals are normalised, which
-keeps German nouns and German phrases as written. Nothing here checks accuracy: a qualified
-reviewer has not seen this content (ACCEPTANCE.md G9).
+keeps German nouns and German phrases as written. Nothing here checks accuracy.
 """
 
 from __future__ import annotations
@@ -112,7 +111,7 @@ def convert(rows, language):
                 "association_hint": association,
                 "situations": [GENERAL_SITUATION],
                 "source": LEVEL_WORD_SOURCE,
-                "notes": f"words.xlsx, {language.title()} sheet, row {number}. Not yet reviewed.",
+                "notes": f"words.xlsx, {language.title()} sheet, row {number}.",
                 "tags": [],
             }
         )
@@ -128,7 +127,7 @@ def main(sheet_path):
         words, left_out = convert(sheets[sheet], language)
         description = (
             f"{sheet} words at five levels, converted from the owner's words.xlsx. "
-            "Clues are in English. Not yet reviewed."
+            "Clues are in English."
         )
         (OUTPUT / f"{language}.json").write_text(
             json.dumps(

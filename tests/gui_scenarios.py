@@ -153,6 +153,34 @@ def window_opens_inside_the_work_area(data):
         app.close_application()
 
 
+def window_stays_inside_a_narrow_work_area(data):
+    """D-38: centring counts the frame, so a screen barely wider than the window holds it."""
+    import ctypes
+    from ctypes import wintypes
+
+    from src.desktop import widgets
+
+    app = signed_in_app(data)
+    try:
+        real = widgets._work_area()
+        if real is None:
+            return
+        scaling = widgets.ScalingTracker.get_window_scaling(app)
+        narrow = (0, 0, round(1024 * scaling), real[3])
+        widgets._work_area = lambda: narrow
+        widgets.fit_to_work_area(app, 1060, 760, minimum=(800, 600))
+        for _ in range(4):
+            app.update()
+        user32 = ctypes.windll.user32
+        user32.GetAncestor.restype = wintypes.HWND
+        hwnd = user32.GetAncestor(wintypes.HWND(app.winfo_id()), 2)
+        rect = wintypes.RECT()
+        user32.GetWindowRect(hwnd, ctypes.byref(rect))
+        assert rect.left >= 0 and rect.right <= narrow[2], (rect.left, rect.right, narrow)
+    finally:
+        app.close_application()
+
+
 def automatic_backup_failure_does_not_block_start_up(data):
     from src.desktop.application import HangmanDesktop
     from src.desktop.runtime import recent_events
@@ -329,7 +357,6 @@ def removed_screens_and_settings_stay_removed(data):
             "Expert",
         ]
         shown = [w.cget("text") for w in every_widget(app.body) if isinstance(w, ctk.CTkLabel)]
-        assert any("not been reviewed" in text for text in shown)
         assert not any("Travel" in text or "Standard" in text for text in shown), shown
     finally:
         app.close_application()
@@ -467,7 +494,6 @@ def level_word_card_shows_its_clues(data):
         assert word in shown
         assert "Synonyms" in shown and "Association" in shown
         assert "Example" not in shown and not any(t.startswith("Say it like") for t in shown)
-        assert not any("not been reviewed" in text for text in shown)
         title = next(t for t in shown if t.startswith("German"))
         assert title == "German · Beginner · Easy"
     finally:
@@ -516,6 +542,7 @@ SCENARIOS = {
         text_size_after_dropdown_is_destroyed,
         focused_control_scrolls_into_view,
         window_opens_inside_the_work_area,
+        window_stays_inside_a_narrow_work_area,
         automatic_backup_failure_does_not_block_start_up,
         recovery_window_fits_at_minimum_size,
         main_window_text_wraps_at_minimum_size,

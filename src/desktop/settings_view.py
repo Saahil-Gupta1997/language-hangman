@@ -164,8 +164,8 @@ class SettingsView:
             "returns home. Ctrl + (or Ctrl =) makes text larger; Ctrl - makes it standard."
         )
         self.text(
-            "Words: lists in English, Spanish, Italian and German at five levels. They have "
-            "not been reviewed by a teacher yet. Easy and Hard describe the game, and levels "
+            "Words: lists in English, Spanish, Italian and German at five levels. Easy and "
+            "Hard describe the game, and levels "
             "describe the word lists: neither measures your proficiency. Accented letters "
             "count as the plain letter, so A reveals Á, N reveals Ñ and S reveals ß."
         )
@@ -200,7 +200,6 @@ class SettingsView:
             "folder (by default %LOCALAPPDATA%\\Programs\\LanguageHangman)."
         )
         self.text(
-            "Release candidate: a clean-computer installation, manual keyboard and display "
-            "checks, an independent review of the word lists and learner sessions are "
-            "still required before a final 1.0 release."
+            "Release candidate: the owner's final approval is still required before a 1.0 "
+            "release."
         )

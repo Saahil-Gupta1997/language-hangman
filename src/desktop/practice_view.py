@@ -35,7 +35,6 @@ from src.utils.constants import (
 LANGUAGE_CHOICES = [language.title() for language in PRACTICE_LANGUAGES]
 LEVEL_CHOICES = [level.title() for level in WORD_LEVELS]
 ALL_WORDS, REVIEW_WORDS = "All words", "Review my words"
-NOT_REVIEWED = "These words have not been reviewed by a teacher yet."
 
 
 class PracticeView:
@@ -114,7 +113,7 @@ class PracticeView:
             "It favours words that need practice, and once you have played them all they "
             f"repeat, oldest first. {REVIEW_WORDS} only uses words you have already completed "
             "at this level that are still in your review queue, due words first, each word "
-            f"once. Clues are in English, and each word has three. {NOT_REVIEWED}",
+            "once. Clues are in English, and each word has three.",
             parent=setup,
             muted=True,
             size=14,

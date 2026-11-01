@@ -17,6 +17,7 @@ SCENARIOS = [
     "text_size_after_dropdown_is_destroyed",
     "focused_control_scrolls_into_view",
     "window_opens_inside_the_work_area",
+    "window_stays_inside_a_narrow_work_area",
     "automatic_backup_failure_does_not_block_start_up",
     "recovery_window_fits_at_minimum_size",
     "main_window_text_wraps_at_minimum_size",

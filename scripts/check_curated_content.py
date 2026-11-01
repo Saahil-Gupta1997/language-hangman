@@ -43,4 +43,4 @@ print(
     f"PASS: {levels['valid_words']} words in {len(PRACTICE_LANGUAGES)} languages: no repeats, "
     "three clues each, every letter on the A-Z keys."
 )
-print("These lists have not been reviewed; their accuracy is not checked here.")
+print("This checks their structure; their accuracy is not checked here.")
