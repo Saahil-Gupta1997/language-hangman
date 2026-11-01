@@ -1,0 +1,9 @@
+date: 2026-11-01T20:41:57.662480+05:30
+validation data folder: a separate folder, set with LANGUAGE_HANGMAN_DATA_DIR
+owner's installed copy before: exe ff3ef89d691cba9bc8cfc0a1763cf34d7bbf925e32f4fecd7fc1585199cb3e79 (rc7 build), entries ['1.0.0rc7']
+owner agreed on 2026-11-01 to it being closed and replaced; their data is not used
+owner's rc7 removed: exit 0, folder gone True
+pre-state: install dir exists=False, data folder used exists=False, start menu entry=False, uninstall entries=0
+previous release: rc7 installer (built from c58d208) sha256: c0089bfbc8cc9f56d2996e18e794438870c82a384ed797d4f6b699bab3e6d2c3
+rc7 install exit: 0; registered version: 1.0.0rc7
+installed rc7 exe sha256: ff3ef89d691cba9bc8cfc0a1763cf34d7bbf925e32f4fecd7fc1585199cb3e79

@@ -27,6 +27,7 @@
 6. Run the manual checks and record them (docs/ACCEPTANCE.md M1–M4).
 7. Content and learner gates: CONTENT_REVIEW.md and USER_ACCEPTANCE.md completed by people.
 8. Owner decisions recorded: licence (DEC-08) and installer terms (DEC-14) before publishing.
+   Silent installs skip the licence page, so check it in the real wizard too.
 9. Source archive from the tagged commit (`git archive`); extract it and run `release-check`
    on the extracted tree; publish `SHA256SUMS.txt` for every artifact.
 10. Update RELEASE_NOTES.md and the go/no-go record. Never mark an unrun gate passed.

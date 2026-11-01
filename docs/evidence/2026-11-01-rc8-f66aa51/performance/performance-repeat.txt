@@ -1,0 +1,42 @@
+=== rc8 run 1 20:38:20
+version 1.0.0rc8; database 5.57 MB
+full backup (copy + validation) n=5 median 120.0 ms p95 132.8 ms max 132.8 ms
+progress report, large profile n=20 median 64.0 ms p95 100.2 ms max 101.8 ms
+screen: Home n=5 median 533.9 ms p95 553.8 ms max 553.8 ms
+screen: Reports (full history table) n=5 median 740.0 ms p95 896.4 ms max 896.4 ms
+screen: Practice setup n=5 median 627.4 ms p95 650.3 ms max 650.3 ms
+=== rc7 run 1 20:38:40
+version 1.0.0rc7; database 5.57 MB
+full backup (copy + validation) n=5 median 119.4 ms p95 133.2 ms max 133.2 ms
+progress report, large profile n=20 median 59.2 ms p95 83.6 ms max 88.0 ms
+screen: Home n=5 median 350.9 ms p95 424.6 ms max 424.6 ms
+screen: Reports (full history table) n=5 median 530.8 ms p95 556.6 ms max 556.6 ms
+screen: Practice setup n=5 median 475.2 ms p95 508.4 ms max 508.4 ms
+=== rc8 run 2 20:38:56
+version 1.0.0rc8; database 5.57 MB
+full backup (copy + validation) n=5 median 120.6 ms p95 152.8 ms max 152.8 ms
+progress report, large profile n=20 median 58.6 ms p95 93.3 ms max 94.6 ms
+screen: Home n=5 median 355.5 ms p95 429.3 ms max 429.3 ms
+screen: Reports (full history table) n=5 median 524.1 ms p95 548.1 ms max 548.1 ms
+screen: Practice setup n=5 median 489.3 ms p95 506.9 ms max 506.9 ms
+=== rc7 run 2 20:39:12
+version 1.0.0rc7; database 5.57 MB
+full backup (copy + validation) n=5 median 114.9 ms p95 173.1 ms max 173.1 ms
+progress report, large profile n=20 median 64.5 ms p95 103.3 ms max 116.9 ms
+screen: Home n=5 median 372.7 ms p95 417.6 ms max 417.6 ms
+screen: Reports (full history table) n=5 median 543.9 ms p95 560.2 ms max 560.2 ms
+screen: Practice setup n=5 median 488.7 ms p95 501.3 ms max 501.3 ms
+=== rc8 run 3 20:39:29
+version 1.0.0rc8; database 5.57 MB
+full backup (copy + validation) n=5 median 109.3 ms p95 131.3 ms max 131.3 ms
+progress report, large profile n=20 median 57.7 ms p95 75.3 ms max 99.0 ms
+screen: Home n=5 median 344.8 ms p95 454.4 ms max 454.4 ms
+screen: Reports (full history table) n=5 median 544.7 ms p95 555.5 ms max 555.5 ms
+screen: Practice setup n=5 median 491.4 ms p95 503.4 ms max 503.4 ms
+=== rc7 run 3 20:39:45
+version 1.0.0rc7; database 5.57 MB
+full backup (copy + validation) n=5 median 118.5 ms p95 128.7 ms max 128.7 ms
+progress report, large profile n=20 median 60.4 ms p95 89.0 ms max 98.5 ms
+screen: Home n=5 median 366.6 ms p95 444.8 ms max 444.8 ms
+screen: Reports (full history table) n=5 median 685.2 ms p95 824.9 ms max 824.9 ms
+screen: Practice setup n=5 median 651.5 ms p95 672.4 ms max 672.4 ms

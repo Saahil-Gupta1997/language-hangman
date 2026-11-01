@@ -1,0 +1,3 @@
+learner data created by rc7's own code (c58d208, the revision the rc7 installer used)
+c58d208
+created with 1.0.0rc7: schema 1 | profiles 2 | rounds 2 | saved sessions 1 | 1.15 MB | paused wrong letter z

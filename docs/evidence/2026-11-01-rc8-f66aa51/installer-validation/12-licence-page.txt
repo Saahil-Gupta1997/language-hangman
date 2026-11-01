@@ -1,0 +1,12 @@
+installer sha256: f4b158b32f828184df6dd754bc72c8fc054e61ca4c0917202be8cb6d4b119288
+window title: Setup - Language Hangman version 1.0.0rc8
+captured 814x623 (kept out of this evidence: the tool accepts only the app window)
+visible controls with text:
+  TNewStaticText [enabled]: 'License Agreement'
+  TNewStaticText [enabled]: 'Please read the following important information before continuing.'
+  TNewStaticText [enabled]: 'Please read the following License Agreement. You must accept the terms of this agreement b'
+  TNewRadioButton [enabled]: 'I &accept the agreement'
+  TNewRadioButton [enabled]: 'I &do not accept the agreement'
+  TNewButton [disabled]: '&Next'
+  TNewButton [enabled]: 'Cancel'
+wizard ended from outside; installed exe unchanged: True

@@ -1,0 +1,5 @@
+final install of rc8 exit: 0 | entries: ['1.0.0rc8'] | exe True
+owner's real data unchanged, checked again after start-up timing, scaling and the demo: True (4 files)
+desktop shortcut present: True
+installed exe is the rc8 build: True
+note: silent installs skip the licence page, so 12-licence-page.txt records the real wizard, ended from outside before it changed anything. No person has accepted the page and finished a normal install.

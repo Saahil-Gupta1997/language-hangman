@@ -64,7 +64,7 @@ facilitators need not correct it, but please note anything a learner could not u
 
 | Item | Where | Origin as far as the repository shows | Confirm |
 | --- | --- | --- | --- |
-| Word lists | `src/desktop/content/levels/*.json` | Converted from `words.xlsx` in the owner's older Hangman Learning app (March 2025); who wrote the sheet is not recorded | Owner: authorship and licence |
+| Word lists | `src/desktop/content/levels/*.json` | Converted from `words.xlsx` in the owner's older Hangman Learning app (March 2025); written by the owner (owner, 2026-11-01) | MIT since rc8 (DEC-08) |
 | Feedback lines | `src/utils/feedback_lines.py` | The owner's `humorous_lines.py`, restored in rc5 | Owner: authorship |
 | Application icon | `assets/app.ico` | Not recorded | Owner: source and rights |
 | Audio tones | `assets/audio/*.wav` | "Simple generated fallback tones" (assets/audio/README.md); **not used** by the desktop app | — |
@@ -91,6 +91,7 @@ Points for the owner:
   its LICENSE file and classifier say MIT. The MIT text is shipped; it satisfies either.
 - **Microsoft Distributable Code**: Python's licence asks anyone redistributing
   `VCRUNTIME140.dll` to have end users agree to terms at least as protective as Microsoft's.
-  The installer currently shows no licence terms during setup (RK-7, decision DEC-14).
+  Since rc8 setup shows `LICENSE` and needs it accepted (DEC-14). Whether that fully meets the
+  terms has not had a legal review (RK-7).
 - Pillow's Windows build used here contains no GPL components (no libimagequant); its font
   module (FreeType, HarfBuzz) is not shipped.

@@ -1,0 +1,15 @@
+candidate installer (built from f66aa51) sha256: f4b158b32f828184df6dd754bc72c8fc054e61ca4c0917202be8cb6d4b119288
+size: 14789247 bytes
+learner data files before upgrade: 1; app.db sha256: 4b8284ddd20e9ed14fe4d72d1123abed032d5c722a5795d334a99a0a1dcf6230
+installed exe before (rc7): ff3ef89d691cba9bc8cfc0a1763cf34d7bbf925e32f4fecd7fc1585199cb3e79
+upgrade installer exit: 0
+learner data files after upgrade: 1; app.db sha256: 4b8284ddd20e9ed14fe4d72d1123abed032d5c722a5795d334a99a0a1dcf6230
+every learner data file unchanged by the installer: True
+installed exe after: 001b063af0fab1027c2a397fecc2d1b220b62a9a57a97207661a61c7efab5d29
+installed exe identical to the rc8 build: True
+uninstall entries: 1 -> version 1.0.0rc8
+LICENSE.txt beside the program: True; notices: True; licence texts: 12
+word lists installed: ['english.json', 'german.json', 'italian.json', 'spanish.json']
+travel cards gone from the program folder: True
+built files missing from the program folder: []
+program files that are not in the build: ['LICENSE.txt', 'unins000.dat', 'unins000.exe']

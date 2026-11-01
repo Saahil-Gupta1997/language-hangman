@@ -1,4 +1,50 @@
-# 1.0.0rc7 — Desktop release candidate 7 (2026-11-01)
+# 1.0.0rc8 — Desktop release candidate 8 (2026-11-01)
+
+A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
+keyboard and display checks, a review of every word by qualified reviewers, five learner
+sessions and some owner decisions are still open (see
+[docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)). It supersedes rc7 for every purpose.
+
+- **Installer:** `LanguageHangman-1.0.0rc8-Setup.exe`, SHA256 `f4b158b32f828184df6dd754bc72c8fc054e61ca4c0917202be8cb6d4b119288`, built from `f66aa51`.
+  **Unsigned**: Windows SmartScreen will show "unknown publisher".
+- **Upgrading:** run the new installer; profiles, progress and paused rounds are kept (checked
+  from rc7 on the build machine).
+
+## New since 1.0.0rc7
+
+- **The word lists and icon are now under MIT**, with the software. The owner wrote both. The
+  legacy banks in `data/words/` stay excluded and are not in the installer.
+- **Setup shows the licence**, and it needs accepting before installing.
+- The app itself is unchanged, apart from its version.
+
+## Known limitations
+
+- The words are unreviewed. Automated checks cover their structure, not their accuracy.
+- Words have clues but no example, pronunciation or usage note, and none were invented. Their
+  clues are in English, so they suit someone who reads English.
+- Accents are not practised, because a plain letter fills them in.
+- The restored lines mock the learner and use idioms that a learner of English may not follow.
+- Windows screen readers generally cannot read CustomTkinter's controls, and the letter keys
+  are drawn rather than separate controls; typing a letter remains the keyboard route.
+- The database is not encrypted; local passwords protect in-app access only. No email
+  password reset. Backups contain every profile's password hash: keep them private.
+- One app instance per Windows account; guest practice is deleted on sign-out or close.
+- The installer is unsigned. Whether its licence page fully meets the Microsoft terms in
+  Python's licence has not had a legal review.
+- On the build machine, the guess that ends a round takes 0.4–0.7 s and start-up about 1.1 s.
+- No cloud sync, automatic updates, multiplayer, machine learning or placement test.
+
+## Verification
+
+Automated suite on the build commit `f66aa51`: 215 passed, 0 skipped, in a clean clone. Lint,
+content and release checks clean. On the build machine (Windows 11 at 125%): upgrade from rc7 with
+data created by rc7, the 17-step journey in the installed app without Python, beta import, recovery
+at both text sizes, restore, uninstall, and the installed licence and notices. The real installer
+window showed the licence page with Next disabled; it was then ended from outside, so no person has
+accepted the page and finished a normal install. Not yet: a clean machine, real 100%/150% scaling, a
+person using the keyboard. Details: [docs/VERIFICATION.md](docs/VERIFICATION.md).
+
+## 1.0.0rc7 — Desktop release candidate 7 (2026-11-01)
 
 A tested release candidate, **not** the final 1.0. A clean-computer installation, manual
 keyboard and display checks, a review of every word by qualified reviewers, five learner

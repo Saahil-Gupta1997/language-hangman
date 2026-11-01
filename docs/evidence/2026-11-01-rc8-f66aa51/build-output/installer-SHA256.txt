@@ -1,0 +1,2 @@
+f4b158b32f828184df6dd754bc72c8fc054e61ca4c0917202be8cb6d4b119288  LanguageHangman-1.0.0rc8-Setup.exe
+001b063af0fab1027c2a397fecc2d1b220b62a9a57a97207661a61c7efab5d29  LanguageHangman.exe (inside the installer)
