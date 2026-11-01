@@ -1,5 +1,7 @@
 # Language Hangman Desktop
 
+**[Download for Windows](https://github.com/Saahil-Gupta1997/language-hangman/releases/latest)** · **[Watch Demo](docs/media/language-hangman-1.0.0-demo.mp4)** · **[Release Verification](docs/VERIFICATION.md)**
+
 ## Project Manager Case Study — Delivering Language Hangman 1.0
 
 **Role:** Product Owner & AI-Assisted Delivery Lead  
@@ -90,7 +92,7 @@ Screenshots from the installed 1.0.0 build:
 
 ## Install
 
-1. Download `LanguageHangman-1.0.0-Setup.exe` from the release package and check it:
+1. Download [Language Hangman 1.0.0 for Windows](https://github.com/Saahil-Gupta1997/language-hangman/releases/latest) and check it:
 
    ```powershell
    Get-FileHash .\LanguageHangman-1.0.0-Setup.exe -Algorithm SHA256
