@@ -33,8 +33,8 @@ class WordService:
     empty list means no eligible words.
     """
 
-    # When set, listing, counting and selection only ever return words from this source.
-    source: str | None = None
+    # When set, listing, counting and selection only ever return words from these sources.
+    sources: tuple[str, ...] | None = None
 
     def __init__(self, words_dir: Path | None = None, db_path: Path | None = None) -> None:
         self.words_dir = Path(words_dir or WORDS_DIR)
@@ -42,9 +42,9 @@ class WordService:
 
     def _restrict_to_source(self, rows: Sequence[Any]) -> list[Any]:
         """Drop rows outside the supported corpus when a source restriction is set."""
-        if not self.source:
+        if not self.sources:
             return list(rows)
-        return [row for row in rows if row["source"] == self.source]
+        return [row for row in rows if row["source"] in self.sources]
 
     def get_available_languages(self) -> list[str]:
         """Return each available language based on the database or JSON fallback."""
@@ -199,7 +199,7 @@ class WordService:
                 categories=normalized_categories,
                 difficulties=normalized_difficulties,
                 # With a source restriction the limit must apply after filtering.
-                limit=None if self.source else limit,
+                limit=None if self.sources else limit,
             )
         )
         if database_words:
@@ -207,7 +207,7 @@ class WordService:
             if situation:
                 words = [word for word in words if self._word_matches_situation(word, situation)]
             return words[:limit] if limit is not None else words
-        if self.source:
+        if self.sources:
             # Never fall back to file banks that sit outside the supported corpus.
             return []
 
@@ -222,7 +222,7 @@ class WordService:
 
     def get_categories(self, language: str) -> list[str]:
         """Return distinct categories for a language."""
-        if self.source:
+        if self.sources:
             return sorted({word["category"] for word in self.get_words(language)})
         database_categories = [
             row["category"] for row in self.word_repository.get_categories(language.lower())
@@ -233,7 +233,7 @@ class WordService:
 
     def get_difficulties(self, language: str) -> list[str]:
         """Return distinct difficulty levels for a language."""
-        if self.source:
+        if self.sources:
             return sorted({word["difficulty"] for word in self.get_words(language)})
         database_difficulties = [
             row["difficulty"] for row in self.word_repository.get_difficulties(language.lower())

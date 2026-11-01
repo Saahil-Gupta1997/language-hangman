@@ -7,10 +7,21 @@ fails the check. Independent educator review is a separate, manual gate.
 
 import json
 import sys
+import unicodedata
+from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.utils.config import CURATED_WORDS_DIR  # noqa: E402
+from src.services.curated_content import LEVEL_WORD_COUNT  # noqa: E402
+from src.utils.config import CURATED_WORDS_DIR, LEVEL_WORDS_DIR  # noqa: E402
+from src.utils.constants import (  # noqa: E402
+    BOARD_LETTERS,
+    EXTRA_LETTERS,
+    GENERAL_SITUATION,
+    LEVEL_WORD_SOURCE,
+    PRACTICE_LANGUAGES,
+    WORD_LEVELS,
+)
 from src.utils.word_bank_loader import build_seed_rows  # noqa: E402
 
 payload = build_seed_rows(CURATED_WORDS_DIR)
@@ -41,3 +52,29 @@ print(
     f"({decisions.count('revised')} revised, {decisions.count('accepted')} accepted)."
 )
 print("Independent educator review remains pending.")
+
+levels = build_seed_rows(LEVEL_WORDS_DIR)
+if levels["has_errors"] or levels["valid_words"] != LEVEL_WORD_COUNT:
+    raise SystemExit(f"The level lists must contain {LEVEL_WORD_COUNT} structurally valid words.")
+travel_words = {row["word"].casefold() for row in words}
+for language in PRACTICE_LANGUAGES:
+    path = LEVEL_WORDS_DIR / f"{language}.json"
+    rows = json.loads(path.read_text(encoding="utf-8"))["words"]
+    keys = set(BOARD_LETTERS + EXTRA_LETTERS.get(language, ""))
+    assert Counter(row["difficulty"] for row in rows).keys() == set(WORD_LEVELS)
+    assert len({row["word"].casefold() for row in rows}) == len(rows), f"{language}: repeats"
+    for row in rows:
+        assert row["language"] == language and row["source"] == LEVEL_WORD_SOURCE
+        assert row["situations"] == [GENERAL_SITUATION]
+        assert unicodedata.normalize("NFC", row["word"]) == row["word"]
+        clues = [row[field].strip() for field in ("meaning", "synonym", "association")]
+        assert len(set(clues)) == 3 and all(clues), f"{row['word']}: needs three clues"
+        letters = {letter.lower() for letter in row["word"] if letter.isalpha()}
+        assert letters <= keys, f"{row['word']}: a letter has no key"
+    if language == "english":
+        assert not travel_words & {row["word"].casefold() for row in rows}
+print(
+    f"PASS: {levels['valid_words']} level-list words in {len(PRACTICE_LANGUAGES)} languages: "
+    "no repeats, three clues each, every letter on the keyboard."
+)
+print("The level lists have not been reviewed; their accuracy is not checked here.")

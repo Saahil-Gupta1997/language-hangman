@@ -128,10 +128,10 @@ def record(output, revision):
     film.card(
         [
             f"Language Hangman {__version__} (release candidate)",
-            "Offline Windows desktop app for English travel vocabulary "
+            "Offline Windows desktop app for vocabulary practice "
             "(Python, CustomTkinter, SQLite).",
-            "Rule-based software built with AI assistance. 30 curated words: "
-            "Restaurant, Airport, Hotel.",
+            "Rule-based software built with AI assistance. 30 English travel cards, plus "
+            "word lists in four languages at five levels (not yet reviewed).",
             f"Scripted run of revision {revision}; captures the app window only.",
         ],
         6,
@@ -145,7 +145,7 @@ def record(output, revision):
     app.authenticate(register=True)
     film.show(app, "Home: progress so far and how the game difficulty works", 4)
     app.show_practice()
-    film.show(app, "Practice setup: situation, difficulty, rounds and focus", 4)
+    film.show(app, "Practice setup: language, word set, difficulty, rounds and focus", 4)
     app.focus.set("Review")
     film.show(app, "A new learner chooses Review...", 2.5)
     app.start_session()
@@ -180,7 +180,19 @@ def record(output, revision):
     app.show_practice()
     film.show(app, "...and the session resumes with its guesses and clues", 5)
     app.show_words()
-    film.show(app, "Word cards: all 30 curated words with examples and usage notes", 4)
+    film.show(app, "Word cards: 30 travel cards with examples and usage notes", 4)
+    app.cards_language.set("Spanish")
+    app.cards_language_changed("Spanish")
+    film.show(app, "Word lists: four languages, five levels, three clues per word", 4)
+    app.show_practice()
+    app.practice.discard(app.user["id"])  # the resumed session, so setup shows
+    app.show_practice()
+    app.language.set("German")
+    app.language_changed("German")
+    film.show(app, "Level lists have no situation, and say they are not yet reviewed", 4)
+    app.start_session()
+    film.show(app, "German adds its own letter keys: Ä, Ö, Ü and ß", 4)
+    app.practice.discard(app.user["id"])
     app.show_settings()
     app.set_scale("Large")
     film.show(app, "Text size: Large (also Ctrl +)", 3.5)

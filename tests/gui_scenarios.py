@@ -307,6 +307,141 @@ def letter_keys_guess_on_click(data):
         app.close_application()
 
 
+def visible_situation(app):
+    app.update()
+    return bool(app.situation.master.winfo_ismapped())
+
+
+def word_set_choices_follow_the_language(data):
+    """Only English has travel cards, and Situation only applies to them."""
+    app = signed_in_app(data)
+    try:
+        app.show_practice()
+        assert app.level.get() == "Travel cards" and visible_situation(app)
+        press(app.level, "<Down>")
+        assert app.level.get() == "Beginner" and not visible_situation(app)
+        press(app.level, "<Up>")
+        assert app.level.get() == "Travel cards" and visible_situation(app)
+        press(app.language, "<Down>")
+        assert app.language.get() == "Spanish"
+        assert app.level.get() == "Beginner", "Spanish has no travel cards"
+        assert "Travel cards" not in app.level.cget("values") and not visible_situation(app)
+        assert "not been reviewed" in app.setup_note.cget("text")
+        press(app.level, "<Down>")
+        assert app.level.get() == "Novice"
+        press(app.language, "<Up>")
+        assert app.language.get() == "English" and app.level.get() == "Novice"
+        assert "Travel cards" in app.level.cget("values")
+    finally:
+        app.close_application()
+
+
+def start_level_round(app, language, level, word):
+    """Start a level session, then put ``word`` on the board so the test can name its letters."""
+    app.show_practice()
+    app.language.set(language)
+    app.language_changed(language)
+    app.level.set(level)
+    app.word_set_changed(level)
+    app.start_session()
+    from src.models.game_round import GameRound
+
+    # Draw this word on the real board; the session itself keeps the word it chose.
+    state = GameRound(**{**app.payload["round"], "word": word})
+    app.board.redraw(state)
+    app.update()
+    return state
+
+
+def accent_keys_are_on_the_board_for_each_language(data):
+    app = signed_in_app(data)
+    try:
+        for language, extras in (("Spanish", "áéíñóú"), ("Italian", "à"), ("German", "äöüß")):
+            app.show_practice()
+            app.language.set(language)
+            app.language_changed(language)
+            app.start_session()
+            app.update()
+            assert set(extras) <= set(app.board._keys), language
+            assert len(app.board._keys) == 26 + len(extras)
+            labels = [
+                app.board.itemcget(item, "text")
+                for item in app.board.find_all()
+                if app.board.type(item) == "text"
+            ]
+            app.practice.discard(app.user["id"])
+        assert "ß" in labels and "SS" not in labels, "ß must be drawn as itself"
+    finally:
+        app.close_application()
+
+
+def long_phrases_fit_the_board_at_minimum_size(data):
+    """The longest words wrap at spaces and stay inside the canvas at every size."""
+    from src.desktop.application import MINIMUM_WINDOW
+
+    app = signed_in_app(data)
+    try:
+        for size, factor in EMULATED:
+            emulate(app, size, factor)
+            app.geometry(f"{MINIMUM_WINDOW[0]}x{MINIMUM_WINDOW[1]}")
+            for word in ("Espíritu de la época", "Idiosincráticamente", "Von großer Schönheit"):
+                state = start_level_round(app, "Spanish", "Expert", word)
+                board = app.board
+                left, _, right, bottom = board.bbox("all")
+                assert 0 <= left and right <= board.winfo_width(), (word, size, right)
+                assert bottom <= int(board.cget("height")) + 2, (word, size, bottom)
+                assert state.masked_letters.count("_") == sum(c.isalpha() for c in word)
+                app.practice.discard(app.user["id"])
+    finally:
+        app.close_application()
+        ctk.set_window_scaling(1.0)
+        ctk.set_widget_scaling(1.0)
+
+
+def level_word_card_shows_its_clues(data):
+    app = signed_in_app(data)
+    try:
+        app.show_practice()
+        app.language.set("German")
+        app.language_changed("German")
+        app.start_session()
+        word = app.payload["round"]["word"]
+        for letter in sorted({c.lower() for c in word if c.isalpha()}):
+            app.guess_letter(letter)
+        app.update()
+        assert app.payload["round"]["saved"]
+        shown = [w.cget("text") for w in every_widget(app.body) if isinstance(w, ctk.CTkLabel)]
+        assert word in shown
+        assert "Synonyms" in shown and "Association" in shown
+        assert "Example" not in shown and not any(t.startswith("Say it like") for t in shown)
+        assert any("not been reviewed" in text for text in shown)
+        title = next(t for t in shown if t.startswith("German"))
+        assert title == "German · Beginner · Easy"
+    finally:
+        app.close_application()
+
+
+def word_cards_page_lists_a_level_without_a_card_per_word(data):
+    app = signed_in_app(data)
+    try:
+        app.show_words()
+        app.update()
+        assert app.cards_level.get() == "Travel cards"
+        travel = sum(1 for _ in every_widget(app.cards_panel))
+        press(app.cards_language, "<Down>")  # Spanish, Beginner
+        app.update()
+        boxes = [w for w in every_widget(app.cards_panel) if isinstance(w, ctk.CTkTextbox)]
+        assert len(boxes) == 1 and sum(1 for _ in every_widget(app.cards_panel)) < travel
+        text = boxes[0].get("1.0", "end")
+        assert text.count("Meaning:") == 80 and text.count("Association:") == 80
+        press(app.cards_level, "<Down>")  # Novice
+        app.update()
+        boxes = [w for w in every_widget(app.cards_panel) if isinstance(w, ctk.CTkTextbox)]
+        assert boxes[0].get("1.0", "end").count("Meaning:") == 76
+    finally:
+        app.close_application()
+
+
 SCENARIOS = {
     function.__name__: function
     for function in (
@@ -319,6 +454,11 @@ SCENARIOS = {
         recovery_window_fits_at_minimum_size,
         main_window_text_wraps_at_minimum_size,
         letter_keys_guess_on_click,
+        word_set_choices_follow_the_language,
+        accent_keys_are_on_the_board_for_each_language,
+        long_phrases_fit_the_board_at_minimum_size,
+        level_word_card_shows_its_clues,
+        word_cards_page_lists_a_level_without_a_card_per_word,
     )
 }
 

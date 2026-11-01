@@ -1,7 +1,7 @@
 """Measure desktop operations and window layout for the release record.
 
     python -m scripts.validation.measure performance <dataset folder>
-    python -m scripts.validation.measure round
+    python -m scripts.validation.measure round [<language> <level>]
     python -m scripts.validation.measure scaling <output folder>
 
 Performance figures are single-machine observations, not guarantees: every line reports its
@@ -110,13 +110,25 @@ def performance(dataset):
         report("screen: Home", timed(render(app.show_home), 5))
         report("screen: Reports (full history table)", timed(render(app.show_reports), 5))
         report("screen: Practice setup", timed(render(app.show_practice), 5))
+        report("screen: Word cards (travel)", timed(render(app.show_words), 5))
+
+        def level_list():
+            app.show_words()
+            app.cards_language.set("Italian")
+            app.cards_language_changed("Italian")
+            app.update()
+
+        report("screen: Word cards (one level list)", timed(level_list, 5))
     finally:
         app.close_application()
     shutil.rmtree(work, ignore_errors=True)
 
 
-def round_redraw(rounds=12):
-    """Time a guess from submission to redrawn screen, on a fresh profile."""
+def round_redraw(language=None, level=None, rounds=12):
+    """Time a guess from submission to redrawn screen, on a fresh profile.
+
+    Travel cards by default; name a language and level to time a level list instead.
+    """
     from src.desktop.application import HangmanDesktop
 
     data = Path(tempfile.mkdtemp(prefix="hangman-round-"))
@@ -130,9 +142,14 @@ def round_redraw(rounds=12):
     for _ in range(rounds):
         app.show_practice()
         if not app.payload:
+            if language:
+                app.language.set(language)
+                app.language_changed(language)
+                app.level.set(level)
+                app.word_set_changed(level)
             app.rounds.set("10")
             app.start_session()
-        for letter in sorted(set(app.payload["round"]["word"])):
+        for letter in sorted({c.lower() for c in app.payload["round"]["word"] if c.isalpha()}):
             if app.payload["round"]["saved"]:
                 break
             start = time.perf_counter()
@@ -146,7 +163,8 @@ def round_redraw(rounds=12):
         else:
             app.practice.discard(app.user["id"])
     app.close_application()
-    report("guess to redrawn screen", samples)
+    words = f"{language} {level}" if language else "travel cards"
+    report(f"guess to redrawn screen, {words}", samples)
 
 
 def settle(window, factor, size):

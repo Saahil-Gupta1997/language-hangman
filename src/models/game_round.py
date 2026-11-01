@@ -87,16 +87,21 @@ class GameRound:
         return max(self.max_attempts - self.letters_wrong, 0)
 
     @property
-    def masked_word(self) -> str:
-        """Return the masked word shown to the player."""
-        return " ".join(
+    def masked_letters(self) -> list[str]:
+        """Return one entry per character: the character once known, otherwise "_"."""
+        return [
             (
                 character
                 if not character.isalpha() or character.lower() in self.guessed_letters
                 else "_"
             )
             for character in self.word
-        )
+        ]
+
+    @property
+    def masked_word(self) -> str:
+        """Return the masked word shown to the player."""
+        return " ".join(self.masked_letters)
 
     @property
     def guessed_letters_display(self) -> str:

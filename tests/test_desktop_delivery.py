@@ -292,9 +292,11 @@ def test_legacy_content_is_excluded_from_new_practice(account):
     # Simulates restoring a database with the old 324-word corpus.
     init_db(path, seed_words=True)
     seed_curated(path)
-    words = CuratedWordService(path).get_words("english")
-    assert len(words) == 30
-    assert all(word["source"] == "desktop-core" for word in words)
+    service = CuratedWordService(path)
+    words = service.get_words("english")
+    assert {word["source"] for word in words} == {"desktop-core", "desktop-levels"}
+    assert len(service.travel_cards()) == 30
+    assert service.get_words("french") == []  # a legacy language with no desktop pack
 
 
 def test_unicode_composed_letter_is_accepted():

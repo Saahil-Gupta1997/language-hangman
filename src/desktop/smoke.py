@@ -186,6 +186,17 @@ def _profile_journey(data, output, checks, shots):
         assert ScalingTracker.widget_scaling == 1.15
         app.set_scale("Standard")
         checks.append("text size change after dropdown screens")
+        app.show_practice()
+        app.language.set("German")
+        app.language_changed("German")
+        app.start_session()
+        app.update()
+        assert app.payload["round"]["language"] == "german"
+        assert app.payload["session"]["difficulty_filter"] == ["beginner"]
+        assert set("äöüß") <= set(app.board._keys)
+        with _auto_confirm():
+            app.discard_session()
+        checks.append("German level list starts with its own letter keys")
         app.show_help()
         app.logout()
         app.start_guest()

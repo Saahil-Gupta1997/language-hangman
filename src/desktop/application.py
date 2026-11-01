@@ -112,7 +112,7 @@ class HangmanDesktop(AuthView, PracticeView, ReportsView, SettingsView, ctk.CTk)
         self.body.pack(fill="both", expand=True, padx=16, pady=SPACE)
         ctk.CTkLabel(
             self,
-            text="Local English vocabulary practice · Progress stays on this device",
+            text="Local vocabulary practice · Progress stays on this device",
             font=ui_font(12),
             text_color=MUTED,
         ).pack(pady=(0, SPACE))

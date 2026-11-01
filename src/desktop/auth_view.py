@@ -14,7 +14,7 @@ class AuthView:
         self.clear("Login")
         self.heading(
             "Create a local profile" if register else "Welcome back",
-            "Practice English for restaurants, airports and hotels. "
+            "Practise travel English, or word lists in four languages. "
             "Profiles and passwords are local to this computer; there is no cloud account.",
         )
         self.username_entry = self.entry("Profile name")

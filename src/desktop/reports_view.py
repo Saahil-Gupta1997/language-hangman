@@ -6,6 +6,12 @@ from tkinter import ttk
 
 import customtkinter as ctk
 
+from src.desktop.practice_view import (
+    LANGUAGE_CHOICES,
+    NOT_REVIEWED,
+    TRAVEL_CARDS,
+    word_choices,
+)
 from src.desktop.widgets import BORDER, BRAND, INK, MUTED, SPACE, SURFACE, ui_font
 from src.services.curated_content import CuratedWordService
 from src.services.desktop_storage import (
@@ -20,11 +26,69 @@ class ReportsView:
         self.clear("Words")
         self.heading(
             "Word cards",
-            "English definitions and examples · Approximate pronunciation "
-            "spelling · Independent educator review is still pending.",
+            "Travel cards have examples and pronunciation spelling; level lists have three "
+            "clues · Independent educator review is still pending.",
         )
-        for word in CuratedWordService(self.active_db).get_words("english"):
-            panel = self.card()
+        filters = ctk.CTkFrame(self.card(), fg_color="transparent")
+        filters.pack(fill="x", padx=2 * SPACE, pady=(SPACE + 4, SPACE))
+        self.cards_language = self.setting(
+            filters, 0, "Language", LANGUAGE_CHOICES, command=self.cards_language_changed
+        )
+        self.cards_level = self.setting(
+            filters, 1, "Words", word_choices("English"), command=lambda _: self.fill_word_cards()
+        )
+        self.cards_panel = ctk.CTkFrame(self.body, fg_color="transparent")
+        self.cards_panel.pack(fill="x")
+        self.fill_word_cards()
+
+    def cards_language_changed(self, language):
+        choices = word_choices(language)
+        self.cards_level.configure(values=choices)
+        if self.cards_level.get() not in choices:
+            self.cards_level.set(choices[0])
+        self.fill_word_cards()
+
+    def fill_word_cards(self):
+        for child in self.cards_panel.winfo_children():
+            child.destroy()
+        words = CuratedWordService(self.active_db)
+        if self.cards_level.get() == TRAVEL_CARDS:
+            self.travel_word_cards(words.travel_cards())
+        else:
+            language, level = self.cards_language.get(), self.cards_level.get()
+            self.level_word_list(words.level_words(language.lower(), level.lower()))
+
+    def level_word_list(self, words):
+        """One text box, not a card per word: about 80 cards of labels would take seconds."""
+        note = f"{len(words)} words. {NOT_REVIEWED}"
+        self.text(note, parent=self.cards_panel, muted=True, size=13)
+        box = ctk.CTkTextbox(
+            self.cards_panel,
+            height=430,
+            wrap="word",
+            font=ui_font(14),
+            fg_color=SURFACE,
+            text_color=INK,
+            border_color=BORDER,
+            border_width=1,
+            corner_radius=12,
+        )
+        box.tag_config("word", foreground=BRAND)
+        for word in words:
+            box.insert("end", f"{word['word']}\n", "word")
+            box.insert(
+                "end",
+                f"{word['category']}\n"
+                f"Meaning: {word['meaning']}\n"
+                f"Synonyms: {word['synonym']}\n"
+                f"Association: {word['association']}\n\n",
+            )
+        box.configure(state="disabled")
+        box.pack(fill="x", padx=2 * SPACE, pady=SPACE)
+
+    def travel_word_cards(self, words):
+        for word in words:
+            panel = self.card(self.cards_panel)
             header = ctk.CTkFrame(panel, fg_color="transparent")
             header.pack(fill="x", padx=2 * SPACE, pady=(SPACE + 2, 0))
             ctk.CTkLabel(

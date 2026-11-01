@@ -144,14 +144,14 @@ class SettingsView:
         self.heading("Help and about", f"Language Hangman {__version__}")
         self.text(
             "1. Create a local profile or try temporary guest practice.\n"
-            "2. Choose a travel situation, game difficulty and session length.\n"
+            "2. Choose a language and word set, game difficulty and session length.\n"
             "3. Enter a single letter; press Enter to submit. Repeated guesses cost no lives.\n"
-            "4. Read the example and usage note after each round.\n"
+            "4. Read the learning card after each round.\n"
             "5. Close at any time. Profile sessions resume with saved guesses and clues."
         )
         self.text(
-            "Practice focus: Standard chooses from the 10 words for the situation. Review "
-            "only uses words you have already completed in that situation and that are still "
+            "Practice focus: Standard chooses from the words in the set you picked. Review "
+            "only uses words you have already completed in that set and that are still "
             "in your review queue, due words first, each once per session. A new profile has "
             "no review words yet, so the app offers Standard practice instead."
         )
@@ -162,9 +162,11 @@ class SettingsView:
             "returns home. Ctrl + (or Ctrl =) makes text larger; Ctrl - makes it standard."
         )
         self.text(
-            "English starter scope: 30 introductory words across Restaurant, Airport and "
-            "Hotel. Difficulty describes the game, not your proficiency. Other languages "
-            "from the older prototype are not offered in this desktop release."
+            "Words: 30 English travel cards across Restaurant, Airport and Hotel, and word "
+            "lists in English, Spanish, Italian and German at five levels. Level lists have "
+            "not been reviewed by a teacher yet. Easy and Hard describe the game, and levels "
+            "describe the word lists: neither measures your proficiency. Letters with accents "
+            "must be guessed exactly, so the board adds the keys each language needs."
         )
         self.text(
             "Privacy: no account server, telemetry or cloud sync. Local passwords protect "
@@ -174,7 +176,7 @@ class SettingsView:
         self.text(
             "Recovery: Settings → full backup/restore. To import the older app, select its "
             "data/app.db using Restore on the sign-in screen. Never import an untrusted file. "
-            "Older results remain in reports; new practice uses the starter pack. If the app "
+            "Older results remain in reports; new practice uses the current words. If the app "
             "cannot open its data, it shows a recovery window instead: restore a backup there. "
             "The damaged file is kept in the backups folder, never deleted."
         )

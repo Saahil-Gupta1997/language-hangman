@@ -30,6 +30,14 @@ GAME_MODE_SETTINGS = {
 MIN_PASSWORD_LENGTH = 8
 SUPPORTED_LEVELS = ("beginner", "intermediate", "advanced")
 DIFFICULTY_ORDER = SUPPORTED_LEVELS
+# The desktop level lists: the owner's older word sheet, kept apart from the legacy banks.
+LEVEL_WORD_SOURCE = "desktop-levels"
+WORD_LEVELS = ("beginner", "novice", "intermediate", "advanced", "expert")
+PRACTICE_LANGUAGES = ("english", "spanish", "italian", "german")
+GENERAL_SITUATION = "general"
+BOARD_LETTERS = "abcdefghijklmnopqrstuvwxyz"
+# Only the letters the level lists use: a key that can never be right would be a trap.
+EXTRA_LETTERS = {"spanish": "áéíñóú", "italian": "à", "german": "äöüß"}
 WORD_CATEGORIES = ("noun", "verb", "adjective", "adverb")
 DEFAULT_PREFERRED_CATEGORIES = WORD_CATEGORIES
 SITUATIONS = (
@@ -43,6 +51,7 @@ SITUATIONS = (
     "metro_train_station",
     "shopping",
     "school_college",
+    GENERAL_SITUATION,
 )
 SITUATION_LABELS = {
     "restaurant": "Restaurant",
@@ -55,6 +64,7 @@ SITUATION_LABELS = {
     "metro_train_station": "Metro/Train Station",
     "shopping": "Shopping",
     "school_college": "School/College",
+    GENERAL_SITUATION: "General",
 }
 NAVIGATION_ITEMS = ("Home", "Preferences", "Play", "Reports", "Content")
 ASSESSMENT_DIFFICULTY_SEQUENCE = ("beginner", "intermediate", "advanced")

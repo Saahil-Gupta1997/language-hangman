@@ -27,6 +27,17 @@ from src.services.desktop_storage import (
 )
 from src.services.game_service import NoReviewWordsError
 from src.services.hint_service import get_revealed_hints
+from src.utils.constants import GENERAL_SITUATION, PRACTICE_LANGUAGES, WORD_LEVELS
+
+TRAVEL_CARDS = "Travel cards"
+LANGUAGE_CHOICES = [language.title() for language in PRACTICE_LANGUAGES]
+NOT_REVIEWED = "Level lists have not been reviewed by a teacher yet."
+
+
+def word_choices(language):
+    """The word sets for a language: only English has the travel cards."""
+    levels = [level.title() for level in WORD_LEVELS]
+    return [TRAVEL_CARDS, *levels] if language == "English" else levels
 
 
 class PracticeView:
@@ -34,8 +45,8 @@ class PracticeView:
         self.clear("Home")
         self.heading(
             f"Hello, {self.user['username']}",
-            "Short vocabulary sessions for everyday travel. "
-            "The starter pack contains 30 English words in three situations.",
+            "Short vocabulary sessions: 30 English travel cards, and word lists in "
+            "English, Spanish, Italian and German at five levels.",
         )
         if self.guest:
             self.text(
@@ -94,28 +105,27 @@ class PracticeView:
             self.render_round()
             return
         self.heading(
-            "Set up your practice", "English starter pack · All vocabulary is introductory."
+            "Set up your practice", "Choose travel cards, or a word list in one of four languages."
         )
         setup = self.card()
         grid = ctk.CTkFrame(setup, fg_color="transparent")
         grid.pack(fill="x", padx=2 * SPACE, pady=(SPACE + 4, 4))
-        self.situation = self.setting(grid, 0, "Situation", ["Restaurant", "Airport", "Hotel"])
-        self.mode = self.setting(grid, 1, "Game difficulty", ["Easy", "Hard"])
-        self.rounds = self.setting(grid, 2, "Number of rounds", ["3", "5", "10"])
-        self.focus = self.setting(grid, 3, "Practice focus", ["Standard", "Review"])
-        self.text(
-            "Standard chooses from all 10 words for the situation, favouring words that need "
-            "practice. Review only uses words you have already completed in this situation "
-            "and that are still in your review queue: due words first, then the rest, each "
-            "word once per session. If fewer review words exist than the rounds you choose, "
-            "the session is shortened and you are told why.",
-            parent=setup,
-            muted=True,
-            size=14,
+        self.language = self.setting(
+            grid, 0, "Language", LANGUAGE_CHOICES, command=self.language_changed
+        )
+        self.level = self.setting(
+            grid, 1, "Words", word_choices("English"), command=self.word_set_changed
+        )
+        self.mode = self.setting(grid, 2, "Game difficulty", ["Easy", "Hard"])
+        self.rounds = self.setting(grid, 3, "Number of rounds", ["3", "5", "10"])
+        self.focus = self.setting(grid, 4, "Practice focus", ["Standard", "Review"])
+        self.situation = self.setting(grid, 5, "Situation", ["Restaurant", "Airport", "Hotel"])
+        self.setup_note = self.text(
+            self.word_set_note(TRAVEL_CARDS), parent=setup, muted=True, size=14
         )
         self.button(self.body, "Start session", self.start_session, variant="primary", width=220)
 
-    def setting(self, grid, column, label, values):
+    def setting(self, grid, column, label, values, command=None):
         """One labelled dropdown in the set-up row; two per row when the window is narrow."""
         cell = ctk.CTkFrame(grid, fg_color="transparent")
         cell.grid(row=column // 2, column=column % 2, sticky="ew", padx=(0, SPACE), pady=4)
@@ -123,46 +133,91 @@ class PracticeView:
         ctk.CTkLabel(
             cell, text=label, anchor="w", font=ui_font(13, bold=True), text_color=MUTED
         ).pack(fill="x", pady=(0, 2))
-        menu = keyboard_option_menu(cell, values)
+        menu = keyboard_option_menu(cell, values, command=command)
         menu.pack(anchor="w")
         return menu
 
-    def start_session(self):
-        self.begin_session(
-            self.situation.get(), self.mode.get(), int(self.rounds.get()), self.focus.get()
+    def language_changed(self, language):
+        choices = word_choices(language)
+        self.level.configure(values=choices)
+        if self.level.get() not in choices:
+            self.level.set(choices[0])
+        self.word_set_changed(self.level.get())
+
+    def word_set_changed(self, word_set):
+        """Situation belongs to the travel cards; the level lists have none."""
+        cell = self.situation.master
+        cell.grid() if word_set == TRAVEL_CARDS else cell.grid_remove()
+        self.setup_note.configure(text=self.word_set_note(word_set))
+
+    @staticmethod
+    def word_set_note(word_set):
+        if word_set == TRAVEL_CARDS:
+            return (
+                "Standard chooses from all 10 words for the situation, favouring words that "
+                "need practice. Review only uses words you have already completed in this "
+                "situation and that are still in your review queue: due words first, then the "
+                "rest, each word once per session. If fewer review words exist than the rounds "
+                "you choose, the session is shortened and you are told why."
+            )
+        return (
+            "Standard chooses from the words at this level, favouring words that need "
+            "practice. Review only uses words you have already completed at this level and "
+            "that are still in your review queue. Clues are in English, and each word has "
+            f"three. {NOT_REVIEWED}"
         )
 
-    def begin_session(self, situation, mode, rounds, focus):
+    def start_session(self):
+        self.begin_session(
+            self.situation.get(),
+            self.mode.get(),
+            int(self.rounds.get()),
+            self.focus.get(),
+            self.language.get(),
+            self.level.get(),
+        )
+
+    def begin_session(self, situation, mode, rounds, focus, language="English", level=TRAVEL_CARDS):
         review = focus == "Review"
+        travel = level == TRAVEL_CARDS
         try:
             self.practice.start(
                 self.user,
                 {
-                    "language": "english",
+                    "language": language.lower(),
                     "categories": ["noun", "verb", "adjective", "adverb"],
-                    "difficulties": ["beginner"],
+                    "difficulties": ["beginner" if travel else level.lower()],
                     "rounds": rounds,
                     "game_mode": mode.lower(),
-                    "situation": situation.lower(),
+                    "situation": situation.lower() if travel else GENERAL_SITUATION,
                     "practice_mode": "review" if review else "standard",
                     "review_policy": "review_only" if review else "prefer_review",
                     "show_hint_immediately": False,
                 },
             )
         except NoReviewWordsError as error:
-            self.show_review_unavailable(str(error), situation, mode, rounds)
+            message = (
+                str(error)
+                if travel
+                else (
+                    f"There are no review words for {language} {level} yet. "
+                    "Play a Standard session first."
+                )
+            )
+            self.show_review_unavailable(message, situation, mode, rounds, language, level)
             return
         self.show_practice()
 
-    def show_review_unavailable(self, message, situation, mode, rounds):
+    def show_review_unavailable(self, message, situation, mode, rounds, language, level):
         self.clear("Practice")
         self.heading("No review words yet", message)
+        where = situation if level == TRAVEL_CARDS else f"{language} {level}"
         self.button(
             self.body,
-            f"Start Standard practice in {situation}",
-            lambda: self.begin_session(situation, mode, rounds, "Standard"),
+            f"Start Standard practice in {where}",
+            lambda: self.begin_session(situation, mode, rounds, "Standard", language, level),
             variant="primary",
-            width=300,
+            width=340,
         )
         self.button(self.body, "Back to practice setup", self.show_practice)
 
@@ -188,9 +243,12 @@ class PracticeView:
         done, planned = session["completed_rounds"], session["planned_rounds"]
         row = ctk.CTkFrame(self.body, fg_color="transparent")
         row.pack(fill="x", padx=2 * SPACE, pady=(SPACE + 2, SPACE))
+        where = session["situation"].title()
+        if session["situation"] == GENERAL_SITUATION:
+            where = f"{session['language'].title()} · {session['difficulty_filter'][0].title()}"
         ctk.CTkLabel(
             row,
-            text=f"{session['situation'].title()} · {session['game_mode'].title()}",
+            text=f"{where} · {session['game_mode'].title()}",
             font=ui_font(24, bold=True),
             text_color=INK,
         ).pack(side="left")
@@ -307,6 +365,16 @@ class PracticeView:
     @staticmethod
     def selection_explanation(session):
         """Describe the desktop selection rule; the legacy engine's reason text is not used."""
+        if session["situation"] == GENERAL_SITUATION:
+            if session["practice_mode"] == "review":
+                return (
+                    "you have practised it before at this level and it is in your review "
+                    "queue (due words come first)."
+                )
+            return (
+                f"one of the {session['language'].title()} words at this level; words you "
+                "have not played recently are chosen first when possible."
+            )
         situation = str(session["situation"]).replace("_", " ").title()
         if session["practice_mode"] == "review":
             return (
@@ -371,27 +439,41 @@ class PracticeView:
             self.show_practice()
 
     def word_card(self, state):
-        """The learning card shown after a round: the word, then what it means and how to use it."""
+        """The learning card shown after a round: the word, then what it means and how to use it.
+
+        Level-list words have clues but no teaching notes, so they show the clues instead.
+        """
         panel = self.card()
+        travel_card = bool(state.example_sentence)
         ctk.CTkLabel(
             panel, text=state.word, anchor="w", font=ui_font(30, bold=True), text_color=BRAND
-        ).pack(fill="x", padx=2 * SPACE, pady=(SPACE + 4, 0))
-        ctk.CTkLabel(
-            panel,
-            text=f"Say it like: {state.pronunciation_text}",
-            anchor="w",
-            font=ui_font(14),
-            text_color=MUTED,
-        ).pack(fill="x", padx=2 * SPACE, pady=(0, SPACE))
-        for label, value in (
-            ("Meaning", state.meaning or state.translation),
-            ("Example", state.example_sentence),
-            ("Usage", state.usage_note),
-        ):
+        ).pack(fill="x", padx=2 * SPACE, pady=(SPACE + 4, 0 if travel_card else SPACE))
+        if travel_card:
+            ctk.CTkLabel(
+                panel,
+                text=f"Say it like: {state.pronunciation_text}",
+                anchor="w",
+                font=ui_font(14),
+                text_color=MUTED,
+            ).pack(fill="x", padx=2 * SPACE, pady=(0, SPACE))
+            details = (
+                ("Meaning", state.meaning or state.translation),
+                ("Example", state.example_sentence),
+                ("Usage", state.usage_note),
+            )
+        else:
+            details = (
+                ("Meaning", state.meaning or state.translation),
+                ("Synonyms", state.synonym_hint),
+                ("Association", state.association_hint),
+            )
+        for label, value in details:
             row = ctk.CTkFrame(panel, fg_color=SURFACE)
             row.pack(fill="x", padx=2 * SPACE, pady=(0, 2))
             ctk.CTkLabel(
-                row, text=label, anchor="w", width=84, font=ui_font(13, bold=True), text_color=MUTED
+                row, text=label, anchor="w", width=96, font=ui_font(13, bold=True), text_color=MUTED
             ).pack(side="left", anchor="n", pady=2)
             self.text(value, parent=row, size=15, pady=2)
+        if not travel_card:
+            self.text(NOT_REVIEWED, parent=panel, muted=True, size=13, pady=(2, 2))
         ctk.CTkLabel(panel, text="", height=2).pack()

@@ -28,6 +28,7 @@ RESOURCE_ROOT = Path(getattr(sys, "_MEIPASS", PROJECT_ROOT))
 DATA_DIR = Path(os.getenv("LANGUAGE_HANGMAN_DATA_DIR", application_data_dir()))
 WORDS_DIR = Path(os.getenv("LANGUAGE_HANGMAN_WORDS_DIR", RESOURCE_ROOT / "data" / "words"))
 CURATED_WORDS_DIR = Path(__file__).resolve().parents[1] / "desktop" / "content"
+LEVEL_WORDS_DIR = CURATED_WORDS_DIR / "levels"
 DATABASE_PATH = Path(os.getenv("LANGUAGE_HANGMAN_DB_PATH", DATA_DIR / "app.db"))
 AUTH_GATEWAY_ENABLED = os.getenv("LANGUAGE_HANGMAN_AUTH_GATEWAY_ENABLED", "0") == "1"
 AUTH_GATEWAY_LOGIN_URL = os.getenv("LANGUAGE_HANGMAN_LOGIN_URL", "http://localhost:8000/login")

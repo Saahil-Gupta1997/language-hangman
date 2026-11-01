@@ -40,7 +40,7 @@ COMPONENTS = [
         "licence": "MIT for the software; the teaching content and icon are not yet licensed",
         "files": ["LanguageHangman.exe", "_internal/src/*", "LICENSE.txt"],
         "notices": ["LanguageHangman-LICENSE.txt"],
-        "notes": "Application code (inside LanguageHangman.exe). The 30-word content file "
+        "notes": "Application code (inside LanguageHangman.exe). The word content files "
         "and the application icon ship with it but are outside the MIT grant until their "
         "authorship is confirmed (decision DEC-08); see LICENSE.txt.",
     },

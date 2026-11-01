@@ -9,9 +9,10 @@ packaging scripts, tests and documentation in this repository.
 
 It does not cover:
 
-- The 30 teaching cards in src/desktop/content/english.json and the legacy word banks in
-  data/words/. Their authorship is still being confirmed and no licence has been chosen for
-  them yet (decision DEC-08 in docs/DELIVERY.md).
+- The 30 teaching cards in src/desktop/content/english.json, the level word lists in
+  src/desktop/content/levels/ and the legacy word banks in data/words/. Their authorship is
+  still being confirmed and no licence has been chosen for them yet (decision DEC-08 in
+  docs/DELIVERY.md).
 - The application icon in assets/, whose source and rights are not recorded.
 - Third-party components distributed with the Windows installer, which keep their own
   licences. They are listed in packaging/third-party/THIRD-PARTY-NOTICES.txt and installed

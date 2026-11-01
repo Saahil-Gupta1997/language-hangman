@@ -256,10 +256,10 @@ def test_imported_database_practice_uses_curated_words_only(imported):
     words = CuratedWordService(path)
     for situation in SITUATIONS:
         assert words.count_candidate_words("english", situation=situation) == 10
-    assert words.get_difficulties("english") == ["beginner"]
+    assert {word["difficulty"] for word in words.travel_cards()} == {"beginner"}
     legacy_ids = [row[2] for row in legacy_before]
     fallback = words.select_word("english", "beginner", candidate_word_ids=legacy_ids)
-    assert fallback["source"] == CURATED_SOURCE
+    assert fallback["source"] in CuratedWordService.sources
 
     # Legacy history and review items are kept, unchanged, for reporting.
     assert progress_report(path, user["id"])["rounds"] == history_before + len(played)

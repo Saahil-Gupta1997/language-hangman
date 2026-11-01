@@ -13,8 +13,10 @@ from src.utils.constants import (
     CONTENT_MIN_WORDS_PER_LANGUAGE_CATEGORY,
     CONTENT_MIN_WORDS_PER_LANGUAGE_DIFFICULTY,
     DIFFICULTY_ORDER,
+    LEVEL_WORD_SOURCE,
     SITUATIONS,
     WORD_CATEGORIES,
+    WORD_LEVELS,
 )
 from src.utils.helpers import load_json_file, serialize_json
 
@@ -453,8 +455,13 @@ def _normalize_word_entry(
         return {}, ["Entry must be a JSON object."]
 
     issues: list[str] = []
+    # Level-list rows carry three clues but no teaching notes, keep the capitals that German
+    # nouns need, and use the five levels of the sheet they came from.
+    level_word = raw_word.get("source") == LEVEL_WORD_SOURCE
     word_id = _normalize_text(raw_word.get("word_id"))
-    word = _normalize_string(raw_word.get("word"))
+    word = _normalize_text(raw_word.get("word")) if level_word else _normalize_string(
+        raw_word.get("word")
+    )
     meaning = _normalize_text(raw_word.get("meaning"))
     language = _normalize_string(raw_word.get("language")) or default_language
     situations = _normalize_situations(raw_word.get("situations"))
@@ -498,19 +505,19 @@ def _normalize_word_entry(
         issues.append(f"Unsupported category '{category}'.")
     if not difficulty:
         issues.append("Missing required field 'difficulty'.")
-    elif difficulty not in DIFFICULTY_ORDER:
+    elif difficulty not in (WORD_LEVELS if level_word else DIFFICULTY_ORDER):
         issues.append(f"Unsupported difficulty '{difficulty}'.")
     if not hint:
         issues.append("Missing required field 'hint'.")
     if not translation:
         issues.append("Missing required field 'translation'.")
-    if not example_sentence:
+    if not example_sentence and not level_word:
         issues.append("Missing required field 'example_sentence'.")
-    if not sentence_translation:
+    if not sentence_translation and not level_word:
         issues.append("Missing required field 'sentence_translation'.")
-    if not pronunciation_text:
+    if not pronunciation_text and not level_word:
         issues.append("Missing required field 'pronunciation_text'.")
-    if not usage_note:
+    if not usage_note and not level_word:
         issues.append("Missing required field 'usage_note'.")
     if not synonym and raw_word.get("source") != "desktop-core":
         issues.append("Missing required field 'synonym'.")
@@ -555,9 +562,9 @@ def _build_quality_warnings(row: dict[str, Any]) -> list[str]:
     warnings: list[str] = []
     word = str(row["word"])
     language = str(row["language"])
-    example_sentence = str(row["example_sentence"])
-    pronunciation_text = str(row["pronunciation_text"])
-    usage_note = str(row["usage_note"])
+    example_sentence = str(row["example_sentence"] or "")
+    pronunciation_text = str(row["pronunciation_text"] or "")
+    usage_note = str(row["usage_note"] or "")
     situations = _deserialize_situations(row.get("situations"))
 
     if _looks_generic_example(example_sentence, word):
@@ -583,7 +590,7 @@ def _build_quality_warnings(row: dict[str, Any]) -> list[str]:
             "Usage note looks templated; make it explain when a learner would say this word."
         )
 
-    if situations and not _usage_note_mentions_any_situation(usage_note, situations):
+    if usage_note and situations and not _usage_note_mentions_any_situation(usage_note, situations):
         warnings.append(
             "Usage note may not match the assigned situation(s); mention a concrete context."
         )

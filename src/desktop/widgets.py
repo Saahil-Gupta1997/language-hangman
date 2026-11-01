@@ -5,6 +5,8 @@ import sys
 import customtkinter as ctk
 from customtkinter.windows.widgets.scaling import ScalingTracker
 
+from src.utils.constants import BOARD_LETTERS, EXTRA_LETTERS
+
 BLUE = "#155E75"
 FOCUS_RING = "#F59E0B"
 TITLE_BAR_ALLOWANCE = 48  # logical pixels for the title bar and window borders
@@ -196,9 +198,9 @@ def keyboard_option_menu(parent, values, command=None, width=200):
     normal = {key: menu.cget(key) for key in ("fg_color", "button_color", "text_color")}
 
     def step(offset):
-        current = menu.get()
-        index = values.index(current) if current in values else 0
-        choice = values[(index + offset) % len(values)]
+        current, choices = menu.get(), menu.cget("values")  # the list can change after creation
+        index = choices.index(current) if current in choices else 0
+        choice = choices[(index + offset) % len(choices)]
         menu.set(choice)
         if command:
             command(choice)
@@ -327,7 +329,8 @@ GALLOWS_PARTS = (
     ("line", (100, 128, 80, 160)),  # left leg
     ("line", (100, 128, 120, 160)),  # right leg
 )
-LETTERS = "abcdefghijklmnopqrstuvwxyz"
+SMALLEST_TILE = 20
+TILE_GAP = 6
 
 
 class GameBoard(ctk.CTkCanvas):
@@ -403,29 +406,52 @@ class GameBoard(ctk.CTkCanvas):
             else:
                 self.create_line(*scaled, width=line, fill=INK, capstyle="round")
 
+    @staticmethod
+    def _tile_lines(letters, available):
+        """Break the tiles into lines that fit at the smallest size, at spaces when possible."""
+        capacity = max(1, int(available // (SMALLEST_TILE + TILE_GAP)))
+        lines, line = [], []
+        for word in "".join(letters).split(" "):
+            while len(word) > capacity:
+                if line:
+                    lines.append(line)
+                    line = []
+                lines.append(list(word[:capacity]))
+                word = word[capacity:]
+            space = [" "] if line else []
+            if len(line) + len(space) + len(word) > capacity:
+                lines.append(line)
+                line, space = [], []
+            line += space + list(word)
+        return [*lines, line] if line else lines or [[]]
+
     def _word(self, state, left, available, factor):
         """Letter tiles, then the lives. Returns the lowest y the word block reaches."""
-        letters = state.masked_word.split()
-        size = min(44, max(20, int(available / max(1, len(letters))) - 6))
-        x = left + max(0, (available - len(letters) * (size + 6)) / 2)
+        lines = self._tile_lines(state.masked_letters, available)
+        longest = max(1, max(len(line) for line in lines))
+        size = min(44, max(SMALLEST_TILE, int(available / longest) - TILE_GAP))
         top = 34
-        for letter in letters:
-            revealed = letter != "_"
-            self.create_rectangle(
-                *self._at((x, top, x + size, top + size * 1.2), factor),
-                fill=SURFACE if revealed else CANVAS,
-                outline=BRAND if revealed else BORDER,
-                width=max(1, round(2 * factor)),
-            )
-            if revealed:
-                self.create_text(
-                    *self._at((x + size / 2, top + size * 0.6), factor),
-                    text=letter,
-                    fill=BRAND,
-                    font=ui_font(max(10, round(size * 0.55)), bold=True),
-                )
-            x += size + 6
-        lives_y = top + size * 1.2 + 22
+        for line in lines:
+            x = left + max(0, (available - len(line) * (size + TILE_GAP)) / 2)
+            for letter in line:
+                if letter != " ":  # a space between words is a gap, not a tile
+                    revealed = letter != "_"
+                    self.create_rectangle(
+                        *self._at((x, top, x + size, top + size * 1.2), factor),
+                        fill=SURFACE if revealed else CANVAS,
+                        outline=BRAND if revealed else BORDER,
+                        width=max(1, round(2 * factor)),
+                    )
+                    if revealed:
+                        self.create_text(
+                            *self._at((x + size / 2, top + size * 0.6), factor),
+                            text=letter,
+                            fill=BRAND,
+                            font=ui_font(max(10, round(size * 0.55)), bold=True),
+                        )
+                x += size + TILE_GAP
+            top += size * 1.2 + TILE_GAP
+        lives_y = top - TILE_GAP + 22
         pip, gap = 12, 6
         block = state.max_attempts * (pip + gap)
         start = left + max(0, (available - block) / 2)
@@ -452,7 +478,8 @@ class GameBoard(ctk.CTkCanvas):
         wrong = set(state.wrong_letters)
         size = min(34, max(18, int(available / columns) - 4))
         left = max(0, (available - columns * (size + 4)) / 2)
-        for index, letter in enumerate(LETTERS):
+        letters = BOARD_LETTERS + EXTRA_LETTERS.get(state.language, "")
+        for index, letter in enumerate(letters):
             x = left + (index % columns) * (size + 4)
             y = top + (index // columns) * (size + 4)
             used = letter in correct or letter in wrong
@@ -468,12 +495,13 @@ class GameBoard(ctk.CTkCanvas):
             )
             self.create_text(
                 *self._at((x + size / 2, y + size / 2), factor),
-                text=letter.upper(),
+                # "ß" has no single capital: its upper() is "SS", which is not this letter.
+                text=letter.upper() if len(letter.upper()) == 1 else letter,
                 fill=FAINT if letter in wrong else text_colour,
                 font=ui_font(max(9, round(size * 0.42)), bold=not used),
             )
             self._keys[letter] = (box, used, (x, y, x + size, y + size))
-        rows = (len(LETTERS) + columns - 1) // columns
+        rows = (len(letters) + columns - 1) // columns
         return top + rows * (size + 4) + 6
 
     def _letter_at(self, event):
