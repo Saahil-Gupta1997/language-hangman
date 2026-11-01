@@ -4,15 +4,15 @@ Language Hangman Desktop
 What this licence covers
 ------------------------
 
-The MIT licence below covers this project's own software: the Python source, build and
-packaging scripts, tests and documentation in this repository.
+The MIT licence below covers this project's own software and content: the Python source,
+build and packaging scripts, tests and documentation in this repository, the word lists in
+src/desktop/content/levels/ and the application icon in assets/.
 
 It does not cover:
 
-- The word lists in src/desktop/content/levels/ and the legacy word banks in data/words/.
-  Their authorship is still being confirmed and no licence has been chosen for them yet
-  (decision DEC-08 in docs/DELIVERY.md).
-- The application icon in assets/, whose source and rights are not recorded.
+- The legacy word banks in data/words/, from the earlier browser prototype. Their authorship
+  is still being confirmed and no licence has been chosen for them yet (decision DEC-08 in
+  docs/DELIVERY.md). They are not in the installer.
 - Third-party components distributed with the Windows installer, which keep their own
   licences. They are listed in packaging/third-party/THIRD-PARTY-NOTICES.txt and installed
   next to the program.

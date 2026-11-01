@@ -37,12 +37,11 @@ COMPONENTS = [
     {
         "name": "Language Hangman (this project)",
         "version": "see the title bar",
-        "licence": "MIT for the software; the teaching content and icon are not yet licensed",
+        "licence": "MIT for the software, the word lists and the icon",
         "files": ["LanguageHangman.exe", "_internal/src/*", "LICENSE.txt"],
         "notices": ["LanguageHangman-LICENSE.txt"],
-        "notes": "Application code (inside LanguageHangman.exe). The word content files "
-        "and the application icon ship with it but are outside the MIT grant until their "
-        "authorship is confirmed (decision DEC-08); see LICENSE.txt.",
+        "notes": "Application code (inside LanguageHangman.exe). The word lists and the "
+        "application icon ship with it under the same licence; see LICENSE.txt.",
     },
     {
         "name": "PyInstaller bootloader",
@@ -326,8 +325,8 @@ def summary():
         "",
         "Language Hangman for Windows includes the third-party software listed below. Each",
         "component remains under its own licence; the full texts are in the 'licenses' folder",
-        "next to this file. Language Hangman's own software is under the MIT licence; its",
-        "teaching content and icon are not yet licensed (see LICENSE.txt).",
+        "next to this file. Language Hangman's own software, word lists and icon are under the",
+        "MIT licence (see LICENSE.txt).",
         "",
     ]
     for component in COMPONENTS:

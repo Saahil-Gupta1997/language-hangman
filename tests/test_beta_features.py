@@ -55,10 +55,10 @@ def _complete_word(
 
 
 def test_release_version_display_is_current() -> None:
-    assert __version__ == "1.0.0rc7"
+    assert __version__ == "1.0.0rc8"
     assert version == __version__
-    assert __release_name__ == "Desktop Release Candidate 6"
-    assert APP_VERSION_DISPLAY == "v1.0.0rc7"
+    assert __release_name__ == f"Desktop Release Candidate {__version__.split('rc')[1]}"
+    assert APP_VERSION_DISPLAY == "v1.0.0rc8"
     version_file = (PROJECT_ROOT / "VERSION").read_text(encoding="utf-8").strip()
     assert version_file == __version__
 
@@ -66,6 +66,15 @@ def test_release_version_display_is_current() -> None:
 def test_installer_default_version_matches_the_application() -> None:
     script = (PROJECT_ROOT / "packaging" / "hangman.iss").read_text(encoding="utf-8")
     assert f'#define MyAppVersion "{__version__}"' in script
+
+
+def test_setup_shows_the_licence_terms() -> None:
+    """DEC-14: the installer shows LICENSE and needs it accepted."""
+    script = (PROJECT_ROOT / "packaging" / "hangman.iss").read_text(encoding="utf-8")
+    assert "LicenseFile=..\\LICENSE\n" in script
+    licence = (PROJECT_ROOT / "LICENSE").read_text(encoding="utf-8")
+    covered = licence.split("It does not cover:")[0]
+    assert "the word lists" in covered and "application icon" in covered
 
 
 def test_onboarding_state_guides_unassessed_users() -> None:
