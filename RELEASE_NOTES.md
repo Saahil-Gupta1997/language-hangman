@@ -56,9 +56,9 @@ that can make a click guess the wrong letter.
 
 ## Verification
 
-Automated suite on the build commit `e0aa9c0`: 212 passed, 0 skipped, in a clean clone. The
-first candidate `2bfbd61` was 210 passed, 1 failed: that failure exposed D-33. Lint, content and
-release checks clean.
+Automated suite on the final tree (`aa82f18`): 212 passed, 0 skipped, ×3, in a clean clone. On
+the build commit `e0aa9c0`: 212 passed, 0 skipped. The first candidate `2bfbd61` was 210
+passed, 1 failed: that failure exposed D-33. Lint, content and release checks clean.
 On the build machine (Windows 11 at 125%): upgrade from rc5 with data created by rc5, the
 17-step journey in the installed app without Python, beta import, recovery at both text sizes,
 restore, uninstall, and the installed licence and notices. Not yet: a clean machine, real

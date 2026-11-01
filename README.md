@@ -10,7 +10,7 @@ the words yet, and the app says so.**
 
 | Verified by automated and scripted checks on the build machine (Windows 11, 125%) | Still pending: needs people or the owner |
 | --- | --- |
-| 212 automated tests, lint, content and release checks on `e0aa9c0`, the installer's commit | Installing on a clean Windows account without Python (G5) |
+| 212 automated tests, lint, content and release checks on `aa82f18`, three times (installer built from `e0aa9c0`, same application code) | Installing on a clean Windows account without Python (G5) |
 | Installer built from `e0aa9c0`; install, upgrade from rc5 with its own data, beta import, recovery, uninstall | Keyboard-only use by a person; real 100% and 150% display scaling (G6–G8) |
 | 17-step scripted journey in the installed app, without Python on `PATH` | Review of every word by qualified reviewers, one per language (G9) |
 | Third-party notices installed and checked against every shipped file | Five learner sessions (G10) |

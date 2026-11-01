@@ -10,7 +10,7 @@ filled in from automated output.
 | # | Gate | Blocking | Status | Owner | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | G1 | P0 defects fixed with regression tests: D-01, D-02, D-03 (rc2) and D-30 (rc3) | Yes | **Met** | Engineering | VERIFICATION.md RQ-01..RQ-11 |
-| G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the build commit** (212 passed, 0 skipped, `e0aa9c0`). The first candidate was 210 passed, 1 failed, which exposed D-33 | Engineering | evidence/…/checks, checks-first-candidate-2bfbd61 |
+| G2 | Automated suite, lint, content check, release check on the candidate revision | Yes | **Met on the final tree** (212 passed, 0 skipped, ×3, `aa82f18`) and on the build commit (212 passed, `e0aa9c0`). The first candidate was 210 passed, 1 failed, which exposed D-33 | Engineering | evidence/…/checks, checks-final, checks-first-candidate-2bfbd61 |
 | G3 | Installer built from the candidate commit in a clean checkout; SHA256 recorded | Yes | **Met** | Engineering | evidence/…/build-output |
 | G4 | Install, upgrade from the previous release, beta import, recovery, uninstall on Windows | Yes | **Met on the build machine** (not a clean machine) | Engineering | VERIFICATION.md installer steps 1–10 |
 | G16 | Performance measured on the candidate: the game's hot path no slower than the previous release | Yes | **Met** against rc5, measured in one session on 2026-11-01, three word lists, three runs each: guess to redrawn screen, median 32–45 ms against 34–41 ms, 95th percentile 430–553 ms against 452–608 ms, longest guess 647 ms against 761 ms. The typical guess is level rather than faster: two of three Spanish runs had a higher median than any rc5 Spanish run (41 and 45 ms against 34–36 ms). Against rc3 the round-ending guess is slower, as in rc4 and rc5 | Engineering | VERIFICATION.md performance |
@@ -126,7 +126,7 @@ read (D-34).
 | Third-party notices | `packaging/third-party/`; installed next to the program | 15 components, 12 licence texts and the notices file |
 | Source archive | release package | see `SHA256SUMS.txt` in the release package |
 | Build log | `docs/evidence/2026-11-01-rc6-e0aa9c0/build-output/` | line 11 of `build.log` names the commit, which closes I-9; `revision.txt` repeats it |
-| Automated results | `docs/evidence/2026-11-01-rc6-e0aa9c0/checks/` | build commit: 212 passed; the two earlier candidates in `checks-first-candidate-2bfbd61/` (1 failed) and `checks-second-candidate-d7cac11/` |
+| Automated results | `docs/evidence/2026-11-01-rc6-e0aa9c0/checks/` | build commit: 212 passed; final tree in `checks-final/`, 212 passed ×3; the two earlier candidates in `checks-first-candidate-2bfbd61/` (1 failed) and `checks-second-candidate-d7cac11/` |
 | Word conversion | `scripts/build_level_words.py`, `docs/evidence/2026-11-01-rc6-e0aa9c0/level-list-conversion.txt` | 1,544 words kept, 56 repeated rows left out; re-running changed no file |
 | Defect reproductions (D-29, D-30, D-31, T-28) | `docs/evidence/2026-09-19-rc3-fd3b25a/defects/` | rc2 code vs `fd3b25a` |
 | Defect reproduction (D-33) | `docs/evidence/2026-11-01-rc6-e0aa9c0/d33-board-moves.txt`, `d33-columns-diagnosis.txt` | `2bfbd61` vs `e0aa9c0`; why the columns became equal |

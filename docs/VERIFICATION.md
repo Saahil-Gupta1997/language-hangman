@@ -64,6 +64,7 @@ desktop shortcut. rc6 has not yet been started on their real data.
 | `2bfbd61` rc6 first candidate | **210 passed, 1 failed** in the clean clone | 0 | clean | PASS, 1,544 words structurally valid | passed (17) from source | `letter_keys_guess_on_click` failed, which exposed D-33 (below). Not built |
 | `d7cac11` rc6 second candidate | 212 passed in the clean clone | 0 | clean | PASS, 1,544 words structurally valid | passed (17) from source | D-33 fixed, but a typical guess measured slower. Not built |
 | **`e0aa9c0` rc6 build commit** | **212 passed** in the clean clone | **0** | clean | PASS, 1,544 words structurally valid | passed (17), source and installed | equal columns; the installer was built from this commit |
+| **`aa82f18` rc6 final tree** | **212 passed, 0 skipped, ×3** | **0** | clean | PASS, 1,544 words structurally valid | passed (17) from source; installer code unchanged since `e0aa9c0` | three consecutive runs in a clean clone, each exit 0 (`checks-final/`) |
 
 **The failure on rc6's first candidate.** `letter_keys_guess_on_click` failed in the clean clone
 of `2bfbd61` with "a used key fired again": the click had landed on a different key. This was a
